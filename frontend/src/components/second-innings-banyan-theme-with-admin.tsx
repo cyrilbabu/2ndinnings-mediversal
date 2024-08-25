@@ -10,6 +10,8 @@ import {
   Lock,
   Loader,
 } from "lucide-react";
+import { toast } from "react-toastify";
+import { ToastBar } from "react-hot-toast";
 
 const BanyanBackground = () => (
   <svg
@@ -77,6 +79,7 @@ const InputField = ({ icon: Icon, label, type = "text", value, onChange }) => (
         type={type}
         value={value}
         onChange={onChange}
+        required
         className="w-full outline-none text-green-800"
       />
     </div>
@@ -89,7 +92,7 @@ const Login = ({ role }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
-  console.log({ role, username: id, password });
+  // console.log({ role, username: id, password });
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -125,6 +128,7 @@ const Login = ({ role }) => {
       console.error("Error during login:", error);
     } finally {
       setLoading(false);
+      // ToastBar.success("Login Successfully");
     }
   };
 

@@ -1,0 +1,122 @@
+import React, { useState, useEffect } from "react";
+
+export default function ShowAllPatient() {
+  const [name, setName] = useState("");
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setName(e.target.value);
+  };
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/patient/getAllPatient"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch patients");
+        }
+        const data = await response.json();
+        setPatients(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-green-50">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
+        <span className="ml-2 text-green-800">Loading...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-red-50">
+        <p className="text-red-600 font-bold">Error: {error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-green-50 p-6">
+      <h1 className="text-3xl font-bold text-green-800 mb-6">Show Member</h1>
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="w-full rounded my-2">
+          <input
+            type="text"
+            placeholder="Enter user info"
+            value={name}
+            onChange={handleChange}
+            className="shadow my-1 appearance-none border rounded w-full
+              py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-slate-500"
+          />
+        </div>
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                Full Name
+              </th>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                DOB
+              </th>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                Phone Number
+              </th>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                Address
+              </th>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                Emergency Contact Number
+              </th>
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+                Membership type
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {patients.map((patient) => (
+              <tr key={patient.id}>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.fullName}
+                </td>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.dob}
+                </td>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.phoneNumber}
+                </td>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.email}
+                </td>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.address}
+                </td>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.emergencyContactNumber}
+                </td>
+                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  {patient.membership}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

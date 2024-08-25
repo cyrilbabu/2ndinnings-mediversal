@@ -8,7 +8,6 @@ const staffSchema = mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
   },
   phone: {
     type: Number,

@@ -28,3 +28,7 @@ const staffSchema = mongoose.Schema({
     }
 
 })
+
+const Staff = new mongoose.model("Staff",staffSchema)
+
+export default Staff;

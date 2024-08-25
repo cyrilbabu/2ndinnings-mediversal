@@ -1,7 +1,5 @@
 import Staff from "../models/staff.model.js";
 
-
-
 // Create new staff
 export const staffSignup = async (req, res) => {
   try {
@@ -19,19 +17,23 @@ export const staffSignup = async (req, res) => {
 // Update staff
 export const updateStaff = async (req, res) => {
   try {
-    const { id } = req.params;
     const { name, phone, role, username, password } = req.body;
     const updateData = { name, phone, role, username };
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
     }
-    const staff = await Staff.findByIdAndUpdate(id, updateData, { new: true });
+    const staff = await Staff.findOneAndUpdate({ username }, updateData, {
+      new: true,
+    });
     if (!staff) {
       return res.status(404).json({ message: "Staff member not found" });
     }
-    res.status(200).json(staff);
+    return res.status(200).json(staff);
   } catch (error) {
-    res.status(500).json({ message: "Error updating staff member", error });
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ message: "Error updating staff member", error });
   }
 };
 
@@ -72,7 +74,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid password" });
     }
 
-    return res.status(200).json({message:"logged in successfully"})
+    return res.status(200).json({ message: "logged in successfully" });
   } catch (error) {
     console.log("Error in login controller", error.message);
     return res.status(500).json({ error: "Internal server error" });

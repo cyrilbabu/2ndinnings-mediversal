@@ -1,3 +1,4 @@
+import { timeStamp } from "console";
 import mongoose from "mongoose";
 
 const patientSchema = mongoose.Schema({
@@ -33,7 +34,7 @@ const patientSchema = mongoose.Schema({
   healthCondition: {
     type: String,
   },
-});
+},{timestamps:true});
 
 const Patient = new mongoose.model("Patient", patientSchema);
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { registerPatient, searchPatient } from "../controllers/patient.controller.js";
+import { getAllPatient, registerPatient, searchPatient } from "../controllers/patient.controller.js";
 
 
 const router = express.Router();
@@ -9,5 +9,6 @@ router.post("/register",registerPatient);
 
 // Search patients
 router.get("/search",searchPatient);
+router.get("/getAllPatient",getAllPatient);
 
 export default router;

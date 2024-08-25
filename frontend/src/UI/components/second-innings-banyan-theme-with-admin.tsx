@@ -89,6 +89,8 @@ const Login = ({ role }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
+  console.log({ role, username: id, password });
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -97,7 +99,7 @@ const Login = ({ role }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ role, id, password }),
+        body: JSON.stringify({ role, username: id, password }),
       });
 
       if (!response.ok) {

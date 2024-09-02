@@ -6,14 +6,15 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 
-import BanyanThemePageWithAdmin from "./UI/components/second-innings-banyan-theme-with-admin";
-import NewRegistration from "./UI/components/second-innings-new-registration";
-import BanyanThemePageWithNamaste from "./UI/components/second-innings-banyan-theme-with-namaste";
-import AdminDashboardView from "./UI/components/admin-dashboard-view";
-import AssessorDashboard from "./UI/components/assessor-dashboard";
-import RevisedCareManagerDashboard from "./UI/components/revised-care-manager-dashboard";
-import HomeCareStaffDashboard from "./UI/components/home-care-staff-dashboard";
-import FrontDeskDashboard from "./UI/components/second-innings-front-desk-dashboard";
+import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
+import NewRegistration from "./components/second-innings-new-registration";
+import BanyanThemePageWithNamaste from "./components/second-innings-banyan-theme-with-namaste";
+import AdminDashboardView from "./components/admin-dashboard-view";
+import AssessorDashboard from "./components/assessor-dashboard";
+import RevisedCareManagerDashboard from "./components/revised-care-manager-dashboard";
+import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
+import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
+import ShowAllPatient from "./UI/show-all-members";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,7 +43,12 @@ export default function App() {
             path="homecare-dashboard"
             element={<HomeCareStaffDashboard />}
           />
-          <Route path="assessor-dashboard" element={<FrontDeskDashboard />} />
+          <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
+          <Route
+            path="patient-new-registration"
+            element={<NewRegistration />}
+          />
+          <Route path="show-all-member" element={<ShowAllPatient />} />
         </Routes>
         <ToastContainer
           position="top-center"

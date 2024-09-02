@@ -1,5 +1,5 @@
 import express from "express";
-import { assignCareManager, getAllPatient, registerPatient, searchPatient } from "../controllers/patient.controller.js";
+import { assignCareManager, getAllPatient, getPatientById, registerPatient, searchPatient } from "../controllers/patient.controller.js";
 import { getPlanDetails } from "../controllers/plan.controller.js";
 
 
@@ -13,5 +13,6 @@ router.get("/search",searchPatient);
 router.get("/getAllPatient",getAllPatient);
 router.get("/getPlanDetails",getPlanDetails);
 router.post("/assignCareManager",assignCareManager);
+router.get("/getPatientById/:id",getPatientById);
 
 export default router;

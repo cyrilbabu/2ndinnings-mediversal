@@ -113,5 +113,23 @@ export const login = async (req, res) => {
   }
 };
 
-
+export const getStaffById = async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const staff = await Staff.findById(id)
+    if(!staff){
+      return res
+      .status(400)
+      .json({ message: "Error in fetching staff" });
+    }
+    return res
+      .status(200)
+      .json({ message: "staff fetched successfully",staff });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ message: "Error in getStaffById controller", error });
+  }
+}
 

@@ -92,7 +92,7 @@ export const assignCareManager = async (req, res) => {
     if (!staffMember) {
       return res.status(404).json({ message: "Staff member not found" });
     }
-    
+
     patient.careManager = staffId
     await patient.save()
 
@@ -104,3 +104,23 @@ export const assignCareManager = async (req, res) => {
       .json({ message: "Error updating staff member", error });
   }
 };
+
+export const getPatientById = async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const patient = await Patient.findById(id)
+    if(!patient){
+      return res
+      .status(400)
+      .json({ message: "Error in fetching patient" });
+    }
+    return res
+      .status(200)
+      .json({ message: "patient fetched successfully",patient });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ message: "Error in getPatientById controller", error });
+  }
+}

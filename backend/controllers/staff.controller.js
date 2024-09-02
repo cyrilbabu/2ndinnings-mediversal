@@ -55,7 +55,10 @@ export const deleteStaff = async (req, res) => {
 export const getAllStaff = async (req, res) => {
   try {
     const staff = await Staff.find();
-    res.status(200).json(staff);
+    if(!staff){
+      return res.status(400).json({error:"error in fetching staff details"});
+    }
+    return res.status(200).json({message:"staff fetched successfully",staff});
   } catch (error) {
     res.status(500).json({ message: "Error fetching staff members", error });
   }

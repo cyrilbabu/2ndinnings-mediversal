@@ -15,6 +15,7 @@ import RevisedCareManagerDashboard from "./components/revised-care-manager-dashb
 import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
 import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
 import ShowAllPatient from "./UI/show-all-members";
+import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
 import AdminShowAllPatient from "./UI/admin-show-all-member";
 
 const queryClient = new QueryClient({
@@ -34,21 +35,56 @@ export default function App() {
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
 
-          <Route path="admin-dashboard" element={<AdminDashboardView />} />
+          {/* Private routes with role-based access */}
+          <Route
+            path="admin-dashboard"
+            element={
+              <PrivateRoute
+                component={AdminDashboardView}
+                allowedRoles={["Admin"]}
+              />
+            }
+          />
           <Route
             path="admin-dashboard/viewMember"
             element={<AdminShowAllPatient />}
           />
-          <Route path="assessor-dashboard" element={<AssessorDashboard />} />
+          <Route
+            path="assessor-dashboard"
+            element={
+              <PrivateRoute
+                component={AssessorDashboard}
+                allowedRoles={["Assessor"]}
+              />
+            }
+          />
           <Route
             path="care-manager-dashboard"
-            element={<RevisedCareManagerDashboard />}
+            element={
+              <PrivateRoute
+                component={RevisedCareManagerDashboard}
+                allowedRoles={["Care Manager"]}
+              />
+            }
           />
           <Route
             path="homecare-dashboard"
-            element={<HomeCareStaffDashboard />}
+            element={
+              <PrivateRoute
+                component={HomeCareStaffDashboard}
+                allowedRoles={["Home Care Staff"]}
+              />
+            }
           />
-          <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
+          <Route
+            path="frontdesk-dashboard"
+            element={
+              <PrivateRoute
+                component={FrontDeskDashboard}
+                allowedRoles={["Front Desk"]}
+              />
+            }
+          />
           <Route
             path="patient-new-registration"
             element={<NewRegistration />}

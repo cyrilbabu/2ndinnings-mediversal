@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  assignCareManager,
   getAllPatient,
   registerPatient,
   searchPatient,
@@ -15,5 +16,6 @@ router.post("/register", registerPatient);
 router.get("/search", searchPatient);
 router.get("/getAllPatient", getAllPatient);
 router.get("/getPlanDetails", getPlanDetails);
+router.post("/assignCareManager", assignCareManager);
 
 export default router;

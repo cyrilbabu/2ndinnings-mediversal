@@ -9,6 +9,8 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useAllStaff } from "../query/useAllStaff";
+import { useNavigate } from "react-router-dom";
 
 const DashboardCard = ({ title, value, icon: Icon, trend }) => (
   <div className="bg-white rounded-lg shadow-md p-6 flex items-center">
@@ -71,9 +73,11 @@ const AlertItem = ({ message, type }) => (
 );
 
 export default function AdminDashboardView() {
+  const navigate = useNavigate();
   const { isLoading, allPatient: patients } = useAllPatient();
+  const { isLoading: loadingStaff, allStaff } = useAllStaff();
 
-  if (isLoading) {
+  if (isLoading || loadingStaff) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -81,7 +85,7 @@ export default function AdminDashboardView() {
       </div>
     );
   }
-  console.log(patients);
+  console.log("staff", allStaff);
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
@@ -96,7 +100,7 @@ export default function AdminDashboardView() {
         />
         <DashboardCard
           title="Active Staff"
-          value="56"
+          value={`${allStaff.length}`}
           icon={Users}
           trend={-2.1}
         />
@@ -121,7 +125,7 @@ export default function AdminDashboardView() {
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <QuickActionButton
-              label="Add New Member"
+              label="Add New Staff"
               icon={Users}
               onClick={() => {}}
             />
@@ -131,9 +135,11 @@ export default function AdminDashboardView() {
               onClick={() => {}}
             />
             <QuickActionButton
-              label="Assign Staff"
+              label="Assign Care Manager To Member"
               icon={Clipboard}
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/admin-dashboard/viewMember");
+              }}
             />
             <QuickActionButton
               label="View Vitals"

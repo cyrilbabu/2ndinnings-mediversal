@@ -15,6 +15,7 @@ import RevisedCareManagerDashboard from "./components/revised-care-manager-dashb
 import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
 import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
 import ShowAllPatient from "./UI/show-all-members";
+import AdminShowAllPatient from "./UI/admin-show-all-member";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +35,10 @@ export default function App() {
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
 
           <Route path="admin-dashboard" element={<AdminDashboardView />} />
+          <Route
+            path="admin-dashboard/viewMember"
+            element={<AdminShowAllPatient />}
+          />
           <Route path="assessor-dashboard" element={<AssessorDashboard />} />
           <Route
             path="care-manager-dashboard"

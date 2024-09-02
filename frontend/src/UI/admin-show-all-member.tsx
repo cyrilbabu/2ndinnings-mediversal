@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
 
-export default function ShowAllPatient() {
+export default function AdminShowAllPatient() {
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
   console.log(patients);
@@ -34,7 +34,9 @@ export default function ShowAllPatient() {
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
-      <h1 className="text-3xl font-bold text-green-800 mb-6">Show Member</h1>
+      <h1 className="text-3xl font-bold text-green-800 mb-6">
+        Asign Care Manager
+      </h1>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="w-full rounded my-2">
           <input
@@ -98,7 +100,13 @@ export default function ShowAllPatient() {
                     {patient?.emergencyContact}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.careManager}
+                    {patient.careManager ? (
+                      <p>{patient.careManager}</p>
+                    ) : (
+                      <button className="bg-blue-500 py-1 px-2 rounded-sm text-white font-semibold text-sm">
+                        Assign
+                      </button>
+                    )}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.plan}

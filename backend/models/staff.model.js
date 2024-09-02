@@ -19,7 +19,13 @@ const staffSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["Front Desk", "Care Manager", "Home Care Staff", "Assessor","Admin"],
+    enum: [
+      "Front Desk",
+      "Care Manager",
+      "Home Care Staff",
+      "Assessor",
+      "Admin",
+    ],
     required: true,
   },
 });

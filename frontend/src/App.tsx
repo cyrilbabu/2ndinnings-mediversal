@@ -6,14 +6,18 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 
-import BanyanThemePageWithAdmin from "./UI/components/second-innings-banyan-theme-with-admin";
-import NewRegistration from "./UI/components/second-innings-new-registration";
-import BanyanThemePageWithNamaste from "./UI/components/second-innings-banyan-theme-with-namaste";
-import AdminDashboardView from "./UI/components/admin-dashboard-view";
-import AssessorDashboard from "./UI/components/assessor-dashboard";
-import RevisedCareManagerDashboard from "./UI/components/revised-care-manager-dashboard";
-import HomeCareStaffDashboard from "./UI/components/home-care-staff-dashboard";
-import FrontDeskDashboard from "./UI/components/second-innings-front-desk-dashboard";
+import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
+import NewRegistration from "./components/second-innings-new-registration";
+import BanyanThemePageWithNamaste from "./components/second-innings-banyan-theme-with-namaste";
+import AdminDashboardView from "./components/admin-dashboard-view";
+import AssessorDashboard from "./components/assessor-dashboard";
+import RevisedCareManagerDashboard from "./components/revised-care-manager-dashboard";
+import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
+import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
+import ShowAllPatient from "./UI/show-all-members";
+import ViewAllPlans from "./components/view-all-plans";
+import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
+import StaffRegistration from "./components/staff-registration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +47,15 @@ export default function App() {
             element={<HomeCareStaffDashboard />}
           />
           <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
+
+          <Route
+            path="patient-new-registration"
+            element={<NewRegistration />}
+          />
+          <Route path="show-all-member" element={<ShowAllPatient />} />
+          <Route path="view-all-plans" element={<ViewAllPlans />} />
+          <Route path="home-care-vitals" element={<VitalsRecordingScreen />} />
+          <Route path="staff-registration" element={<StaffRegistration />} />
         </Routes>
         <ToastContainer
           position="top-center"

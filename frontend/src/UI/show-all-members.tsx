@@ -21,7 +21,6 @@ export default function ShowAllPatient() {
         }
         const data = await response.json();
         setPatients(data.allPatient);
-        console.log(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -51,7 +50,7 @@ export default function ShowAllPatient() {
 
   // Filter patients based on the search input
   const filteredPatients = patients.filter((patient) =>
-    patient.fullName.toLowerCase().includes(name) 
+    patient.fullName.toLowerCase().includes(name)
   );
 
   return (
@@ -102,7 +101,7 @@ export default function ShowAllPatient() {
                     {patient?.fullName}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.dob}
+                    {patient?.dob.split("T")[0]}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.phone}
@@ -123,10 +122,7 @@ export default function ShowAllPatient() {
               ))
             ) : (
               <tr>
-                <td
-                  colSpan="7"
-                  className="text-center text-red-600 py-3"
-                >
+                <td colSpan="7" className="text-center text-red-600 py-3">
                   No patients found
                 </td>
               </tr>

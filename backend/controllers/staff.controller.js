@@ -1,12 +1,26 @@
 import Staff from "../models/staff.model.js";
+import jwt from 'jsonwebtoken'
+
+
+
+const createToken = (id,role)=>{
+  return jwt.sign({id,role},process.env.SECRET_KEY || "default_secret",{
+  expiresIn:"3d"
+})
+}
 
 // Create new staff
 export const staffSignup = async (req, res) => {
   try {
     const { name, phone, role, username, password } = req.body;
+
+    
+
     const staff = new Staff({ name, phone, role, username, password });
     await staff.save();
-    return res.status(200).json(staff);
+
+
+
   } catch (error) {
     return res
       .status(500)
@@ -64,17 +78,26 @@ export const getAllStaff = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { username, password, role } = req.body;
+
+    // Find the user by username and role
     const user = await Staff.findOne({ username: username, role: role });
 
+    // Check if the user exists
     if (!user) {
-      return res.status(400).json({ error: "user not found" });
+      return res.status(400).json({ error: "User not found" });
     }
 
+    // Check if the password matches
     if (password !== user.password) {
       return res.status(400).json({ error: "Invalid password" });
     }
 
-    return res.status(200).json({ message: "logged in successfully" });
+    // Create the token with user's ID and role
+    const token = createToken(user._id, user.role);
+
+    // Return the success response with the token
+    return res.status(200).json({ success: true, token, user });
+
   } catch (error) {
     console.log("Error in login controller", error.message);
     return res.status(500).json({ error: "Internal server error" });

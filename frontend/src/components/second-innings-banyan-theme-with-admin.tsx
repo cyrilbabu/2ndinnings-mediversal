@@ -10,8 +10,7 @@ import {
   Lock,
   Loader,
 } from "lucide-react";
-import { toast } from "react-toastify";
-import { ToastBar } from "react-hot-toast";
+import { useLogin } from "../query/useLogin";
 
 const BanyanBackground = () => (
   <svg
@@ -89,47 +88,29 @@ const InputField = ({ icon: Icon, label, type = "text", value, onChange }) => (
 const Login = ({ role }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
-
+  const { login, isLoading } = useLogin();
+  const navigate = useNavigate();
   // console.log({ role, username: id, password });
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("http://localhost:3000/api/staff/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    login(
+      { username: id, password, role },
+      {
+        onSuccess: () => {
+          if (role === "Admin") {
+            navigate("/admin-dashboard");
+          } else if (role === "Front Desk") {
+            navigate("/frontdesk-dashboard");
+          } else if (role === "Care Manager") {
+            navigate("/care-manager-dashboard");
+          } else if (role === "Home Care Staff") {
+            navigate("/homecare-dashboard");
+          } else if (role === "Assessor") {
+            navigate("/assessor-dashboard");
+          }
         },
-        body: JSON.stringify({ role, username: id, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Login failed");
       }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
-
-      // Navigate based on role
-      if (role === "Admin") {
-        navigate("/admin-dashboard");
-      } else if (role === "Front Desk") {
-        navigate("/frontdesk-dashboard");
-      } else if (role === "Care Manager") {
-        navigate("/care-manager-dashboard");
-      } else if (role === "Home Care Staff") {
-        navigate("/homecare-dashboard");
-      } else if (role === "Assessor") {
-        navigate("/assessor-dashboard");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    } finally {
-      setLoading(false);
-      // ToastBar.success("Login Successfully");
-    }
+    );
   };
 
   return (
@@ -150,9 +131,9 @@ const Login = ({ role }) => {
       <button
         onClick={handleSubmit}
         className="w-full px-6 py-2 mt-4 text-white font-semibold bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50"
-        disabled={loading}
+        disabled={isLoading}
       >
-        {loading ? (
+        {isLoading ? (
           <Loader className="animate-spin w-5 h-5 mx-auto" />
         ) : (
           "Login"

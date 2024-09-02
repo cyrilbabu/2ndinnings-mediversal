@@ -3,11 +3,14 @@ import jwt from 'jsonwebtoken'
 
 
 
-const createToken = (id,role)=>{
-  return jwt.sign({id,role},process.env.SECRET_KEY || "default_secret",{
-  expiresIn:"3d"
-})
-}
+const createToken = (id, role) => {
+  const normalizedRole = role.replace(/\s+/g, '_'); // Replace spaces with underscores
+  console.log("Creating token with:", { id, role: normalizedRole });
+  return jwt.sign({ id, role: normalizedRole }, process.env.SECRET_KEY || "default_secret", {
+    expiresIn: "3d",
+  });
+};
+
 
 // Create new staff
 export const staffSignup = async (req, res) => {
@@ -75,12 +78,14 @@ export const getAllStaff = async (req, res) => {
   }
 };
 
+
+
 export const login = async (req, res) => {
   try {
     const { username, password, role } = req.body;
 
     // Find the user by username and role
-    const user = await Staff.findOne({ username: username, role: role });
+    const user = await Staff.findOne({ username, role });
 
     // Check if the user exists
     if (!user) {
@@ -104,3 +109,6 @@ export const login = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+

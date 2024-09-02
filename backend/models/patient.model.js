@@ -1,5 +1,4 @@
-import { timeStamp } from "console";
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const patientSchema = mongoose.Schema({
   fullName: {
@@ -23,6 +22,10 @@ const patientSchema = mongoose.Schema({
     enum: ["Basic", "Advance", "premium"],
     required: true,
   },
+  planDuration:{
+    type:String,
+    required:true
+  },
   dob: {
     type: Date,
     required: true,
@@ -34,6 +37,10 @@ const patientSchema = mongoose.Schema({
   healthCondition: {
     type: String,
   },
+  careManager:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Staff"
+  }
 },{timestamps:true});
 
 const Patient = new mongoose.model("Patient", patientSchema);

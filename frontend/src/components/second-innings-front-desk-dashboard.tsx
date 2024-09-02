@@ -36,7 +36,6 @@ export default function FrontDeskDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -70,25 +69,22 @@ export default function FrontDeskDashboard() {
 
   const totalPatients = patients.length;
 
-// Get the current month and year
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
-const currentYear = currentDate.getFullYear();
+  // Get the current month and year
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentYear = currentDate.getFullYear();
 
-// Filter patients added in the current month
-const newThisMonth = patients.filter((patient) => {
-  const createdAtDate = new Date(patient?.createdAt);
-  return (
-    createdAtDate.getMonth() === currentMonth &&
-    createdAtDate.getFullYear() === currentYear
-  );
-});
+  // Filter patients added in the current month
+  const newThisMonth = patients.filter((patient) => {
+    const createdAtDate = new Date(patient?.createdAt);
+    return (
+      createdAtDate.getMonth() === currentMonth &&
+      createdAtDate.getFullYear() === currentYear
+    );
+  });
 
-// Find the number of patients added this month
-const newThisMonthCount = newThisMonth.length;
-
-console.log("Total Patients:", totalPatients);
-console.log("New This Month:", newThisMonthCount);
+  // Find the number of patients added this month
+  const newThisMonthCount = newThisMonth.length;
 
   return (
     <>

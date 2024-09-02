@@ -29,13 +29,13 @@ const InputField = ({
 export default function NewRegistration() {
   const [formData, setFormData] = useState({
     fullName: "",
-    dateOfBirth: "",
-    phoneNumber: "",
-    emailAddress: "",
+    dob: "",
+    phone: "",
+    email: "",
     address: "",
     emergencyContact: "",
-    membershipPlan: "",
-    healthConditions: "",
+    plan: "",
+    healthCondition: "", // Updated key
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -51,25 +51,26 @@ export default function NewRegistration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log(formData);
 
     try {
       await axios.post(
-        "http://localhost:3000/api/patient/addPatient",
+        "http://localhost:3000/api/patient/register",
         formData
       );
-      alert("Registration successful!");
+      // alert("Registration successful!");
       setFormData({
         fullName: "",
-        dateOfBirth: "",
-        phoneNumber: "",
-        emailAddress: "",
+        dob: "",
+        phone: "",
+        email: "",
         address: "",
         emergencyContact: "",
-        membershipPlan: "",
-        healthConditions: "",
+        plan: "",
+        healthCondition: "", // Reset key
       });
     } catch (error) {
-      alert("Registration failed. Please try again.");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -97,25 +98,25 @@ export default function NewRegistration() {
             <InputField
               icon={User}
               label="Date of Birth"
-              name="dateOfBirth"
+              name="dob"
               type="date"
-              value={formData.dateOfBirth}
+              value={formData.dob}
               onChange={handleInputChange}
             />
             <InputField
               icon={Phone}
               label="Phone Number"
-              name="phoneNumber"
+              name="phone"
               type="tel"
-              value={formData.phoneNumber}
+              value={formData.phone}
               onChange={handleInputChange}
             />
             <InputField
               icon={Mail}
               label="Email Address"
-              name="emailAddress"
+              name="email"
               type="email"
-              value={formData.emailAddress}
+              value={formData.email}
               onChange={handleInputChange}
             />
             <InputField
@@ -141,9 +142,9 @@ export default function NewRegistration() {
                 <label key={plan} className="flex items-center">
                   <input
                     type="radio"
-                    name="membershipPlan"
+                    name="plan"
                     value={plan}
-                    checked={formData.membershipPlan === plan}
+                    checked={formData.plan === plan}
                     onChange={handleInputChange}
                     className="mr-2"
                   />
@@ -155,13 +156,13 @@ export default function NewRegistration() {
 
           <div className="mt-6">
             <label className="block text-green-800 mb-2">
-              Health Conditions
+              Health Condition
             </label>
             <textarea
               className="w-full h-24 p-2 border border-green-300 rounded-md"
               placeholder="List any existing health conditions..."
-              name="healthConditions"
-              value={formData.healthConditions}
+              name="healthCondition"
+              value={formData.healthCondition}
               onChange={handleInputChange}
             ></textarea>
           </div>

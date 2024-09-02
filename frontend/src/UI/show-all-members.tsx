@@ -7,7 +7,7 @@ export default function ShowAllPatient() {
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-    setName(e.target.value);
+    setName(e.target.value.toLowerCase());
   };
 
   useEffect(() => {
@@ -20,7 +20,8 @@ export default function ShowAllPatient() {
           throw new Error("Failed to fetch patients");
         }
         const data = await response.json();
-        setPatients(data);
+        setPatients(data.allPatient);
+        console.log(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -48,6 +49,11 @@ export default function ShowAllPatient() {
     );
   }
 
+  // Filter patients based on the search input
+  const filteredPatients = patients.filter((patient) =>
+    patient.fullName.toLowerCase().includes(name) 
+  );
+
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <h1 className="text-3xl font-bold text-green-800 mb-6">Show Member</h1>
@@ -55,7 +61,7 @@ export default function ShowAllPatient() {
         <div className="w-full rounded my-2">
           <input
             type="text"
-            placeholder="Enter user info"
+            placeholder="Enter name, phone, or email"
             value={name}
             onChange={handleChange}
             className="shadow my-1 appearance-none border rounded w-full
@@ -89,31 +95,42 @@ export default function ShowAllPatient() {
             </tr>
           </thead>
           <tbody>
-            {patients.map((patient) => (
-              <tr key={patient.id}>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.fullName}
-                </td>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.dob}
-                </td>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.phoneNumber}
-                </td>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.email}
-                </td>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.address}
-                </td>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.emergencyContactNumber}
-                </td>
-                <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                  {patient.membership}
+            {filteredPatients.length > 0 ? (
+              filteredPatients.map((patient) => (
+                <tr key={patient._id}>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.fullName}
+                  </td>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.dob}
+                  </td>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.phone}
+                  </td>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.email}
+                  </td>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.address}
+                  </td>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.emergencyContact}
+                  </td>
+                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {patient?.plan}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="text-center text-red-600 py-3"
+                >
+                  No patients found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search, UserPlus, Users, LogOut } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../UI/back-button";
+import { useAllPatient } from "../query/useAllPatient";
 
 const DashboardCard = ({
   title,
@@ -32,34 +33,10 @@ const StatCard = ({ value, label }) => (
 
 export default function FrontDeskDashboard() {
   const navigate = useNavigate();
-  const [patients, setPatients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { isLoading, allPatient: patients } = useAllPatient();
 
-
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/patient/getAllPatient"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch patients");
-        }
-        const data = await response.json();
-        setPatients(data.allPatient);
-        console.log(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPatients();
-  }, []);
-
-  if (loading) {
+  console.log(patients);
+  if (isLoading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -70,25 +47,22 @@ export default function FrontDeskDashboard() {
 
   const totalPatients = patients.length;
 
-// Get the current month and year
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
-const currentYear = currentDate.getFullYear();
+  // Get the current month and year
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentYear = currentDate.getFullYear();
 
-// Filter patients added in the current month
-const newThisMonth = patients.filter((patient) => {
-  const createdAtDate = new Date(patient?.createdAt);
-  return (
-    createdAtDate.getMonth() === currentMonth &&
-    createdAtDate.getFullYear() === currentYear
-  );
-});
+  // Filter patients added in the current month
+  const newThisMonth = patients.filter((patient) => {
+    const createdAtDate = new Date(patient?.createdAt);
+    return (
+      createdAtDate.getMonth() === currentMonth &&
+      createdAtDate.getFullYear() === currentYear
+    );
+  });
 
-// Find the number of patients added this month
-const newThisMonthCount = newThisMonth.length;
-
-console.log("Total Patients:", totalPatients);
-console.log("New This Month:", newThisMonthCount);
+  // Find the number of patients added this month
+  const newThisMonthCount = newThisMonth.length;
 
   return (
     <>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
@@ -8,16 +8,20 @@ import { Toaster } from "react-hot-toast";
 
 import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
 import NewRegistration from "./components/second-innings-new-registration";
-import BanyanThemePageWithNamaste from "./components/second-innings-banyan-theme-with-namaste";
+
 import AdminDashboardView from "./components/admin-dashboard-view";
 import AssessorDashboard from "./components/assessor-dashboard";
 import RevisedCareManagerDashboard from "./components/revised-care-manager-dashboard";
 import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
 import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
 import ShowAllPatient from "./UI/show-all-members";
+
 import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
+
+import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,16 +40,53 @@ export default function App() {
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
 
-          <Route path="admin-dashboard" element={<AdminDashboardView />} />
-          <Route path="assessor-dashboard" element={<AssessorDashboard />} />
+          {/* Private routes with role-based access */}
+          <Route
+            path="admin-dashboard"
+            element={
+              <PrivateRoute
+                component={AdminDashboardView}
+                allowedRoles={["Admin"]}
+              />
+            }
+          />
+          <Route
+            path="assessor-dashboard"
+            element={
+              <PrivateRoute
+                component={AssessorDashboard}
+                allowedRoles={["Assessor"]}
+              />
+            }
+          />
           <Route
             path="care-manager-dashboard"
-            element={<RevisedCareManagerDashboard />}
+            element={
+              <PrivateRoute
+                component={RevisedCareManagerDashboard}
+                allowedRoles={["Care Manager"]}
+              />
+            }
           />
           <Route
             path="homecare-dashboard"
-            element={<HomeCareStaffDashboard />}
+            element={
+              <PrivateRoute
+                component={HomeCareStaffDashboard}
+                allowedRoles={["Home Care Staff"]}
+              />
+            }
           />
+          <Route
+            path="frontdesk-dashboard"
+            element={
+              <PrivateRoute
+                component={FrontDeskDashboard}
+                allowedRoles={["Front Desk"]}
+              />
+            }
+          />
+
           <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
 
           <Route

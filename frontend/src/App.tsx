@@ -42,7 +42,7 @@ export default function App() {
             path="homecare-dashboard"
             element={<HomeCareStaffDashboard />}
           />
-          <Route path="assessor-dashboard" element={<FrontDeskDashboard />} />
+          <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
         </Routes>
         <ToastContainer
           position="top-center"

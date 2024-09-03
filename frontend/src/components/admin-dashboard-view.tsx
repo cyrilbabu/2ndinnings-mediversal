@@ -10,6 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useAllStaff } from "../query/useAllStaff";
 import { useNavigate } from "react-router-dom";
 
@@ -91,8 +92,9 @@ export default function AdminDashboardView() {
   const navigate = useNavigate();
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
+  const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
 
-  if (isLoading || loadingStaff) {
+  if (isLoading || loadingStaff || loadingAssignments) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -101,7 +103,13 @@ export default function AdminDashboardView() {
     );
   }
 
-  console.log(allStaff);
+  const completedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Completed"
+  );
+  const notCompletedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Not Completed"
+  );
+
   const currentDate = new Date();
   const startOfThisMonth = new Date(
     currentDate.getFullYear(),
@@ -133,6 +141,37 @@ export default function AdminDashboardView() {
       : (increaseInPatients / patientsLastMonth.length) * 100;
 
   return (
+
+    <div className="bg-gray-100 min-h-screen p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <DashboardCard
+          title="Total Members"
+          value={`${patients.length}`}
+          icon={Users}
+          trend={percentageIncrease}
+        />
+        <DashboardCard
+          title="Active Staff"
+          value={`${allStaff.length}`}
+          icon={Users}
+          trend={-2.1}
+        />
+        <DashboardCard
+          title="Reports This Month"
+          value={`${completedAssignments.length}`}
+          icon={FileText}
+          trend={12.7}
+        />
+        <DashboardCard
+          title="Pending Assignments"
+          value={`${notCompletedAssignments.length}`}
+          icon={Clipboard}
+        />
+      </div>
+
     <div>
       <header className="bg-green-800 font-bold text-white text-2xl p-4 flex justify-between items-center">
         Admin Dashboard
@@ -146,6 +185,7 @@ export default function AdminDashboardView() {
           />
         </div>
       </header>
+
 
       <div className="bg-gray-100 min-h-screen p-6">
         <div className="bg-gray-100 min-h-screen p-6">
@@ -173,6 +213,25 @@ export default function AdminDashboardView() {
               title="Pending Assignments"
               value="23"
               icon={Clipboard}
+
+              onClick={() => {
+                navigate("/admin-dashboard/assign-care-manager");
+              }}
+            />
+            <QuickActionButton
+              label="Assign Home Care Staff"
+              icon={Clipboard}
+              onClick={() => {
+                navigate("/admin-dashboard/assign-home-care-staff");
+              }}
+            />
+            <QuickActionButton
+              label="Assign Assessor"
+              icon={Clipboard}
+              onClick={() => {
+                navigate("/admin-dashboard/assign-assessor");
+              }}
+
             />
           </div>
 

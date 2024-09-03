@@ -1,13 +1,50 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useAddAssignement } from "../query/useAddAssignement";
 import DropDownStaff from "./DropDownStaff";
+import AssignModal from "./AssignModal";
+import SelectDropDown from "./SelectDropDown";
 
-export default function AdminShowAllPatient() {
+export default function AdminShowAllPatient({ role }) {
   const [name, setName] = useState("");
+  const [selectedOption, setSelectedOption] = useState();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const { addAssignement, isLoading: addingAssignement } = useAddAssignement();
   const { isLoading, allPatient: patients } = useAllPatient();
 
   const handleChange = (e) => {
     setName(e.target.value.toLowerCase());
+  };
+
+  const handleOpenModal = (patient) => {
+    setSelectedPatient(patient);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const handleSubmit = (e, data) => {
+    e.preventDefault();
+
+    addAssignement({
+      staff: selectedOption,
+      role: selectedOption?.role,
+      patient: selectedPatient,
+      time: data.time,
+    });
+
+    console.log({
+      staff: selectedOption,
+      patient: selectedPatient,
+      role: selectedOption?.role,
+      time: data.time,
+    });
+
+    handleCloseModal();
   };
 
   if (isLoading) {
@@ -19,24 +56,13 @@ export default function AdminShowAllPatient() {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <div className="min-h-screen flex justify-center items-center bg-red-50">
-  //       <p className="text-red-600 font-bold">Error: {error}</p>
-  //     </div>
-  //   );
-  // }
-
-  // Filter patients based on the search input
   const filteredPatients = patients.filter((patient) =>
     patient.fullName.toLowerCase().includes(name)
   );
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
-      <h1 className="text-3xl font-bold text-green-800 mb-6">
-        Asign Care Manager
-      </h1>
+      <h1 className="text-3xl font-bold text-green-800 mb-6">Assign {role}</h1>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="w-full rounded my-2">
           <input
@@ -51,28 +77,22 @@ export default function AdminShowAllPatient() {
         <table className="min-w-full bg-white border">
           <thead>
             <tr>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-2/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Full Name
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 DOB
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Phone Number
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
-                Address
-              </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
-                Emergency Contact Number
-              </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Care Manager
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Membership type
               </th>
             </tr>
@@ -81,7 +101,7 @@ export default function AdminShowAllPatient() {
             {filteredPatients.length > 0 ? (
               filteredPatients.map((patient) => (
                 <tr key={patient._id}>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  <td className="px-5 py-3 w-2/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.fullName}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
@@ -93,20 +113,19 @@ export default function AdminShowAllPatient() {
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.email}
                   </td>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.address}
-                  </td>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.emergencyContact}
-                  </td>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient.careManager ? (
+
+                  <td className="px-5 py-1 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                    {role === "Home Care Staff" || role === "Assessor" ? (
+                      <button
+                        onClick={() => handleOpenModal(patient)}
+                        className="flex items-center justify-center w-full px-6 py-2 bg-green-600  text-white font-semibold text-sm  rounded-lg hover:bg-green-800"
+                      >
+                        Assign
+                      </button>
+                    ) : patient.careManager ? (
                       <p>{patient.careManager}</p>
                     ) : (
-                      <DropDownStaff
-                        role="Care Manager"
-                        patientId={patient._id}
-                      />
+                      <DropDownStaff role={role} patientId={patient._id} />
                     )}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
@@ -124,6 +143,19 @@ export default function AdminShowAllPatient() {
           </tbody>
         </table>
       </div>
+
+      <AssignModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        dropDown={
+          <SelectDropDown
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            role={role}
+          />
+        }
+      />
     </div>
   );
 }

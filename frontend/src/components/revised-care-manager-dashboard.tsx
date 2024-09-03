@@ -92,16 +92,21 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
 
 const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
   const [report, setReport] = useState("");
+  const [report, setReport] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(report);
+    setReport("");
     setReport("");
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 max-w-md w-full">
+        <h2 className="text-2xl font-bold text-green-800 mb-4">
+          Submit Call Report for {patientName}
+        </h2>
         <h2 className="text-2xl font-bold text-green-800 mb-4">
           Submit Call Report for {patientName}
         </h2>
@@ -156,6 +161,8 @@ export default function RevisedCareManagerDashboard() {
     },
     // Add more mock patients as needed
   ]);
+
+  const navigate = useNavigate();
 
   const notifications = [
     {

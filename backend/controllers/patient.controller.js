@@ -9,6 +9,7 @@ export const registerPatient = async (req, res) => {
       phone,
       address,
       plan,
+      planDuration,
       dob,
       emergencyContact,
       healthCondition,
@@ -27,6 +28,7 @@ export const registerPatient = async (req, res) => {
       phone,
       address,
       plan,
+      planDuration,
       dob,
       emergencyContact,
       healthCondition,
@@ -79,6 +81,7 @@ export const getAllPatient = async (req, res) => {
   }
 };
 
+
 export const assignCareManager = async (req, res) => {
   try {
     const { staffId, patientId } = req.body;
@@ -130,4 +133,5 @@ export const getPatientById = async(req,res)=>{
       .json({ message: "Error in getPatientById controller", error });
   }
 }
+
 

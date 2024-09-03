@@ -143,7 +143,7 @@ export default function NewRegistration() {
                 Membership Plan
               </label>
               <div className="flex space-x-4">
-                {["Basic", "Advanced", "Premium"].map((plan) => (
+                {["Basic", "Advance", "Premium"].map((plan) => (
                   <label key={plan} className="flex items-center">
                     <input
                       type="radio"

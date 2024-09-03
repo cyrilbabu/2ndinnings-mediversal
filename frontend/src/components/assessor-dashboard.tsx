@@ -8,7 +8,9 @@ import {
   MapPin,
   FileText,
   AlertTriangle,
+  LogOut,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const VisitCard = ({
   name,
@@ -59,6 +61,7 @@ const VisitCard = ({
 
 export default function AssessorDashboard() {
   const [activeTab, setActiveTab] = useState("assigned");
+  const navigate = useNavigate();
 
   const assignedVisits = [
     {
@@ -119,7 +122,13 @@ export default function AssessorDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800">Welcome, Dr. Anderson</span>
+          <span className="text-green-800 mr-4">Welcome, Dr. Anderson</span>
+          <LogOut
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
         </div>
       </header>
 

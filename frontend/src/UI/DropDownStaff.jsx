@@ -38,7 +38,7 @@ const DropDownStaff = ({ role, patientId }) => {
         value={selectedOption}
         onChange={handleChange}
       >
-        <option value="">Select A Care Manager</option>
+        <option value="">Select A {role}</option>
         {filteredStaff.map((staff) => (
           <option key={staff._id} value={staff._id}>
             {staff.name} ({staff.username})

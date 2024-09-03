@@ -19,18 +19,38 @@ export default function ShowAllPatient() {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <div className="min-h-screen flex justify-center items-center bg-red-50">
-  //       <p className="text-red-600 font-bold">Error: {error}</p>
-  //     </div>
-  //   );
-  // }
+  function calculateDaysLeft(patients) {
+    return patients.map((patient) => {
+      const { createdAt, planDuration } = patient;
+      const createdDate = new Date(createdAt);
+      let planEndDate;
 
-  // Filter patients based on the search input
-  const filteredPatients = patients.filter((patient) =>
+      if (planDuration === "monthly") {
+        planEndDate = new Date(createdDate);
+        planEndDate.setMonth(planEndDate.getMonth() + 1);
+      } else if (planDuration === "yearly") {
+        planEndDate = new Date(createdDate);
+        planEndDate.setFullYear(planEndDate.getFullYear() + 1);
+      }
+
+      const currentDate = new Date();
+      const timeDiff = planEndDate - currentDate;
+      const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+
+      return {
+        ...patient,
+        daysLeft: daysLeft > 0 ? daysLeft : 0, // If the plan has already ended, return 0
+      };
+    });
+  }
+
+  const result = calculateDaysLeft(patients);
+
+  const filteredPatients = result.filter((patient) =>
     patient.fullName.toLowerCase().includes(name)
   );
+
+  console.log(filteredPatients);
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -101,7 +121,9 @@ export default function ShowAllPatient() {
                     {patient?.careManager}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.plan}
+                    {patient?.plan} {"("}
+                    {patient?.daysLeft}
+                    {")"}
                   </td>
                 </tr>
               ))

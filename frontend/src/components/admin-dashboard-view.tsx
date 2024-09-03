@@ -169,7 +169,21 @@ export default function AdminDashboardView() {
               label="Assign Care Manager To Member"
               icon={Clipboard}
               onClick={() => {
-                navigate("/admin-dashboard/viewMember");
+                navigate("/admin-dashboard/assign-care-manager");
+              }}
+            />
+            <QuickActionButton
+              label="Assign Home Care Staff"
+              icon={Clipboard}
+              onClick={() => {
+                navigate("/admin-dashboard/assign-home-care-staff");
+              }}
+            />
+            <QuickActionButton
+              label="Assign Assessor"
+              icon={Clipboard}
+              onClick={() => {
+                navigate("/admin-dashboard/assign-assessor");
               }}
             />
             <QuickActionButton

@@ -14,6 +14,7 @@ export function useLogin() {
 
       // Store the data in the React Query cache under the key "user"
       queryClient.setQueryData(["user"], data);
+      localStorage.setItem("userData", JSON.stringify(data));
     },
     onError: (err) => {
       console.log(err);

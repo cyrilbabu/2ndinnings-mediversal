@@ -37,8 +37,16 @@ export default function App() {
           <Route>
             <Route path="admin-dashboard" element={<AdminDashboardView />} />
             <Route
-              path="admin-dashboard/viewMember"
-              element={<AdminShowAllPatient />}
+              path="admin-dashboard/assign-care-manager"
+              element={<AdminShowAllPatient role="Care Manager" />}
+            />
+            <Route
+              path="admin-dashboard/assign-home-care-staff"
+              element={<AdminShowAllPatient role="Home Care Staff" />}
+            />
+            <Route
+              path="admin-dashboard/assign-assessor"
+              element={<AdminShowAllPatient role="Assessor" />}
             />
           </Route>
 
@@ -52,7 +60,7 @@ export default function App() {
               element={<ShowAllPatient />}
             />
             <Route
-              path="frontdesk-dashboard/spatient-new-registration"
+              path="frontdesk-dashboard/patient-new-registration"
               element={<NewRegistration />}
             />
           </Route>

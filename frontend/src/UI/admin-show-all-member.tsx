@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
 import DropDownStaff from "./DropDownStaff";
 
-export default function AdminShowAllPatient() {
+export default function AdminShowAllPatient({ role }) {
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
 
@@ -34,9 +34,7 @@ export default function AdminShowAllPatient() {
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
-      <h1 className="text-3xl font-bold text-green-800 mb-6">
-        Asign Care Manager
-      </h1>
+      <h1 className="text-3xl font-bold text-green-800 mb-6">Assign {role}</h1>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="w-full rounded my-2">
           <input
@@ -51,28 +49,22 @@ export default function AdminShowAllPatient() {
         <table className="min-w-full bg-white border">
           <thead>
             <tr>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-2/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Full Name
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 DOB
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Phone Number
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
-                Address
-              </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
-                Emergency Contact Number
-              </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Care Manager
               </th>
-              <th className="px-5 py-3 w-1/8 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Membership type
               </th>
             </tr>
@@ -81,7 +73,7 @@ export default function AdminShowAllPatient() {
             {filteredPatients.length > 0 ? (
               filteredPatients.map((patient) => (
                 <tr key={patient._id}>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+                  <td className="px-5 py-3 w-2/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.fullName}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
@@ -93,20 +85,12 @@ export default function AdminShowAllPatient() {
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.email}
                   </td>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.address}
-                  </td>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.emergencyContact}
-                  </td>
-                  <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
+
+                  <td className="px-5 py-1 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient.careManager ? (
                       <p>{patient.careManager}</p>
                     ) : (
-                      <DropDownStaff
-                        role="Care Manager"
-                        patientId={patient._id}
-                      />
+                      <DropDownStaff role={role} patientId={patient._id} />
                     )}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">

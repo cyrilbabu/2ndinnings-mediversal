@@ -6,6 +6,7 @@ import {
   User,
   MapPin,
   Phone,
+  LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -67,7 +68,13 @@ export default function HomeCareStaffDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800">Welcome, Sarah</span>
+          <span className="text-green-800 mr-4">Welcome, Sarah</span>
+          <LogOut
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
         </div>
       </header>
 

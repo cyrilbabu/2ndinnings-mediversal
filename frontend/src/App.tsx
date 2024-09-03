@@ -18,6 +18,7 @@ import ShowAllPatient from "./UI/show-all-members";
 import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
+import ViewPatientDetails from "./components/view-patient-details";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,6 +57,7 @@ export default function App() {
           <Route path="view-all-plans" element={<ViewAllPlans />} />
           <Route path="home-care-vitals" element={<VitalsRecordingScreen />} />
           <Route path="staff-registration" element={<StaffRegistration />} />
+          <Route path="view-patient-details" element={<ViewPatientDetails />} />
         </Routes>
         <ToastContainer
           position="top-center"

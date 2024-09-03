@@ -61,6 +61,7 @@ export default function SubmitReportView({ patientName, onSubmit, onCancel }) {
   };
 
   return (
+    
     <div className="min-h-screen bg-green-50 p-6">
       <header className="flex items-center mb-6">
         <button onClick={onCancel} className="mr-4">

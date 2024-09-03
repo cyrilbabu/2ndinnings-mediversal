@@ -9,6 +9,7 @@ export const registerPatient = async (req, res) => {
       phone,
       address,
       plan,
+      plantime,
       dob,
       emergencyContact,
       healthCondition,
@@ -27,6 +28,7 @@ export const registerPatient = async (req, res) => {
       phone,
       address,
       plan,
+      plantime,
       dob,
       emergencyContact,
       healthCondition,
@@ -65,14 +67,16 @@ export const searchPatient = async (req, res) => {
   }
 };
 
-export const getAllPatient = async(req,res)=>{
+export const getAllPatient = async (req, res) => {
   try {
-    const allPatient= await Patient.find({})
-    if(!allPatient){
-      return res.status(200).json({ message: "no patient found", allPatient});
+    const allPatient = await Patient.find({});
+    if (!allPatient) {
+      return res.status(200).json({ message: "no patient found", allPatient });
     }
-    return res.status(200).json({ message: "all patients fetched successfuly", allPatient});
+    return res
+      .status(200)
+      .json({ message: "all patients fetched successfuly", allPatient });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
-}
+};

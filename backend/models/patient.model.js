@@ -21,7 +21,12 @@ const patientSchema = mongoose.Schema(
     },
     plan: {
       type: String,
-      enum: ["Basic", "Advance", "premium"],
+      enum: ["Basic", "Advance", "Premium"],
+      required: true,
+    },
+    plantime: {
+      type: String,
+      enum: ["Monthly", "Yearly"],
       required: true,
     },
     dob: {

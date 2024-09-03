@@ -36,7 +36,6 @@ export default function FrontDeskDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -70,25 +69,25 @@ export default function FrontDeskDashboard() {
 
   const totalPatients = patients.length;
 
-// Get the current month and year
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
-const currentYear = currentDate.getFullYear();
+  // Get the current month and year
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentYear = currentDate.getFullYear();
 
-// Filter patients added in the current month
-const newThisMonth = patients.filter((patient) => {
-  const createdAtDate = new Date(patient?.createdAt);
-  return (
-    createdAtDate.getMonth() === currentMonth &&
-    createdAtDate.getFullYear() === currentYear
-  );
-});
+  // Filter patients added in the current month
+  const newThisMonth = patients.filter((patient) => {
+    const createdAtDate = new Date(patient?.createdAt);
+    return (
+      createdAtDate.getMonth() === currentMonth &&
+      createdAtDate.getFullYear() === currentYear
+    );
+  });
 
-// Find the number of patients added this month
-const newThisMonthCount = newThisMonth.length;
+  // Find the number of patients added this month
+  const newThisMonthCount = newThisMonth.length;
 
-console.log("Total Patients:", totalPatients);
-console.log("New This Month:", newThisMonthCount);
+  console.log("Total Patients:", totalPatients);
+  console.log("New This Month:", newThisMonthCount);
 
   return (
     <>
@@ -96,7 +95,7 @@ console.log("New This Month:", newThisMonthCount);
         <header className="bg-green-800 text-white p-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">2nd Innings - Front Desk</h1>
           <div className="flex items-center space-x-4">
-            <span className="text-sm">Welcome, Sarah</span>
+            <span className="text-sm ">Welcome, Sarah</span>
             <LogOut
               className="w-5 h-5 cursor-pointer"
               onClick={() => {

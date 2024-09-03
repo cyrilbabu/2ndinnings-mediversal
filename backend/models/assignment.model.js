@@ -14,6 +14,11 @@ const assignmentSchema = mongoose.Schema({
     role:{
         type:String,
         required:true
+    },
+    status:{
+        type:String,
+        enum:["Not Completed","Completed"],
+        default:"Not Completed"
     }
 
 },{timestamps:true})

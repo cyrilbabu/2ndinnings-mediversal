@@ -15,7 +15,13 @@ import RevisedCareManagerDashboard from "./components/revised-care-manager-dashb
 import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
 import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
 import ShowAllPatient from "./UI/show-all-members";
+
+import ViewAllPlans from "./components/view-all-plans";
+import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
+import StaffRegistration from "./components/staff-registration";
+
 import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -80,11 +86,17 @@ export default function App() {
               />
             }
           />
+
+          <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
+
           <Route
             path="patient-new-registration"
             element={<NewRegistration />}
           />
           <Route path="show-all-member" element={<ShowAllPatient />} />
+          <Route path="view-all-plans" element={<ViewAllPlans />} />
+          <Route path="home-care-vitals" element={<VitalsRecordingScreen />} />
+          <Route path="staff-registration" element={<StaffRegistration />} />
         </Routes>
         <ToastContainer
           position="top-center"

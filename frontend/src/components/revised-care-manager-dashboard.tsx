@@ -8,9 +8,28 @@ import {
   Phone,
   Hospital,
   FileText,
-  LogOut,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
+import { useUser } from "../query/useUser";
+import { useAllPatient } from "../query/useAllPatient";
+
+function calculateAge(dob) {
+  const today = new Date();
+  const birthDate = new Date(dob);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  // Adjust age if the birth date has not yet occurred this year
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+
+  return age;
+}
 
 const NotificationItem = ({ icon: Icon, title, description, onAction }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0">
@@ -33,7 +52,9 @@ const NotificationItem = ({ icon: Icon, title, description, onAction }) => (
 const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
-      <h3 className="text-lg font-semibold text-green-800">{patient.name}</h3>
+      <h3 className="text-lg font-semibold text-green-800">
+        {patient.fullName}
+      </h3>
       <span
         className={`px-2 py-1 rounded-full text-xs ${
           patient.status === "Critical"
@@ -47,7 +68,7 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
       </span>
     </div>
     <p className="text-sm text-gray-600 mb-2">
-      Age: {patient.age}, Plan: {patient.plan}
+      Age: {calculateAge(patient.dob)}, Plan: {patient.plan}
     </p>
     <p className="text-sm text-gray-600 mb-4">
       Last Check: {patient.lastCheck}
@@ -71,16 +92,21 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
 
 const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
   const [report, setReport] = useState("");
+  const [report, setReport] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(report);
+    setReport("");
     setReport("");
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 max-w-md w-full">
+        <h2 className="text-2xl font-bold text-green-800 mb-4">
+          Submit Call Report for {patientName}
+        </h2>
         <h2 className="text-2xl font-bold text-green-800 mb-4">
           Submit Call Report for {patientName}
         </h2>
@@ -174,6 +200,22 @@ export default function RevisedCareManagerDashboard() {
     // Here you would typically send the report to your backend
   };
 
+  const { user, isLoading } = useUser();
+  const { isLoading: loadingPatients, allPatient } = useAllPatient();
+
+  if (isLoading || loadingPatients) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-green-50">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
+        <span className="ml-2 text-green-800">Loading...</span>
+      </div>
+    );
+  }
+
+  const filteredPatients = allPatient.filter(
+    (patient) => patient.careManager === user._id
+  );
+
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <header className="flex justify-between items-center mb-6">
@@ -182,13 +224,7 @@ export default function RevisedCareManagerDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800 mr-4">Welcome, Dr. Mehra</span>
-          <LogOut
-            className="w-5 h-5 cursor-pointer"
-            onClick={() => {
-              navigate("/");
-            }}
-          />
+          <span className="text-green-800">{user.name}</span>
         </div>
       </header>
 
@@ -212,7 +248,7 @@ export default function RevisedCareManagerDashboard() {
             <h2 className="text-xl font-semibold text-green-800 mb-4">
               Assigned Patients
             </h2>
-            {patients.map((patient) => (
+            {filteredPatients.map((patient) => (
               <PatientCard
                 key={patient.id}
                 patient={patient}

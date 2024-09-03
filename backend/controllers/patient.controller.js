@@ -1,5 +1,5 @@
 import Patient from "../models/patient.model.js"; // Adjust the path as needed
-
+import Staff from "../models/staff.model.js";
 // Register a new patient
 export const registerPatient = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ export const registerPatient = async (req, res) => {
       phone,
       address,
       plan,
-      plantime,
+      planDuration,
       dob,
       emergencyContact,
       healthCondition,
@@ -28,7 +28,7 @@ export const registerPatient = async (req, res) => {
       phone,
       address,
       plan,
-      plantime,
+      planDuration,
       dob,
       emergencyContact,
       healthCondition,
@@ -80,3 +80,58 @@ export const getAllPatient = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
+export const assignCareManager = async (req, res) => {
+  try {
+    const { staffId, patientId } = req.body;
+
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(400).json({ message: "patient not found" });
+    }
+    if (patient.careManager) {
+      return res
+        .status(400)
+        .json({ message: "patient already have care manager" });
+    }
+    const staffMember = await Staff.findById(staffId);
+    if (!staffMember) {
+      return res.status(404).json({ message: "Staff member not found" });
+    }
+
+    patient.careManager = staffId;
+    await patient.save();
+
+    return res
+      .status(200)
+      .json({ message: "care manager assigned to patient" });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ message: "Error updating staff member", error });
+  }
+};
+
+export const getPatientById = async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const patient = await Patient.findById(id)
+    if(!patient){
+      return res
+      .status(400)
+      .json({ message: "Error in fetching patient" });
+    }
+    return res
+      .status(200)
+      .json({ message: "patient fetched successfully",patient });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ message: "Error in getPatientById controller", error });
+  }
+}
+
+

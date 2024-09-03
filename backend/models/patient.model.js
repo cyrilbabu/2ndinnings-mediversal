@@ -24,11 +24,12 @@ const patientSchema = mongoose.Schema(
       enum: ["Basic", "Advance", "Premium"],
       required: true,
     },
-    plantime: {
+
+    planDuration: {
       type: String,
-      enum: ["Monthly", "Yearly"],
-      required: true,
+      enum: ["yearly", "monthly"],
     },
+
     dob: {
       type: Date,
       required: true,
@@ -39,6 +40,11 @@ const patientSchema = mongoose.Schema(
     },
     healthCondition: {
       type: String,
+    },
+
+    careManager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Staff",
     },
   },
   { timestamps: true }

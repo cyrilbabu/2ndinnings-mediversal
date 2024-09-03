@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search, UserPlus, Users, LogOut } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../UI/back-button";
+import { useAllPatient } from "../query/useAllPatient";
 
 const DashboardCard = ({
   title,
@@ -73,7 +74,19 @@ export default function FrontDeskDashboard() {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
+  // Get the current month and year
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentYear = currentDate.getFullYear();
 
+  // Filter patients added in the current month
+  const newThisMonth = patients.filter((patient) => {
+    const createdAtDate = new Date(patient?.createdAt);
+    return (
+      createdAtDate.getMonth() === currentMonth &&
+      createdAtDate.getFullYear() === currentYear
+    );
+  });
   // Filter patients added in the current month
   const newThisMonth = patients.filter((patient) => {
     const createdAtDate = new Date(patient?.createdAt);
@@ -85,9 +98,6 @@ export default function FrontDeskDashboard() {
 
   // Find the number of patients added this month
   const newThisMonthCount = newThisMonth.length;
-
-  console.log("Total Patients:", totalPatients);
-  console.log("New This Month:", newThisMonthCount);
 
   return (
     <>

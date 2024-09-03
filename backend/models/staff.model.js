@@ -27,8 +27,8 @@ const staffSchema = mongoose.Schema({
       "Admin",
     ],
     required: true,
-  },
-});
+  }
+},{timestamps:true});
 
 const Staff = new mongoose.model("Staff", staffSchema);
 

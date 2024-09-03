@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
@@ -8,13 +8,14 @@ import { Toaster } from "react-hot-toast";
 
 import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
 import NewRegistration from "./components/second-innings-new-registration";
-import BanyanThemePageWithNamaste from "./components/second-innings-banyan-theme-with-namaste";
+
 import AdminDashboardView from "./components/admin-dashboard-view";
 import AssessorDashboard from "./components/assessor-dashboard";
 import RevisedCareManagerDashboard from "./components/revised-care-manager-dashboard";
 import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
 import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
 import ShowAllPatient from "./UI/show-all-members";
+import AdminShowAllPatient from "./UI/admin-show-all-member";
 import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
@@ -37,27 +38,46 @@ export default function App() {
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
 
-          <Route path="admin-dashboard" element={<AdminDashboardView />} />
-          <Route path="assessor-dashboard" element={<AssessorDashboard />} />
-          <Route
-            path="care-manager-dashboard"
-            element={<RevisedCareManagerDashboard />}
-          />
-          <Route
-            path="homecare-dashboard"
-            element={<HomeCareStaffDashboard />}
-          />
-          <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
+          <Route>
+            <Route path="admin-dashboard" element={<AdminDashboardView />} />
+            <Route
+              path="admin-dashboard/viewMember"
+              element={<AdminShowAllPatient />}
+            />
+          </Route>
 
-          <Route
-            path="patient-new-registration"
-            element={<NewRegistration />}
-          />
-          <Route path="show-all-member" element={<ShowAllPatient />} />
-          <Route path="view-all-plans" element={<ViewAllPlans />} />
-          <Route path="home-care-vitals" element={<VitalsRecordingScreen />} />
-          <Route path="staff-registration" element={<StaffRegistration />} />
-          <Route path="view-patient-details" element={<ViewPatientDetails />} />
+          <Route>
+            <Route
+              path="frontdesk-dashboard"
+              element={<FrontDeskDashboard />}
+            />
+            <Route
+              path="frontdesk-dashboard/show-all-member"
+              element={<ShowAllPatient />}
+            />
+            <Route
+              path="frontdesk-dashboard/patient-new-registration"
+              element={<NewRegistration />}
+            />
+          </Route>
+
+          <Route>
+            <Route path="assessor-dashboard" element={<AssessorDashboard />} />
+          </Route>
+
+          <Route>
+            <Route
+              path="care-manager-dashboard"
+              element={<RevisedCareManagerDashboard />}
+            />
+          </Route>
+
+          <Route>
+            <Route
+              path="homecare-dashboard"
+              element={<HomeCareStaffDashboard />}
+            />
+          </Route>
         </Routes>
         <ToastContainer
           position="top-center"

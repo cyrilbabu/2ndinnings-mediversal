@@ -16,6 +16,6 @@ router.get("/getAllPatient",getAllPatient);
 router.get("/getPlanDetails",getPlanDetails);
 router.post("/assignCareManager",assignCareManager);
 router.get("/getPatientById/:id",getPatientById);
-
+router.post("/registerPatient",registerPatient);
 
 export default router;

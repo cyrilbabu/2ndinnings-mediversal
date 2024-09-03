@@ -52,7 +52,7 @@ export default function App() {
               element={<ShowAllPatient />}
             />
             <Route
-              path="frontdesk-dashboard/spatient-new-registration"
+              path="frontdesk-dashboard/patient-new-registration"
               element={<NewRegistration />}
             />
           </Route>

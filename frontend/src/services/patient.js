@@ -23,10 +23,10 @@ export async function showAllPatient() {
 }
 
 export async function assignCareManager(data) {
-  const apiUrl = `${url}/api/patient/getAllPatient`;
+  const apiUrl = `${url}/api/patient/assignCareManager`;
 
   try {
-    const response = await axios.post(apiUrl,data);
+    const response = await axios.post(apiUrl, data);
 
     if (response.status === 200) {
       return response.data.allPatient; // Assuming response.data contains the array of admin details

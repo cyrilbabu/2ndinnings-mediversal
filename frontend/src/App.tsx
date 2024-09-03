@@ -15,13 +15,7 @@ import RevisedCareManagerDashboard from "./components/revised-care-manager-dashb
 import HomeCareStaffDashboard from "./components/home-care-staff-dashboard";
 import FrontDeskDashboard from "./components/second-innings-front-desk-dashboard";
 import ShowAllPatient from "./UI/show-all-members";
-
-import ViewAllPlans from "./components/view-all-plans";
-import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
-import StaffRegistration from "./components/staff-registration";
-
-import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
-
+import AdminShowAllPatient from "./UI/admin-show-all-member";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,63 +34,46 @@ export default function App() {
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
 
-          {/* Private routes with role-based access */}
-          <Route
-            path="admin-dashboard"
-            element={
-              <PrivateRoute
-                component={AdminDashboardView}
-                allowedRoles={["Admin"]}
-              />
-            }
-          />
-          <Route
-            path="assessor-dashboard"
-            element={
-              <PrivateRoute
-                component={AssessorDashboard}
-                allowedRoles={["Assessor"]}
-              />
-            }
-          />
-          <Route
-            path="care-manager-dashboard"
-            element={
-              <PrivateRoute
-                component={RevisedCareManagerDashboard}
-                allowedRoles={["Care Manager"]}
-              />
-            }
-          />
-          <Route
-            path="homecare-dashboard"
-            element={
-              <PrivateRoute
-                component={HomeCareStaffDashboard}
-                allowedRoles={["Home Care Staff"]}
-              />
-            }
-          />
-          <Route
-            path="frontdesk-dashboard"
-            element={
-              <PrivateRoute
-                component={FrontDeskDashboard}
-                allowedRoles={["Front Desk"]}
-              />
-            }
-          />
+          <Route>
+            <Route path="admin-dashboard" element={<AdminDashboardView />} />
+            <Route
+              path="admin-dashboard/viewMember"
+              element={<AdminShowAllPatient />}
+            />
+          </Route>
 
-          <Route path="frontdesk-dashboard" element={<FrontDeskDashboard />} />
+          <Route>
+            <Route
+              path="frontdesk-dashboard"
+              element={<FrontDeskDashboard />}
+            />
+            <Route
+              path="frontdesk-dashboard/show-all-member"
+              element={<ShowAllPatient />}
+            />
+            <Route
+              path="frontdesk-dashboard/spatient-new-registration"
+              element={<NewRegistration />}
+            />
+          </Route>
 
-          <Route
-            path="patient-new-registration"
-            element={<NewRegistration />}
-          />
-          <Route path="show-all-member" element={<ShowAllPatient />} />
-          <Route path="view-all-plans" element={<ViewAllPlans />} />
-          <Route path="home-care-vitals" element={<VitalsRecordingScreen />} />
-          <Route path="staff-registration" element={<StaffRegistration />} />
+          <Route>
+            <Route path="assessor-dashboard" element={<AssessorDashboard />} />
+          </Route>
+
+          <Route>
+            <Route
+              path="care-manager-dashboard"
+              element={<RevisedCareManagerDashboard />}
+            />
+          </Route>
+
+          <Route>
+            <Route
+              path="homecare-dashboard"
+              element={<HomeCareStaffDashboard />}
+            />
+          </Route>
         </Routes>
         <ToastContainer
           position="top-center"

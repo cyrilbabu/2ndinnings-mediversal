@@ -1,5 +1,5 @@
 import Patient from "../models/patient.model.js"; // Adjust the path as needed
-
+import Staff from "../models/staff.model.js";
 // Register a new patient
 export const registerPatient = async (req, res) => {
   try {
@@ -65,38 +65,44 @@ export const searchPatient = async (req, res) => {
   }
 };
 
-export const getAllPatient = async(req,res)=>{
+export const getAllPatient = async (req, res) => {
   try {
-    const allPatient= await Patient.find({})
-    if(!allPatient){
-      return res.status(200).json({ message: "no patient found", allPatient});
+    const allPatient = await Patient.find({});
+    if (!allPatient) {
+      return res.status(200).json({ message: "no patient found", allPatient });
     }
-    return res.status(200).json({ message: "all patients fetched successfuly", allPatient});
+    return res
+      .status(200)
+      .json({ message: "all patients fetched successfuly", allPatient });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
-}
+};
 
 export const assignCareManager = async (req, res) => {
   try {
-    const { staffId,patientId} = req.body;
-  
-    const patient = await Patient.findById({_id:patientId});
+    const { staffId, patientId } = req.body;
+
+    const patient = await Patient.findById(patientId);
     if (!patient) {
       return res.status(400).json({ message: "patient not found" });
     }
-    if(patient.careManager){
-      return res.status(400).json({ message: "patient already have care manager" });
+    if (patient.careManager) {
+      return res
+        .status(400)
+        .json({ message: "patient already have care manager" });
     }
     const staffMember = await Staff.findById(staffId);
     if (!staffMember) {
       return res.status(404).json({ message: "Staff member not found" });
     }
 
-    patient.careManager = staffId
-    await patient.save()
+    patient.careManager = staffId;
+    await patient.save();
 
-    return res.status(200).json({message:"care manager assigned to patient"});
+    return res
+      .status(200)
+      .json({ message: "care manager assigned to patient" });
   } catch (error) {
     console.log(error.message);
     return res
@@ -124,3 +130,4 @@ export const getPatientById = async(req,res)=>{
       .json({ message: "Error in getPatientById controller", error });
   }
 }
+

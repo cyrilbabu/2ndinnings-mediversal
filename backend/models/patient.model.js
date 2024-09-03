@@ -21,14 +21,14 @@ const patientSchema = mongoose.Schema(
     },
     plan: {
       type: String,
-      enum: ["Basic", "Advance", "premium"],
+      enum: ["Basic", "Advance", "Premium"],
       required: true,
     },
 
     planDuration: {
       type: String,
+      enum: ["yearly", "monthly"],
     },
-
 
     dob: {
       type: Date,
@@ -46,7 +46,6 @@ const patientSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Staff",
     },
-
   },
   { timestamps: true }
 );

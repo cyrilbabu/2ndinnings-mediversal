@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { User, Phone, Mail, Home, AlertTriangle } from "lucide-react";
 import axios from "axios";
 import BackButton from "../UI/back-button";
+import { useNavigate } from "react-router-dom";
 
 const InputField = ({
   icon: Icon,
@@ -35,8 +36,11 @@ export default function NewRegistration() {
     address: "",
     emergencyContact: "",
     plan: "",
+    plantime: "",
     healthCondition: "", // Updated key
   });
+
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,10 +58,7 @@ export default function NewRegistration() {
     console.log(formData);
 
     try {
-      await axios.post(
-        "http://localhost:3000/api/patient/register",
-        formData
-      );
+      await axios.post("http://localhost:3000/api/patient/register", formData);
       // alert("Registration successful!");
       setFormData({
         fullName: "",
@@ -67,6 +68,7 @@ export default function NewRegistration() {
         address: "",
         emergencyContact: "",
         plan: "",
+        plantime: "",
         healthCondition: "", // Reset key
       });
     } catch (error) {
@@ -135,23 +137,50 @@ export default function NewRegistration() {
             />
           </div>
 
-          <div className="mt-6">
-            <label className="block text-green-800 mb-2">Membership Plan</label>
-            <div className="flex space-x-4">
-              {["Basic", "Advanced", "Premium"].map((plan) => (
-                <label key={plan} className="flex items-center">
-                  <input
-                    type="radio"
-                    name="plan"
-                    value={plan}
-                    checked={formData.plan === plan}
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  <span>{plan}</span>
-                </label>
-              ))}
+          <div className="mt-6  md:flex justify-between">
+            <div>
+              <label className="block text-green-800 mb-2">
+                Membership Plan
+              </label>
+              <div className="flex space-x-4">
+                {["Basic", "Advanced", "Premium"].map((plan) => (
+                  <label key={plan} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="plan"
+                      value={plan}
+                      checked={formData.plan === plan}
+                      onChange={handleInputChange}
+                      className="mr-2"
+                    />
+                    <span>{plan}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="flex space-x-4">
+                {["Monthly", "Yearly"].map((plantime) => (
+                  <label key={plantime} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="plantime"
+                      value={plantime}
+                      checked={formData.plantime === plantime}
+                      onChange={handleInputChange}
+                      className="mr-2"
+                    />
+                    <span>{plantime}</span>
+                  </label>
+                ))}
+              </div>
             </div>
+            <button
+              onClick={() => {
+                navigate("/view-all-plans");
+              }}
+              className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
+            >
+              View Plans
+            </button>
           </div>
 
           <div className="mt-6">

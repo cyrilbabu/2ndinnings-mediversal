@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
+import DropDownStaff from "./DropDownStaff";
 
 export default function AdminShowAllPatient() {
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
-  console.log(patients);
 
   const handleChange = (e) => {
     setName(e.target.value.toLowerCase());
@@ -103,9 +103,10 @@ export default function AdminShowAllPatient() {
                     {patient.careManager ? (
                       <p>{patient.careManager}</p>
                     ) : (
-                      <button className="bg-blue-500 py-1 px-2 rounded-sm text-white font-semibold text-sm">
-                        Assign
-                      </button>
+                      <DropDownStaff
+                        role="Care Manager"
+                        patientId={patient._id}
+                      />
                     )}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">

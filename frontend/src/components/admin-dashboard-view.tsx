@@ -85,7 +85,38 @@ export default function AdminDashboardView() {
       </div>
     );
   }
-  console.log("staff", allStaff);
+
+  console.log(allStaff);
+  const currentDate = new Date();
+  const startOfThisMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+
+  const startOfLastMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() - 1,
+    1
+  );
+  const patientsThisMonth = patients.filter((patient) => {
+    const createdAt = new Date(patient.createdAt);
+    return createdAt >= startOfThisMonth;
+  });
+  const patientsLastMonth = patients.filter((patient) => {
+    const createdAt = new Date(patient.createdAt);
+    return createdAt >= startOfLastMonth && createdAt < startOfThisMonth;
+  });
+
+  const increaseInPatients =
+    patientsThisMonth.length - patientsLastMonth.length;
+
+  // Calculate the percentage increase in patients
+  const percentageIncrease =
+    patientsLastMonth.length === 0
+      ? 100
+      : (increaseInPatients / patientsLastMonth.length) * 100;
+
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
@@ -96,7 +127,7 @@ export default function AdminDashboardView() {
           title="Total Members"
           value={`${patients.length}`}
           icon={Users}
-          trend={5.2}
+          trend={percentageIncrease}
         />
         <DashboardCard
           title="Active Staff"

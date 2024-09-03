@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useAllStaff } from "../query/useAllStaff";
 
 export default function ShowAllPatient() {
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
-  console.log(patients);
 
   const handleChange = (e) => {
     setName(e.target.value.toLowerCase());

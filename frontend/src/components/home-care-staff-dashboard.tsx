@@ -8,6 +8,7 @@ import {
   Phone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useGetAllAssignment } from "../query/useGetAllAssignment";
 
 const VisitCard = ({ name, address, phone, time, status, navigate }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
@@ -35,7 +36,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
       <Clock className="w-4 h-4 mr-2" />
       {time}
     </div>
-    {status === "Upcoming" ? (
+    {status === "Not Completed" ? (
       <button
         onClick={() => {
           navigate("/home-care-vitals");
@@ -59,6 +60,31 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
 
 export default function HomeCareStaffDashboard() {
   const navigate = useNavigate();
+  const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
+
+  if (loadingAssignments) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-green-50">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
+        <span className="ml-2 text-green-800">Loading...</span>
+      </div>
+    );
+  }
+
+  const homeCareAssignments = assignments.filter(
+    (assignment) =>
+      assignment.role === "Home Care Staff" &&
+      assignment.staff._id === userData._id
+  );
+
+  const completedhomeCareAssignments = homeCareAssignments.filter(
+    (assignment) => assignment.status === "Completed"
+  );
+  const notCompletedhomeCareAssignments = homeCareAssignments.filter(
+    (assignment) => assignment.status === "Not Completed"
+  );
+
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <header className="flex justify-between items-center mb-6">
@@ -67,7 +93,7 @@ export default function HomeCareStaffDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800">Welcome, Sarah</span>
+          <span className="text-green-800">Welcome, {userData.name}</span>
         </div>
       </header>
 
@@ -75,35 +101,32 @@ export default function HomeCareStaffDashboard() {
         <h2 className="text-xl font-semibold text-green-800 mb-4">
           Today's Visits
         </h2>
-        <VisitCard
-          name="John Doe"
-          address="123 Elder St, Senior City"
-          phone="(555) 123-4567"
-          time="10:00 AM"
-          status="Upcoming"
-          navigate={navigate}
-        />
-        <VisitCard
-          name="Jane Smith"
-          address="456 Wellness Ave, Care Town"
-          phone="(555) 987-6543"
-          time="2:00 PM"
-          status="Upcoming"
-          navigate={navigate}
-        />
+        {notCompletedhomeCareAssignments.map((visit) => (
+          <VisitCard
+            name={visit.patient.fullName}
+            address={visit.patient.address}
+            phone={visit.patient.phone}
+            time={visit.time}
+            status={visit.status}
+            navigate={navigate}
+          />
+        ))}
       </div>
 
       <div>
         <h2 className="text-xl font-semibold text-green-800 mb-4">
           Completed Visits
         </h2>
-        <VisitCard
-          name="Robert Brown"
-          address="789 Serenity Ln, Peaceful Village"
-          phone="(555) 246-8135"
-          time="9:00 AM"
-          status="Completed"
-        />
+        {completedhomeCareAssignments.map((visit) => (
+          <VisitCard
+            name={visit.patient.fullName}
+            address={visit.patient.address}
+            phone={visit.patient.phone}
+            time={visit.time}
+            status={visit.status}
+            navigate={navigate}
+          />
+        ))}
       </div>
     </div>
   );

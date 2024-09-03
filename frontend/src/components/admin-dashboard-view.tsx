@@ -9,6 +9,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useAllStaff } from "../query/useAllStaff";
 import { useNavigate } from "react-router-dom";
 
@@ -76,8 +77,9 @@ export default function AdminDashboardView() {
   const navigate = useNavigate();
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
+  const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
 
-  if (isLoading || loadingStaff) {
+  if (isLoading || loadingStaff || loadingAssignments) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -86,7 +88,13 @@ export default function AdminDashboardView() {
     );
   }
 
-  console.log(allStaff);
+  const completedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Completed"
+  );
+  const notCompletedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Not Completed"
+  );
+
   const currentDate = new Date();
   const startOfThisMonth = new Date(
     currentDate.getFullYear(),
@@ -137,13 +145,13 @@ export default function AdminDashboardView() {
         />
         <DashboardCard
           title="Reports This Month"
-          value="287"
+          value={`${completedAssignments.length}`}
           icon={FileText}
           trend={12.7}
         />
         <DashboardCard
           title="Pending Assignments"
-          value="23"
+          value={`${notCompletedAssignments.length}`}
           icon={Clipboard}
         />
       </div>

@@ -1,13 +1,50 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useAddAssignement } from "../query/useAddAssignement";
 import DropDownStaff from "./DropDownStaff";
+import AssignModal from "./AssignModal";
+import SelectDropDown from "./SelectDropDown";
 
 export default function AdminShowAllPatient({ role }) {
   const [name, setName] = useState("");
+  const [selectedOption, setSelectedOption] = useState();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const { addAssignement, isLoading: addingAssignement } = useAddAssignement();
   const { isLoading, allPatient: patients } = useAllPatient();
 
   const handleChange = (e) => {
     setName(e.target.value.toLowerCase());
+  };
+
+  const handleOpenModal = (patient) => {
+    setSelectedPatient(patient);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const handleSubmit = (e, data) => {
+    e.preventDefault();
+
+    addAssignement({
+      staff: selectedOption,
+      role: selectedOption?.role,
+      patient: selectedPatient,
+      time: data.time,
+    });
+
+    console.log({
+      staff: selectedOption,
+      patient: selectedPatient,
+      role: selectedOption?.role,
+      time: data.time,
+    });
+
+    handleCloseModal();
   };
 
   if (isLoading) {
@@ -19,15 +56,6 @@ export default function AdminShowAllPatient({ role }) {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <div className="min-h-screen flex justify-center items-center bg-red-50">
-  //       <p className="text-red-600 font-bold">Error: {error}</p>
-  //     </div>
-  //   );
-  // }
-
-  // Filter patients based on the search input
   const filteredPatients = patients.filter((patient) =>
     patient.fullName.toLowerCase().includes(name)
   );
@@ -87,7 +115,14 @@ export default function AdminShowAllPatient({ role }) {
                   </td>
 
                   <td className="px-5 py-1 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient.careManager ? (
+                    {role === "Home Care Staff" || role === "Assessor" ? (
+                      <button
+                        onClick={() => handleOpenModal(patient)}
+                        className="flex items-center justify-center w-full px-6 py-2 bg-green-600  text-white font-semibold text-sm  rounded-lg hover:bg-green-800"
+                      >
+                        Assign
+                      </button>
+                    ) : patient.careManager ? (
                       <p>{patient.careManager}</p>
                     ) : (
                       <DropDownStaff role={role} patientId={patient._id} />
@@ -108,6 +143,19 @@ export default function AdminShowAllPatient({ role }) {
           </tbody>
         </table>
       </div>
+
+      <AssignModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        dropDown={
+          <SelectDropDown
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            role={role}
+          />
+        }
+      />
     </div>
   );
 }

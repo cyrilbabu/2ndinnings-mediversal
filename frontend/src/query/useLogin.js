@@ -9,7 +9,6 @@ export function useLogin() {
     mutationFn: (data) => loginApi(data),
 
     onSuccess: (data) => {
-      console.log(data);
       toast.success("User Login Successfully");
 
       // Store the data in the React Query cache under the key "user"

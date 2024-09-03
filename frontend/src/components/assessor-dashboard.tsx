@@ -9,19 +9,14 @@ import {
   FileText,
   AlertTriangle,
 } from "lucide-react";
+import { useGetAllAssignment } from "../query/useGetAllAssignment";
 
-const VisitCard = ({
-  name,
-  address,
-  date,
-  time,
-  assessmentType,
-  status,
-  onActionClick,
-}) => (
+const VisitCard = ({ visit, onActionClick }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
-      <h3 className="text-lg font-semibold text-green-800">{name}</h3>
+      <h3 className="text-lg font-semibold text-green-800">
+        {visit.patient.fullName}
+      </h3>
       <span
         className={`px-2 py-1 rounded-full text-xs ${
           status === "Assigned"
@@ -34,15 +29,17 @@ const VisitCard = ({
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-1">
       <MapPin className="w-4 h-4 mr-2" />
-      {address}
+      {visit.patient.address}
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-2">
       <Calendar className="w-4 h-4 mr-2" />
-      {date} at {time}
+      {/* {date} at {visit.time} */}
+      {visit.time}
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-3">
       <FileText className="w-4 h-4 mr-2" />
-      {assessmentType} Geriatric Assessment
+      {/* {assessmentType} Geriatric Assessment */}
+      Geriatric Assessment
     </div>
     <button
       onClick={onActionClick}
@@ -59,48 +56,8 @@ const VisitCard = ({
 
 export default function AssessorDashboard() {
   const [activeTab, setActiveTab] = useState("assigned");
-
-  const assignedVisits = [
-    {
-      id: 1,
-      name: "John Doe",
-      address: "123 Elder St, Senior City",
-      date: "2023-08-25",
-      time: "10:00 AM",
-      assessmentType: "Basic",
-      status: "Assigned",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      address: "456 Wellness Ave, Care Town",
-      date: "2023-08-26",
-      time: "2:00 PM",
-      assessmentType: "Advanced",
-      status: "Assigned",
-    },
-  ];
-
-  const completedVisits = [
-    {
-      id: 3,
-      name: "Robert Brown",
-      address: "789 Serenity Ln, Peaceful Village",
-      date: "2023-08-24",
-      time: "11:30 AM",
-      assessmentType: "Basic",
-      status: "Completed",
-    },
-    {
-      id: 4,
-      name: "Emily White",
-      address: "101 Tranquil Rd, Quiet Hamlet",
-      date: "2023-08-23",
-      time: "3:00 PM",
-      assessmentType: "Advanced",
-      status: "Completed",
-    },
-  ];
+  const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
   const handleActionClick = (visit) => {
     // Here you would navigate to the appropriate assessment form or view
@@ -111,6 +68,29 @@ export default function AssessorDashboard() {
     );
   };
 
+  if (loadingAssignments) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-green-50">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
+        <span className="ml-2 text-green-800">Loading...</span>
+      </div>
+    );
+  }
+
+  const assessorAssignments = assignments.filter(
+    (assignment) =>
+      assignment.role === "Assessor" && assignment.staff._id === userData._id
+  );
+
+  const completedAssignments = assessorAssignments.filter(
+    (assignment) => assignment.status === "Completed"
+  );
+  const notCompletedAssignments = assessorAssignments.filter(
+    (assignment) => assignment.status === "Not Completed"
+  );
+
+  // console.log(assessorAssignments);
+
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <header className="flex justify-between items-center mb-6">
@@ -119,7 +99,7 @@ export default function AssessorDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800">Welcome, Dr. Anderson</span>
+          <span className="text-green-800">Welcome, {userData.name}</span>
         </div>
       </header>
 
@@ -153,17 +133,17 @@ export default function AssessorDashboard() {
             : "Recent Assessments"}
         </h2>
         {activeTab === "assigned"
-          ? assignedVisits.map((visit) => (
+          ? completedAssignments.map((visit) => (
               <VisitCard
                 key={visit.id}
-                {...visit}
+                visit={visit}
                 onActionClick={() => handleActionClick(visit)}
               />
             ))
-          : completedVisits.map((visit) => (
+          : notCompletedAssignments.map((visit) => (
               <VisitCard
                 key={visit.id}
-                {...visit}
+                visit={visit}
                 onActionClick={() => handleActionClick(visit)}
               />
             ))}

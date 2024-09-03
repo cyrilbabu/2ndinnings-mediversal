@@ -32,6 +32,17 @@ const DashboardCard = ({ title, value, icon: Icon, trend }) => (
               className="inline mr-1 transform rotate-180"
             />
           )}
+        <p
+          className={`text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}`}
+        >
+          {trend > 0 ? (
+            <TrendingUp size={16} className="inline mr-1" />
+          ) : (
+            <TrendingUp
+              size={16}
+              className="inline mr-1 transform rotate-180"
+            />
+          )}
           {Math.abs(trend)}% from last month
         </p>
       )}
@@ -147,6 +158,46 @@ export default function AdminDashboardView() {
           icon={Clipboard}
         />
       </div>
+    <div>
+      <header className="bg-green-800 text-white p-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="flex items-center space-x-4">
+          <span className="text-sm">Welcome, Sarah</span>
+          <LogOut
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
+        </div>
+      </header>
+      <div className="bg-gray-100 min-h-screen p-6">
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <DashboardCard
+            title="Total Members"
+            value="1,234"
+            icon={Users}
+            trend={5.2}
+          />
+          <DashboardCard
+            title="Active Staff"
+            value="56"
+            icon={Users}
+            trend={-2.1}
+          />
+          <DashboardCard
+            title="Reports This Month"
+            value="287"
+            icon={FileText}
+            trend={12.7}
+          />
+          <DashboardCard
+            title="Pending Assignments"
+            value="23"
+            icon={Clipboard}
+          />
+        </div>
 
       {/* Quick Actions and Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

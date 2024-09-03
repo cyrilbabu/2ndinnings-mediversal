@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
 import { useAllStaff } from "../query/useAllStaff";
+import BackButton from "./back-button";
 
 export default function ShowAllPatient() {
   const [name, setName] = useState("");
@@ -34,6 +35,7 @@ export default function ShowAllPatient() {
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
+      <BackButton />
       <h1 className="text-3xl font-bold text-green-800 mb-6">Show Member</h1>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="w-full rounded my-2">

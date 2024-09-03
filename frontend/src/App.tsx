@@ -20,6 +20,7 @@ import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
 import ViewPatientDetails from "./components/view-patient-details";
+import HomeCareVitalDetails from "./components/home-care-vitail-detail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,6 +60,10 @@ export default function App() {
               path="frontdesk-dashboard/patient-new-registration"
               element={<NewRegistration />}
             />
+            <Route
+              path="frontdesk-dashboard/patient-details"
+              element={<ViewPatientDetails />}
+            />
           </Route>
 
           <Route>
@@ -76,6 +81,14 @@ export default function App() {
             <Route
               path="homecare-dashboard"
               element={<HomeCareStaffDashboard />}
+            />
+            <Route
+              path="homecare-dashboard/home-care-vitals"
+              element={<VitalsRecordingScreen />}
+            />
+            <Route
+              path="homecare-dashboard/home-care-vitals-details"
+              element={<HomeCareVitalDetails />}
             />
           </Route>
         </Routes>

@@ -53,6 +53,10 @@ export default function App() {
               path="admin-dashboard/assign-assessor"
               element={<AdminShowAllPatient role="Assessor" />}
             />
+            <Route
+              path="admin-dashboard/add-staff"
+              element={<StaffRegistration />}
+            />
           </Route>
 
           <Route>
@@ -71,6 +75,10 @@ export default function App() {
             <Route
               path="frontdesk-dashboard/patient-details"
               element={<ViewPatientDetails />}
+            />
+            <Route
+              path="frontdesk-dashboard/view-all-plans"
+              element={<ViewAllPlans />}
             />
           </Route>
 

@@ -175,7 +175,7 @@ export default function NewRegistration() {
             </div>
             <button
               onClick={() => {
-                navigate("/view-all-plans");
+                navigate("/frontdesk-dashboard/view-all-plans");
               }}
               className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
             >

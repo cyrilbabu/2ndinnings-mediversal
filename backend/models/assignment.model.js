@@ -16,6 +16,11 @@ const assignmentSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["Not Completed", "Completed"],
+      default: "Not Completed",
+    },
   },
   { timestamps: true }
 );

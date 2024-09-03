@@ -6,6 +6,7 @@ import {
   User,
   MapPin,
   Phone,
+  LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
@@ -39,7 +40,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
     {status === "Not Completed" ? (
       <button
         onClick={() => {
-          navigate("/home-care-vitals");
+          navigate("/homecare-dashboard/home-care-vitals");
         }}
         className="mt-3 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
       >
@@ -48,11 +49,11 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
     ) : (
       <button
         onClick={() => {
-          navigate("/home-care-vitals");
+          navigate("/homecare-dashboard/home-care-vitals-details");
         }}
-        className="mt-3 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
+        className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
-        Download Report
+        See Report
       </button>
     )}
   </div>
@@ -93,7 +94,17 @@ export default function HomeCareStaffDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
+
           <span className="text-green-800">Welcome, {userData.name}</span>
+
+          
+          <LogOut
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
+
         </div>
       </header>
 

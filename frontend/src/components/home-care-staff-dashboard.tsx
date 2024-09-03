@@ -39,7 +39,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
     {status === "Upcoming" ? (
       <button
         onClick={() => {
-          navigate("/home-care-vitals");
+          navigate("/homecare-dashboard/home-care-vitals");
         }}
         className="mt-3 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
       >
@@ -48,11 +48,11 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
     ) : (
       <button
         onClick={() => {
-          navigate("/home-care-vitals");
+          navigate("/homecare-dashboard/home-care-vitals-details");
         }}
-        className="mt-3 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
+        className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
-        Download Report
+        See Report
       </button>
     )}
   </div>

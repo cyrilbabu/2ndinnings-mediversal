@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useUser } from "../query/useUser";
 import { useAllPatient } from "../query/useAllPatient";
+import { useNavigate } from "react-router-dom";
 
 function calculateAge(dob) {
   const today = new Date();
@@ -92,12 +93,10 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
 
 const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
   const [report, setReport] = useState("");
-  const [report, setReport] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(report);
-    setReport("");
     setReport("");
   };
 
@@ -211,7 +210,8 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
-
+  console.log("patient hai", allPatient);
+  console.log("user hai", user);
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === user._id
   );

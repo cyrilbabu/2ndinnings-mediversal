@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useUser } from "../query/useUser";
 import { useAllPatient } from "../query/useAllPatient";
+import { useNavigate } from "react-router-dom";
 
 function calculateAge(dob) {
   const today = new Date();
@@ -105,6 +106,9 @@ const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
         <h2 className="text-2xl font-bold text-green-800 mb-4">
           Submit Call Report for {patientName}
         </h2>
+        <h2 className="text-2xl font-bold text-green-800 mb-4">
+          Submit Call Report for {patientName}
+        </h2>
         <form onSubmit={handleSubmit}>
           <textarea
             value={report}
@@ -157,6 +161,8 @@ export default function RevisedCareManagerDashboard() {
     // Add more mock patients as needed
   ]);
 
+  const navigate = useNavigate();
+
   const notifications = [
     {
       icon: Phone,
@@ -205,7 +211,8 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
-
+  console.log("patient hai", allPatient);
+  console.log("user hai", user);
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === userData._id
   );

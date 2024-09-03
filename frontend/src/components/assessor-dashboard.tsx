@@ -8,8 +8,13 @@ import {
   MapPin,
   FileText,
   AlertTriangle,
+  LogOut,
 } from "lucide-react";
+
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
+
+import { useNavigate } from "react-router-dom";
+
 
 const VisitCard = ({ visit, onActionClick }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
@@ -56,8 +61,10 @@ const VisitCard = ({ visit, onActionClick }) => (
 
 export default function AssessorDashboard() {
   const [activeTab, setActiveTab] = useState("assigned");
+
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
+
 
   const handleActionClick = (visit) => {
     // Here you would navigate to the appropriate assessment form or view
@@ -99,7 +106,17 @@ export default function AssessorDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
+
           <span className="text-green-800">Welcome, {userData.name}</span>
+
+         
+          <LogOut
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
+
         </div>
       </header>
 

@@ -15,7 +15,6 @@ import { useGetAllAssignment } from "../query/useGetAllAssignment";
 
 import { useNavigate } from "react-router-dom";
 
-
 const VisitCard = ({ visit, onActionClick }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
@@ -61,10 +60,9 @@ const VisitCard = ({ visit, onActionClick }) => (
 
 export default function AssessorDashboard() {
   const [activeTab, setActiveTab] = useState("assigned");
-
+  const navigate = useNavigate();
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
-
 
   const handleActionClick = (visit) => {
     // Here you would navigate to the appropriate assessment form or view
@@ -100,7 +98,7 @@ export default function AssessorDashboard() {
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+      <header className="flex justify-between items-center mb-6 ">
         <h1 className="text-2xl font-bold text-green-800">
           Assessor Dashboard
         </h1>
@@ -109,14 +107,12 @@ export default function AssessorDashboard() {
 
           <span className="text-green-800">Welcome, {userData.name}</span>
 
-         
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
               navigate("/");
             }}
           />
-
         </div>
       </header>
 

@@ -26,14 +26,14 @@ const DashboardCard = ({ title, value, icon: Icon, trend }) => (
         <p
           className={`text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}`}
         >
-          {trend > 0 ? (
+          {/* {trend > 0 ? (
             <TrendingUp size={16} className="inline mr-1" />
           ) : (
             <TrendingUp
               size={16}
               className="inline mr-1 transform rotate-180"
             />
-          )}
+          )} */}
           <p
             className={`text-sm ${
               trend > 0 ? "text-green-600" : "text-red-600"
@@ -141,38 +141,7 @@ export default function AdminDashboardView() {
       : (increaseInPatients / patientsLastMonth.length) * 100;
 
   return (
-
-    <div className="bg-gray-100 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
-
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <DashboardCard
-          title="Total Members"
-          value={`${patients.length}`}
-          icon={Users}
-          trend={percentageIncrease}
-        />
-        <DashboardCard
-          title="Active Staff"
-          value={`${allStaff.length}`}
-          icon={Users}
-          trend={-2.1}
-        />
-        <DashboardCard
-          title="Reports This Month"
-          value={`${completedAssignments.length}`}
-          icon={FileText}
-          trend={12.7}
-        />
-        <DashboardCard
-          title="Pending Assignments"
-          value={`${notCompletedAssignments.length}`}
-          icon={Clipboard}
-        />
-      </div>
-
-    <div>
+    <div className="bg-gray-100 min-h-screen ">
       <header className="bg-green-800 font-bold text-white text-2xl p-4 flex justify-between items-center">
         Admin Dashboard
         <div className="flex items-center space-x-4">
@@ -185,7 +154,6 @@ export default function AdminDashboardView() {
           />
         </div>
       </header>
-
 
       <div className="bg-gray-100 min-h-screen p-6">
         <div className="bg-gray-100 min-h-screen p-6">
@@ -205,33 +173,14 @@ export default function AdminDashboardView() {
             />
             <DashboardCard
               title="Reports This Month"
-              value="287"
+              value={`${completedAssignments.length}`}
               icon={FileText}
               trend={12.7}
             />
             <DashboardCard
               title="Pending Assignments"
-              value="23"
+              value={`${notCompletedAssignments.length}`}
               icon={Clipboard}
-
-              onClick={() => {
-                navigate("/admin-dashboard/assign-care-manager");
-              }}
-            />
-            <QuickActionButton
-              label="Assign Home Care Staff"
-              icon={Clipboard}
-              onClick={() => {
-                navigate("/admin-dashboard/assign-home-care-staff");
-              }}
-            />
-            <QuickActionButton
-              label="Assign Assessor"
-              icon={Clipboard}
-              onClick={() => {
-                navigate("/admin-dashboard/assign-assessor");
-              }}
-
             />
           </div>
 
@@ -243,26 +192,38 @@ export default function AdminDashboardView() {
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <QuickActionButton
-                  label="Add New Staff"
-                  icon={Users}
-                  onClick={() => {}}
-                />
-                <QuickActionButton
-                  label="Create Report"
-                  icon={FileText}
-                  onClick={() => {}}
-                />
-                <QuickActionButton
                   label="Assign Care Manager To Member"
                   icon={Clipboard}
                   onClick={() => {
-                    navigate("/admin-dashboard/viewMember");
+                    navigate("/admin-dashboard/assign-care-manager");
+                  }}
+                />
+                <QuickActionButton
+                  label="Add New Staff"
+                  icon={Users}
+                  onClick={() => {
+                    navigate("/admin-dashboard/add-staff");
+                  }}
+                />
+
+                <QuickActionButton
+                  label="Assign Assessor"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-assessor");
                   }}
                 />
                 <QuickActionButton
                   label="View Vitals"
                   icon={Activity}
                   onClick={() => {}}
+                />
+                <QuickActionButton
+                  label="Assign Home Care Staff"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-home-care-staff");
+                  }}
                 />
               </div>
             </div>

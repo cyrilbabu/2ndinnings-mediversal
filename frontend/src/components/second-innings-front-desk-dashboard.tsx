@@ -37,9 +37,6 @@ export default function FrontDeskDashboard() {
   const { isLoading, allPatient: patients } = useAllPatient();
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
-
-
-  const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -66,7 +63,6 @@ export default function FrontDeskDashboard() {
   }, []);
 
   if (loading) {
-
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -129,7 +125,6 @@ export default function FrontDeskDashboard() {
         <header className="bg-green-800 text-white p-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">2nd Innings - Front Desk</h1>
           <div className="flex items-center space-x-4">
-
             <span className="text-sm">Welcome, {userData.name}</span>
 
             <LogOut

@@ -100,7 +100,7 @@ export default function ShowAllPatient() {
           <tbody>
             {filteredPatients.length > 0 ? (
               filteredPatients.map((patient) => (
-                <tr key={patient._id}>
+                <tr key={patient._id} className="hover:bg-green-200">
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.fullName}
                   </td>

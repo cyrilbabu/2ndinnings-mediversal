@@ -23,12 +23,12 @@ const VisitCard = ({ visit, onActionClick }) => (
       </h3>
       <span
         className={`px-2 py-1 rounded-full text-xs ${
-          status === "Assigned"
+          visit.status === "Not Completed"
             ? "bg-yellow-100 text-yellow-800"
             : "bg-green-100 text-green-800"
         }`}
       >
-        {status}
+        {visit.status}
       </span>
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-1">
@@ -48,12 +48,14 @@ const VisitCard = ({ visit, onActionClick }) => (
     <button
       onClick={onActionClick}
       className={`w-full py-2 rounded-md transition duration-300 flex items-center justify-center ${
-        status === "Assigned"
+        visit.status === "Not Completed"
           ? "bg-green-600 text-white hover:bg-green-700"
           : "bg-blue-600 text-white hover:bg-blue-700"
       }`}
     >
-      {status === "Assigned" ? "Start Assessment" : "View Assessment"}
+      {visit.status === "Not Completed"
+        ? "Start Assessment"
+        : "View Assessment"}
     </button>
   </div>
 );
@@ -146,14 +148,14 @@ export default function AssessorDashboard() {
             : "Recent Assessments"}
         </h2>
         {activeTab === "assigned"
-          ? completedAssignments.map((visit) => (
+          ? notCompletedAssignments.map((visit) => (
               <VisitCard
                 key={visit.id}
                 visit={visit}
                 onActionClick={() => handleActionClick(visit)}
               />
             ))
-          : notCompletedAssignments.map((visit) => (
+          : completedAssignments.map((visit) => (
               <VisitCard
                 key={visit.id}
                 visit={visit}

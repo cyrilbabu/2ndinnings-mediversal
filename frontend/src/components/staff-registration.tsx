@@ -36,7 +36,13 @@ const InputField = ({
 );
 
 export default function StaffRegistration() {
-  const options = ["Care Taker", "Assessor", "Care Manager", "Home Care Staff"];
+  const options = [
+    "Admin",
+    "Front Desk",
+    "Assessor",
+    "Care Manager",
+    "Home Care Staff",
+  ];
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,

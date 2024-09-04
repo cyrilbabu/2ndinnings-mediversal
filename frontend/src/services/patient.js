@@ -22,6 +22,24 @@ export async function showAllPatient() {
   }
 }
 
+export async function showPatientById(id) {
+  const apiUrl = `${url}/api/patient/getPatientById/${id}`;
+
+  try {
+    const response = await axios.get(apiUrl); // Use GET for fetching data
+
+    if (response.status === 200) {
+      return response.data.patient; // Assuming response.data contains the array of admin details
+    } else {
+      console.error("PatientById:", response.data.error);
+      return null;
+    }
+  } catch (error) {
+    console.error("PatientById:", error);
+    throw error;
+  }
+}
+
 export async function assignCareManager(data) {
   const apiUrl = `${url}/api/patient/assignCareManager`;
 

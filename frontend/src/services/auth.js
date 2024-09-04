@@ -1,5 +1,6 @@
 import { url } from "./url";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export async function login(data) {
   let newUrl = `${url}/api/staff/login`;
@@ -17,3 +18,9 @@ export async function login(data) {
       throw error;
     });
 }
+
+function logout() {
+  localStorage.clear();
+}
+
+export default logout;

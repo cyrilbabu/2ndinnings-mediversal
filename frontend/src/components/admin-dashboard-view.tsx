@@ -10,6 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useAllStaff } from "../query/useAllStaff";
 import { useNavigate } from "react-router-dom";
 
@@ -25,14 +26,14 @@ const DashboardCard = ({ title, value, icon: Icon, trend }) => (
         <p
           className={`text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}`}
         >
-          {trend > 0 ? (
+          {/* {trend > 0 ? (
             <TrendingUp size={16} className="inline mr-1" />
           ) : (
             <TrendingUp
               size={16}
               className="inline mr-1 transform rotate-180"
             />
-          )}
+          )} */}
           <p
             className={`text-sm ${
               trend > 0 ? "text-green-600" : "text-red-600"
@@ -91,8 +92,9 @@ export default function AdminDashboardView() {
   const navigate = useNavigate();
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
+  const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
 
-  if (isLoading || loadingStaff) {
+  if (isLoading || loadingStaff || loadingAssignments) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -101,7 +103,13 @@ export default function AdminDashboardView() {
     );
   }
 
-  console.log(allStaff);
+  const completedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Completed"
+  );
+  const notCompletedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Not Completed"
+  );
+
   const currentDate = new Date();
   const startOfThisMonth = new Date(
     currentDate.getFullYear(),
@@ -133,7 +141,7 @@ export default function AdminDashboardView() {
       : (increaseInPatients / patientsLastMonth.length) * 100;
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen ">
       <header className="bg-green-800 font-bold text-white text-2xl p-4 flex justify-between items-center">
         Admin Dashboard
         <div className="flex items-center space-x-4">
@@ -165,13 +173,13 @@ export default function AdminDashboardView() {
             />
             <DashboardCard
               title="Reports This Month"
-              value="287"
+              value={`${completedAssignments.length}`}
               icon={FileText}
               trend={12.7}
             />
             <DashboardCard
               title="Pending Assignments"
-              value="23"
+              value={`${notCompletedAssignments.length}`}
               icon={Clipboard}
             />
           </div>
@@ -184,26 +192,38 @@ export default function AdminDashboardView() {
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <QuickActionButton
-                  label="Add New Staff"
-                  icon={Users}
-                  onClick={() => {}}
-                />
-                <QuickActionButton
-                  label="Create Report"
-                  icon={FileText}
-                  onClick={() => {}}
-                />
-                <QuickActionButton
                   label="Assign Care Manager To Member"
                   icon={Clipboard}
                   onClick={() => {
-                    navigate("/admin-dashboard/viewMember");
+                    navigate("/admin-dashboard/assign-care-manager");
+                  }}
+                />
+                <QuickActionButton
+                  label="Add New Staff"
+                  icon={Users}
+                  onClick={() => {
+                    navigate("/admin-dashboard/add-staff");
+                  }}
+                />
+
+                <QuickActionButton
+                  label="Assign Assessor"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-assessor");
                   }}
                 />
                 <QuickActionButton
                   label="View Vitals"
                   icon={Activity}
                   onClick={() => {}}
+                />
+                <QuickActionButton
+                  label="Assign Home Care Staff"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-home-care-staff");
+                  }}
                 />
               </div>
             </div>

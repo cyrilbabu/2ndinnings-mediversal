@@ -15,7 +15,7 @@ import { useGetAllAssignment } from "../query/useGetAllAssignment";
 
 import { useNavigate } from "react-router-dom";
 
-const VisitCard = ({ visit, onActionClick }) => (
+const VisitCard = ({ visit, onActionClick, navigate }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
       <h3 className="text-lg font-semibold text-green-800">
@@ -46,7 +46,11 @@ const VisitCard = ({ visit, onActionClick }) => (
       Geriatric Assessment
     </div>
     <button
-      onClick={onActionClick}
+      onClick={() =>
+        navigate(
+          `/assessor-dashboard/idian-geriatric-assessment-form/${visit._id}`
+        )
+      }
       className={`w-full py-2 rounded-md transition duration-300 flex items-center justify-center ${
         visit.status === "Not Completed"
           ? "bg-green-600 text-white hover:bg-green-700"
@@ -152,6 +156,7 @@ export default function AssessorDashboard() {
               <VisitCard
                 key={visit.id}
                 visit={visit}
+                navigate={navigate}
                 onActionClick={() => handleActionClick(visit)}
               />
             ))
@@ -159,6 +164,7 @@ export default function AssessorDashboard() {
               <VisitCard
                 key={visit.id}
                 visit={visit}
+                navigate={navigate}
                 onActionClick={() => handleActionClick(visit)}
               />
             ))}

@@ -48,18 +48,24 @@ export const uploadAssignment = async (req, res) => {
 export const updateAssesment = async (req, res) => {
   try {
     const { id, assessment } = req.body;
-    const assessments = await Assignment.findById(id);
-    if (!assessments) {
+    // const photoes_Link = assessment.photos.map(
+    //   (photo) => (photo = req.file.path)
+    // );
+    // assignment.photos = photoes.link;
+
+    const assignment = await Assignment.findById(id);
+    if (!assignment) {
       return res.status(400).json({ message: "error in fetching assessment" });
     }
-    assessments.assessment = assessment;
-    const result = await assessments.save();
+    assignment.assessment = assessment;
+    assignment.status = "Completed";
+    const result = await assignment.save();
     if (!result) {
       return res.status(400).json({ message: "error in saving assessment" });
     }
     return res
       .status(200)
-      .json({ message: " assessment saved successfully", assessments });
+      .json({ message: " assessment saved successfully", assignment });
   } catch (error) {
     console.log(error.message);
     return res

@@ -24,7 +24,7 @@ const DashboardCard = ({ title, value, icon: Icon, trend }) => (
       <p className="text-2xl font-bold text-green-800">{value}</p>
       {trend && (
         <p
-          className={text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}}
+          className={`text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}`}
         >
           {/* {trend > 0 ? (
             <TrendingUp size={16} className="inline mr-1" />
@@ -162,25 +162,25 @@ export default function AdminDashboardView() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <DashboardCard
               title="Total Members"
-              value={${patients.length}}
+              value={`${patients.length}`}
               icon={Users}
               trend={percentageIncrease}
             />
             <DashboardCard
               title="Active Staff"
-              value={${allStaff.length}}
+              value={`${allStaff.length}`}
               icon={Users}
               trend={-2.1}
             />
             <DashboardCard
               title="Reports This Month"
-              value={${completedAssignments.length}}
+              value={`${completedAssignments.length}`}
               icon={FileText}
               trend={12.7}
             />
             <DashboardCard
               title="Pending Assignments"
-              value={${notCompletedAssignments.length}}
+              value={`${notCompletedAssignments.length}`}
               icon={Clipboard}
             />
           </div>

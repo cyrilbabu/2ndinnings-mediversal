@@ -3,7 +3,7 @@ import { useAllPatient } from "../query/useAllPatient";
 import { useAllStaff } from "../query/useAllStaff";
 import { useStaff } from "../query/useStaff";
 import BackButton from "./back-button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StaffName from "./StaffDetails";
 import StaffDetails from "./StaffDetails";
 

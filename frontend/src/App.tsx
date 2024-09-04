@@ -25,10 +25,11 @@ import AdminShowAllPatient from "./UI/admin-show-all-member";
 import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
-import ViewPatientDetails from "./components/view-patient-details";
+
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
 import PrivateRoute from "./priviateRoute.js/PrivateRoute";
 import ViewMemberDetails from "./components/second-innings-member-details-with-benefit-tracking";
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,9 +69,9 @@ export default function App() {
               <ShowAllPatient />
             </FrontDeskRoute>
           } />
-          <Route path="frontdesk-dashboard/view-patient" element={
+          <Route path="frontdesk-dashboard/member-detail/:id" element={
             <FrontDeskRoute>
-              <ViewPatientDetails />
+              <ViewMemberDetails />
             </FrontDeskRoute>
           } />
           <Route path="frontdesk-dashboard/patient-new-registration" element={
@@ -78,6 +79,7 @@ export default function App() {
               <NewRegistration />
             </FrontDeskRoute>
           } />
+        
 
           <Route path="assessor-dashboard" element={
             <AssessorRoute>

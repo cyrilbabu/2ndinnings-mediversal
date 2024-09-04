@@ -15,6 +15,7 @@ import {
 import { useParams } from "react-router-dom";
 import { usePatient } from "../query/usePatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
+import {useGetPlanDetails} from "../query/useGetPlanDetails";
 
 function calculateRenewalDate(createdAt, planDuration) {
   const createdDate = new Date(createdAt);
@@ -80,7 +81,7 @@ const TabButton = ({ active, children, onClick }) => (
 export default function ViewMemberDetails() {
   const { id } = useParams();
   const { isLoading, patient } = usePatient(id);
-
+  const {plans , isLoading:plansLoading} = useGetPlanDetails()
   const [activeTab, setActiveTab] = useState("personal");
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const [benefits, setBenefits] = useState([
@@ -105,7 +106,7 @@ export default function ViewMemberDetails() {
     }
   };
 
-  if (isLoading || loadingAssignments) {
+  if (isLoading || loadingAssignments ||plansLoading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -113,6 +114,8 @@ export default function ViewMemberDetails() {
       </div>
     );
   }
+  const filteredPlan = plans.filter(plan=>plan.plan===patient.plan)
+
 
   const assessorAssignments = assignments.filter(
     (assignment) => assignment.patient._id === "66cb0892414953d08e0b05d3"

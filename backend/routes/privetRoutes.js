@@ -1,28 +1,41 @@
-// routes/protectedRoutes.js
-
 import express from 'express';
-import { verifyToken, authorizeRoles } from '../middleware/verifyToken.js'; // Adjust the path as necessary
+import { verifyToken } from '../middleware/verifyToken.js'; // Ensure the correct path
+import { validationToken } from '../controllers/patient.controller.js'; // Ensure the correct path
 
 const verifyRouter = express.Router();
 
-// Example protected route for Admins
-verifyRouter.get('/admin-only', verifyToken, authorizeRoles('Admin'), (req, res) => {
-  res.status(200).json({ message: 'Welcome Admin!' });
+verifyRouter.get('/admin-only', verifyToken, (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Insufficient role' });
+  }
+  res.status(200).json({ success: true, role: req.user.role });
 });
 
-// Example protected route for Care Managers
-verifyRouter.get('/care-manager-only', verifyToken, authorizeRoles('Care Manager'), (req, res) => {
-  res.status(200).json({ message: 'Welcome Care Manager!' });
+verifyRouter.get('/care-manager-only', verifyToken, (req, res) => {
+  if (req.user.role !== 'Care Manager') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Insufficient role' });
+  }
+  res.status(200).json({ success: true, role: req.user.role });
 });
 
-// Example protected route for Home Care Staff
-verifyRouter.get('/home-care-staff-only', verifyToken, authorizeRoles('Home Care Staff'), (req, res) => {
-  res.status(200).json({ message: 'Welcome Home Care Staff!' });
+verifyRouter.get('/home-care-staff-only', verifyToken, (req, res) => {
+  if (req.user.role !== 'Home Care Staff') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Insufficient role' });
+  }
+  res.status(200).json({ success: true, role: req.user.role });
 });
 
-// Example protected route for multiple roles
-verifyRouter.get('/multi-role', verifyToken, authorizeRoles('Admin', 'Front Desk', 'Care Manager'), (req, res) => {
-  res.status(200).json({ message: 'Welcome to Multi-role Access!' });
+verifyRouter.get('/multi-role', verifyToken, (req, res) => {
+  if (req.user.role !== 'Front Desk') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Insufficient role' });
+  }
+  res.status(200).json({ success: true, role: req.user.role });
+});
+verifyRouter.get('/assesor', verifyToken, (req, res) => {
+  if (req.user.role !== 'Assessor') {
+    return res.status(403).json({ success: false, message: 'Forbidden: Insufficient role' });
+  }
+  res.status(200).json({ success: true, role: req.user.role });
 });
 
 export default verifyRouter;

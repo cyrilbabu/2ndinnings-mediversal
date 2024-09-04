@@ -21,6 +21,8 @@ import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-
 import StaffRegistration from "./components/staff-registration";
 import ViewPatientDetails from "./components/view-patient-details";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
+import PrivateRoute from "./priviateRoute.js/PrivateRoute";
+import ViewMemberDetails from "./components/second-innings-member-details-with-benefit-tracking";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,6 +65,10 @@ export default function App() {
             <Route
               path="frontdesk-dashboard"
               element={<FrontDeskDashboard />}
+            />
+            <Route
+              path="frontdesk-dashboard/member-detail/:id"
+              element={<ViewMemberDetails />}
             />
             <Route
               path="frontdesk-dashboard/show-all-member"

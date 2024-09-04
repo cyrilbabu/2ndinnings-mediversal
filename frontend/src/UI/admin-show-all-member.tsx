@@ -90,7 +90,7 @@ export default function AdminShowAllPatient({ role }) {
                 Email
               </th>
               <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
-                Care Manager
+                {role}
               </th>
               <th className="px-5 py-3 w-1/7 border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Membership type

@@ -71,22 +71,14 @@ export default function FrontDeskDashboard() {
   const totalPatients = patients.length;
 
   // Get the current month and year
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
-  const currentYear = currentDate.getFullYear();
+ 
   // Get the current month and year
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
 
   // Filter patients added in the current month
-  const newThisMonth = patients.filter((patient) => {
-    const createdAtDate = new Date(patient?.createdAt);
-    return (
-      createdAtDate.getMonth() === currentMonth &&
-      createdAtDate.getFullYear() === currentYear
-    );
-  });
+ 
   // Filter patients added in the current month
   const newThisMonth = patients.filter((patient) => {
     const createdAtDate = new Date(patient?.createdAt);

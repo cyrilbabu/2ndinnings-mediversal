@@ -1,14 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 
+// Import all role-based routes
+import AdminRoute from "./routes/Admin";
+import  AssessorRoute  from "./routes/AssesorRoute";
+import  CareManagerRoute  from "./routes/CareManagerRoute";
+import  HomeCareStaffRoute  from "./routes/HomeCareStaffRoute";
+import  FrontDeskRoute  from "./routes/MultiRoleRoutes";
+
+// Import components
 import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
 import NewRegistration from "./components/second-innings-new-registration";
-
 import AdminDashboardView from "./components/admin-dashboard-view";
 import AssessorDashboard from "./components/assessor-dashboard";
 import RevisedCareManagerDashboard from "./components/revised-care-manager-dashboard";
@@ -38,46 +44,56 @@ export default function App() {
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
 
-          <Route>
-            <Route path="admin-dashboard" element={<AdminDashboardView />} />
-            <Route
-              path="admin-dashboard/viewMember"
-              element={<AdminShowAllPatient />}
-            />
-          </Route>
+          <Route path="admin-dashboard" element={
+            <AdminRoute>
+              <AdminDashboardView />
+            </AdminRoute>
+          } />
+          <Route path="admin-dashboard/viewMember" element={
+            <AdminRoute>
+              <AdminShowAllPatient />
+            </AdminRoute>
+          } />
 
-          <Route>
-            <Route
-              path="frontdesk-dashboard"
-              element={<FrontDeskDashboard />}
-            />
-            <Route
-              path="frontdesk-dashboard/show-all-member"
-              element={<ShowAllPatient />}
-            />
-            <Route
-              path="frontdesk-dashboard/patient-new-registration"
-              element={<NewRegistration />}
-            />
-          </Route>
+          <Route path="frontdesk-dashboard" element={
+            <FrontDeskRoute>
+              <FrontDeskDashboard />
+            </FrontDeskRoute>
+          } />
+          <Route path="frontdesk-dashboard/show-all-member" element={
+            <FrontDeskRoute>
+              <ShowAllPatient />
+            </FrontDeskRoute>
+          } />
+          <Route path="frontdesk-dashboard/view-patient" element={
+            <FrontDeskRoute>
+              <ViewPatientDetails />
+            </FrontDeskRoute>
+          } />
+          <Route path="frontdesk-dashboard/patient-new-registration" element={
+            <FrontDeskRoute>
+              <NewRegistration />
+            </FrontDeskRoute>
+          } />
 
-          <Route>
-            <Route path="assessor-dashboard" element={<AssessorDashboard />} />
-          </Route>
+          <Route path="assessor-dashboard" element={
+            <AssessorRoute>
+              <AssessorDashboard />
+            </AssessorRoute>
+          } />
 
-          <Route>
-            <Route
-              path="care-manager-dashboard"
-              element={<RevisedCareManagerDashboard />}
-            />
-          </Route>
+          <Route path="care-manager-dashboard" element={
+            <CareManagerRoute>
+              <RevisedCareManagerDashboard />
+            </CareManagerRoute>
+          } />
 
-          <Route>
-            <Route
-              path="homecare-dashboard"
-              element={<HomeCareStaffDashboard />}
-            />
-          </Route>
+          <Route path="homecare-dashboard" element={
+            <HomeCareStaffRoute>
+              <HomeCareStaffDashboard />
+            </HomeCareStaffRoute>
+          } />
+
         </Routes>
         <ToastContainer
           position="top-center"
@@ -104,7 +120,6 @@ export default function App() {
             padding: "16px 24px",
           }}
         />
-
         <Toaster
           position="top-center"
           gutter={12}

@@ -92,7 +92,6 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
 
 const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
   const [report, setReport] = useState("");
-  const [report, setReport] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();

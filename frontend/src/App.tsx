@@ -21,6 +21,7 @@ import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-
 import StaffRegistration from "./components/staff-registration";
 import ViewPatientDetails from "./components/view-patient-details";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
+import IndianGeriatricAssessmentForm from "./components/indian-geriatric-assessment-form";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -74,6 +75,10 @@ export default function App() {
             <Route
               path="care-manager-dashboard"
               element={<RevisedCareManagerDashboard />}
+            />
+            <Route
+              path="care-manager-dashboard/geriatic-assesment"
+              element={<IndianGeriatricAssessmentForm />}
             />
           </Route>
 

@@ -110,6 +110,7 @@ export default function HomeCareStaffDashboard() {
           phone="(555) 246-8135"
           time="9:00 AM"
           status="Completed"
+          navigate={navigate}
         />
       </div>
     </div>

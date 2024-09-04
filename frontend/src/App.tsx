@@ -27,6 +27,8 @@ import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-
 import StaffRegistration from "./components/staff-registration";
 import ViewPatientDetails from "./components/view-patient-details";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
+import PrivateRoute from "./priviateRoute.js/PrivateRoute";
+import ViewMemberDetails from "./components/second-innings-member-details-with-benefit-tracking";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,7 +46,6 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
-
 
           <Route path="admin-dashboard" element={
             <AdminRoute>
@@ -78,7 +79,6 @@ export default function App() {
             </FrontDeskRoute>
           } />
 
-
           <Route path="assessor-dashboard" element={
             <AssessorRoute>
               <AssessorDashboard />
@@ -96,6 +96,7 @@ export default function App() {
               <HomeCareStaffDashboard />
             </HomeCareStaffRoute>
           } />
+
 
         </Routes>
         <ToastContainer

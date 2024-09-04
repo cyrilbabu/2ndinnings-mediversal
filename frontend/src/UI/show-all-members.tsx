@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
 import { useAllStaff } from "../query/useAllStaff";
 import BackButton from "./back-button";
+import { useNavigate } from "react-router-dom";
 
 export default function ShowAllPatient() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
 
@@ -100,7 +102,15 @@ export default function ShowAllPatient() {
           <tbody>
             {filteredPatients.length > 0 ? (
               filteredPatients.map((patient) => (
-                <tr key={patient._id} className="hover:bg-green-200">
+                <tr
+                  key={patient._id}
+                  onClick={() => {
+                    navigate(
+                      `/frontdesk-dashboard/member-detail/${patient._id}`
+                    );
+                  }}
+                  className="hover:bg-green-200"
+                >
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.fullName}
                   </td>

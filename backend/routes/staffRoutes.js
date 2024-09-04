@@ -9,6 +9,7 @@ import {
 import {
   getAssignment,
   uploadAssignment,
+  updateAssessment,
 } from "../controllers/assignment.controller.js";
 const router = express.Router();
 
@@ -19,4 +20,5 @@ router.get("/getAllStaff", getAllStaff);
 router.get("/getStaffById/:id", getStaffById);
 router.get("/getAssignment", getAssignment);
 router.post("/uploadAssignment", uploadAssignment);
+router.post("/updateAssessment", ,updateAssessment);
 export default router;

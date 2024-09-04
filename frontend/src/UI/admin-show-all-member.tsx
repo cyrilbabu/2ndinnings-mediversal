@@ -4,6 +4,8 @@ import { useAddAssignement } from "../query/useAddAssignement";
 import DropDownStaff from "./DropDownStaff";
 import AssignModal from "./AssignModal";
 import SelectDropDown from "./SelectDropDown";
+import StaffName from "./StaffDetails";
+import StaffDetails from "./StaffDetails";
 
 export default function AdminShowAllPatient({ role }) {
   const [name, setName] = useState("");
@@ -123,7 +125,7 @@ export default function AdminShowAllPatient({ role }) {
                         Assign
                       </button>
                     ) : patient.careManager ? (
-                      <p>{patient.careManager}</p>
+                      <StaffDetails id={patient.careManager} />
                     ) : (
                       <DropDownStaff role={role} patientId={patient._id} />
                     )}

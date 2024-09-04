@@ -26,6 +26,7 @@ import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
 import ViewPatientDetails from "./components/view-patient-details";
+import HomeCareVitalDetails from "./components/home-care-vitail-detail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,7 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<BanyanThemePageWithAdmin />} />
           <Route path="/" element={<BanyanThemePageWithAdmin />} />
+
 
           <Route path="admin-dashboard" element={
             <AdminRoute>
@@ -75,6 +77,7 @@ export default function App() {
               <NewRegistration />
             </FrontDeskRoute>
           } />
+
 
           <Route path="assessor-dashboard" element={
             <AssessorRoute>

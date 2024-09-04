@@ -3,6 +3,7 @@ import { Search, UserPlus, Users, LogOut } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../UI/back-button";
 import { useAllPatient } from "../query/useAllPatient";
+import logout from "../services/auth";
 
 const DashboardCard = ({
   title,
@@ -33,7 +34,10 @@ const StatCard = ({ value, label }) => (
 
 export default function FrontDeskDashboard() {
   const navigate = useNavigate();
-  const [patients, setPatients] = useState([]);
+
+  const { isLoading, allPatient: patients } = useAllPatient();
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -68,17 +72,42 @@ export default function FrontDeskDashboard() {
     );
   }
 
+  function calculateDaysLeft(patients) {
+    return patients.map((patient) => {
+      const { createdAt, planDuration } = patient;
+      const createdDate = new Date(createdAt);
+      let planEndDate;
+
+      if (planDuration === "monthly") {
+        planEndDate = new Date(createdDate);
+        planEndDate.setMonth(planEndDate.getMonth() + 1);
+      } else if (planDuration === "yearly") {
+        planEndDate = new Date(createdDate);
+        planEndDate.setFullYear(planEndDate.getFullYear() + 1);
+      }
+
+      const currentDate = new Date();
+      const timeDiff = planEndDate - currentDate;
+      const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+
+      return {
+        ...patient,
+        daysLeft: daysLeft > 0 ? daysLeft : 0, // If the plan has already ended, return 0
+      };
+    });
+  }
+  const result = calculateDaysLeft(patients);
+
+  const PlanOverInTenDaysPatients = result.filter(
+    (patient) => patient.daysLeft < 10
+  );
+
   const totalPatients = patients.length;
 
-  // Get the current month and year
- 
-  // Get the current month and year
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
 
-  // Filter patients added in the current month
- 
   // Filter patients added in the current month
   const newThisMonth = patients.filter((patient) => {
     const createdAtDate = new Date(patient?.createdAt);
@@ -97,10 +126,12 @@ export default function FrontDeskDashboard() {
         <header className="bg-green-800 text-white p-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">2nd Innings - Front Desk</h1>
           <div className="flex items-center space-x-4">
-            <span className="text-sm ">Welcome, Sarah</span>
+            <span className="text-sm">Welcome, {userData.name}</span>
+
             <LogOut
               className="w-5 h-5 cursor-pointer"
               onClick={() => {
+                logout();
                 navigate("/");
               }}
             />
@@ -122,7 +153,7 @@ export default function FrontDeskDashboard() {
               description="Register new members and set up their profiles."
               linkText="Register"
               onClick={() => {
-                navigate("/patient-new-registration");
+                navigate("/frontdesk-dashboard/patient-new-registration");
               }}
             />
             <DashboardCard
@@ -131,7 +162,7 @@ export default function FrontDeskDashboard() {
               description="Access comprehensive member information and benefits."
               linkText="View Members"
               onClick={() => {
-                navigate("/show-all-member");
+                navigate("/frontdesk-dashboard/show-all-member");
               }}
             />
           </div>
@@ -139,8 +170,11 @@ export default function FrontDeskDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard value={totalPatients} label="Total Members" />
             <StatCard value={newThisMonthCount} label="New This Month" />
-            <StatCard value="23" label="Appointments Today" />
-            <StatCard value="7" label="Renewals Due" />
+            <StatCard value="null" label="Appointments Today" />
+            <StatCard
+              value={PlanOverInTenDaysPatients.length}
+              label="Renewals Due"
+            />
           </div>
         </main>
       </div>

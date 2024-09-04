@@ -36,8 +36,8 @@ export default function NewRegistration() {
     address: "",
     emergencyContact: "",
     plan: "",
-    plantime: "",
-    healthCondition: "", // Updated key
+    planDuration: "",
+    healthCondition: "",
   });
 
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ export default function NewRegistration() {
         address: "",
         emergencyContact: "",
         plan: "",
-        plantime: "",
+        planDuration: "",
         healthCondition: "", // Reset key
       });
     } catch (error) {
@@ -164,7 +164,7 @@ export default function NewRegistration() {
                       type="radio"
                       name="plantime"
                       value={plantime}
-                      checked={formData.plantime === plantime}
+                      checked={formData.planDuration === plantime}
                       onChange={handleInputChange}
                       className="mr-2"
                     />
@@ -175,7 +175,7 @@ export default function NewRegistration() {
             </div>
             <button
               onClick={() => {
-                navigate("/view-all-plans");
+                navigate("/frontdesk-dashboard/view-all-plans");
               }}
               className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
             >

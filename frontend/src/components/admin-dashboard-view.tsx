@@ -7,9 +7,10 @@ import {
   Clipboard,
   TrendingUp,
   AlertTriangle,
-  LogOut, // Ensure this import exists
+  LogOut,
 } from "lucide-react";
 import { useAllPatient } from "../query/useAllPatient";
+import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useAllStaff } from "../query/useAllStaff";
 import { useNavigate } from "react-router-dom";
 
@@ -23,17 +24,31 @@ const DashboardCard = ({ title, value, icon: Icon, trend }) => (
       <p className="text-2xl font-bold text-green-800">{value}</p>
       {trend && (
         <p
-          className={`text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}`}
+          className={text-sm ${trend > 0 ? "text-green-600" : "text-red-600"}}
         >
-          {trend > 0 ? (
+          {/* {trend > 0 ? (
             <TrendingUp size={16} className="inline mr-1" />
           ) : (
             <TrendingUp
               size={16}
               className="inline mr-1 transform rotate-180"
             />
-          )}
-          {Math.abs(trend)}% from last month
+          )} */}
+          <p
+            className={`text-sm ${
+              trend > 0 ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {trend > 0 ? (
+              <TrendingUp size={16} className="inline mr-1" />
+            ) : (
+              <TrendingUp
+                size={16}
+                className="inline mr-1 transform rotate-180"
+              />
+            )}
+            {Math.abs(trend)}% from last month
+          </p>
         </p>
       )}
     </div>
@@ -77,8 +92,10 @@ export default function AdminDashboardView() {
   const navigate = useNavigate();
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
+  const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
-  if (isLoading || loadingStaff) {
+  if (isLoading || loadingStaff || loadingAssignments) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -86,6 +103,13 @@ export default function AdminDashboardView() {
       </div>
     );
   }
+
+  const completedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Completed"
+  );
+  const notCompletedAssignments = assignments.filter(
+    (assignment) => assignment.status === "Not Completed"
+  );
 
   const currentDate = new Date();
   const startOfThisMonth = new Date(
@@ -111,17 +135,18 @@ export default function AdminDashboardView() {
   const increaseInPatients =
     patientsThisMonth.length - patientsLastMonth.length;
 
+  // Calculate the percentage increase in patients
   const percentageIncrease =
     patientsLastMonth.length === 0
       ? 100
       : (increaseInPatients / patientsLastMonth.length) * 100;
 
   return (
-    <div className="bg-gray-100 min-h-screen p-6">
-      <header className="bg-green-800 text-white p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+    <div className="bg-gray-100 min-h-screen ">
+      <header className="bg-green-800 font-bold text-white text-2xl p-4 flex justify-between items-center">
+        Admin Dashboard
         <div className="flex items-center space-x-4">
-          <span className="text-sm">Welcome, Sarah</span>
+          <span className="text-sm">Welcome, {userData.name}</span>
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
@@ -131,99 +156,115 @@ export default function AdminDashboardView() {
         </div>
       </header>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <DashboardCard
-          title="Total Members"
-          value={`${patients.length}`}
-          icon={Users}
-          trend={percentageIncrease}
-        />
-        <DashboardCard
-          title="Active Staff"
-          value={`${allStaff.length}`}
-          icon={Users}
-          trend={-2.1}
-        />
-        <DashboardCard
-          title="Reports This Month"
-          value="287"
-          icon={FileText}
-          trend={12.7}
-        />
-        <DashboardCard
-          title="Pending Assignments"
-          value="23"
-          icon={Clipboard}
-        />
-      </div>
-
-      {/* Quick Actions and Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <QuickActionButton
-              label="Add New Staff"
+      <div className="bg-gray-100 min-h-screen p-6">
+        <div className="bg-gray-100 min-h-screen p-6">
+          {/* Key Metrics */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <DashboardCard
+              title="Total Members"
+              value={${patients.length}}
               icon={Users}
-              onClick={() => {}}
+              trend={percentageIncrease}
             />
-            <QuickActionButton
-              label="Create Report"
+            <DashboardCard
+              title="Active Staff"
+              value={${allStaff.length}}
+              icon={Users}
+              trend={-2.1}
+            />
+            <DashboardCard
+              title="Reports This Month"
+              value={${completedAssignments.length}}
               icon={FileText}
-              onClick={() => {}}
+              trend={12.7}
             />
-            <QuickActionButton
-              label="Assign Care Manager To Member"
+            <DashboardCard
+              title="Pending Assignments"
+              value={${notCompletedAssignments.length}}
               icon={Clipboard}
-              onClick={() => {
-                navigate("/admin-dashboard/viewMember");
-              }}
             />
-            <QuickActionButton
-              label="View Vitals"
-              icon={Activity}
-              onClick={() => {}}
+          </div>
+
+          {/* Quick Actions and Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Quick Actions
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                <QuickActionButton
+                  label="Assign Care Manager To Member"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-care-manager");
+                  }}
+                />
+                <QuickActionButton
+                  label="Add New Staff"
+                  icon={Users}
+                  onClick={() => {
+                    navigate("/admin-dashboard/add-staff");
+                  }}
+                />
+
+                <QuickActionButton
+                  label="Assign Assessor"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-assessor");
+                  }}
+                />
+                <QuickActionButton
+                  label="View Vitals"
+                  icon={Activity}
+                  onClick={() => {}}
+                />
+                <QuickActionButton
+                  label="Assign Home Care Staff"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/assign-home-care-staff");
+                  }}
+                />
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Recent Activity
+              </h2>
+              <RecentActivityItem
+                title="New Member Registered"
+                description="John Doe (72) joined Premium plan"
+                time="2 hours ago"
+              />
+              <RecentActivityItem
+                title="Staff Assignment"
+                description="Nurse Sarah assigned to 3 new members"
+                time="5 hours ago"
+              />
+              <RecentActivityItem
+                title="Report Submitted"
+                description="Monthly health report for Jane Smith"
+                time="Yesterday"
+              />
+            </div>
+          </div>
+
+          {/* Alerts and Notifications */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Alerts & Notifications
+            </h2>
+            <AlertItem
+              message="5 members have upcoming medication renewals"
+              type="warning"
+            />
+            <AlertItem
+              message="Urgent: 2 members missed their scheduled check-ups"
+              type="error"
             />
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Recent Activity
-          </h2>
-          <RecentActivityItem
-            title="New Member Registered"
-            description="John Doe (72) joined Premium plan"
-            time="2 hours ago"
-          />
-          <RecentActivityItem
-            title="Staff Assignment"
-            description="Nurse Sarah assigned to 3 new members"
-            time="5 hours ago"
-          />
-          <RecentActivityItem
-            title="Report Submitted"
-            description="Monthly health report for Jane Smith"
-            time="Yesterday"
-          />
-        </div>
-      </div>
-
-      {/* Alerts and Notifications */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Alerts & Notifications
-        </h2>
-        <AlertItem
-          message="5 members have upcoming medication renewals"
-          type="warning"
-        />
-        <AlertItem
-          message="Urgent: 2 members missed their scheduled check-ups"
-          type="error"
-        />
       </div>
     </div>
   );

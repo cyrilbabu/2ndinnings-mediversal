@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useUser } from "../query/useUser";
 import { useAllPatient } from "../query/useAllPatient";
+import { useNavigate } from "react-router-dom";
 
 function calculateAge(dob) {
   const today = new Date();
@@ -96,7 +97,6 @@ const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(report);
-    setReport("");
     setReport("");
   };
 
@@ -199,10 +199,11 @@ export default function RevisedCareManagerDashboard() {
     // Here you would typically send the report to your backend
   };
 
-  const { user, isLoading } = useUser();
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
+
   const { isLoading: loadingPatients, allPatient } = useAllPatient();
 
-  if (isLoading || loadingPatients) {
+  if (loadingPatients) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -210,9 +211,10 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
-
+  console.log("patient hai", allPatient);
+  console.log("user hai", user);
   const filteredPatients = allPatient.filter(
-    (patient) => patient.careManager === user._id
+    (patient) => patient.careManager === userData._id
   );
 
   return (
@@ -223,7 +225,7 @@ export default function RevisedCareManagerDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800">{user.name}</span>
+          <span className="text-green-800">{userData.name}</span>
         </div>
       </header>
 

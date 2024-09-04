@@ -97,14 +97,12 @@ export default function HomeCareStaffDashboard() {
 
           <span className="text-green-800">Welcome, {userData.name}</span>
 
-          
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
               navigate("/");
             }}
           />
-
         </div>
       </header>
 
@@ -139,7 +137,6 @@ export default function HomeCareStaffDashboard() {
             navigate={navigate}
           />
         ))}
-
       </div>
     </div>
   );

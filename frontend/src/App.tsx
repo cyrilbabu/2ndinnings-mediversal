@@ -97,6 +97,10 @@ export default function App() {
               path="care-manager-dashboard"
               element={<RevisedCareManagerDashboard />}
             />
+            <Route
+              path="care-manager-dashboard/member-detail/:id"
+              element={<ViewMemberDetails />}
+            />
           </Route>
 
           <Route>

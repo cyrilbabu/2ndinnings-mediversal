@@ -90,11 +90,6 @@ export default function ViewMemberDetails() {
     { name: "Home Care Services", count: 20 },
     { name: "Specialist Consultations", count: 4 },
   ]);
-  const [activities, setActivities] = useState([
-    { date: "22/08/2023", activity: "Health Check-up" },
-    { date: "15/08/2023", activity: "Physiotherapy Session" },
-    { date: "05/08/2023", activity: "Doctor Consultation" },
-  ]);
 
   const handleAvailBenefit = (index) => {
     const newBenefits = [...benefits];

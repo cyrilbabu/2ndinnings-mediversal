@@ -31,3 +31,19 @@ export async function getAllAssignement() {
       throw error;
     });
 }
+export async function updateAssignementDetails(data) {
+  let newUrl = `${url}/api/staff/updateAssessment`;
+
+  return await axios
+    .post(newUrl, data)
+    .then((res) => {
+      if (res.status === 200) {
+        console.log(res.data.assignment);
+        return res.data.assignment; // Return the email to be used in the onSuccess callback
+      }
+    })
+    .catch((error) => {
+      console.error("add Assignment:", error);
+      throw error;
+    });
+}

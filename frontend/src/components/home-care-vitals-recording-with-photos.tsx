@@ -12,7 +12,8 @@ import {
   Camera,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUpdateAssessment } from "../query/useUpdateAssessment";
 
 const VitalInput = ({
   icon: Icon,
@@ -107,6 +108,7 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
 
 export default function VitalsRecordingScreen() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const {
     register,
     handleSubmit,
@@ -114,7 +116,7 @@ export default function VitalsRecordingScreen() {
     setError,
     clearErrors,
   } = useForm();
-
+  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const [photos, setPhotos] = useState([]);
 
   const onSubmit = (data) => {
@@ -122,11 +124,17 @@ export default function VitalsRecordingScreen() {
       setError("photos", { message: "Please upload at least one photo." });
       return;
     }
-    clearErrors("photos");
-
-    console.log("Submitting vitals:", data);
-
-    console.log("Photos:", photos);
+    updateAssignementDetails(
+      {
+        id: id,
+        assessment: { ...data, photos },
+      },
+      {
+        onSucess: () => {
+          navigate("/homecare-dashboard");
+        },
+      }
+    );
   };
 
   return (

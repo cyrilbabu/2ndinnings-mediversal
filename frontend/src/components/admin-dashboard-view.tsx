@@ -93,8 +93,12 @@ export default function AdminDashboardView() {
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+<<<<<<< HEAD
   console.log("ye le patients", patients);
   console.log("ye le staff", allStaff);
+=======
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
   if (isLoading || loadingStaff || loadingAssignments) {
     return (
@@ -168,7 +172,7 @@ export default function AdminDashboardView() {
       <header className="bg-green-800 font-bold text-white text-2xl p-4 flex justify-between items-center">
         Admin Dashboard
         <div className="flex items-center space-x-4">
-          <span className="text-sm">Welcome, Sarah</span>
+          <span className="text-sm">Welcome, {userData.name}</span>
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {

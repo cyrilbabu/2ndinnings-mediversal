@@ -1,4 +1,5 @@
 import Staff from "../models/staff.model.js";
+<<<<<<< HEAD
 import jwt from "jsonwebtoken";
 
 const createToken = (id, role) => {
@@ -13,11 +14,30 @@ const createToken = (id, role) => {
   );
 };
 
+=======
+import jwt from 'jsonwebtoken'
+
+
+const createToken = (id, role) => {
+  console.log("Creating token with:", { id, role });
+  return jwt.sign({ id, role }, process.env.SECRET_KEY || "default_secret", {
+    expiresIn: "3d",
+  });
+};
+
+
+
+// Create new staff
+// Import the necessary modules
+import bcrypt from 'bcrypt';
+
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 // Create new staff
 export const staffSignup = async (req, res) => {
   try {
     const { name, phone, role, username, password } = req.body;
 
+<<<<<<< HEAD
     // Check if a staff member with the given username already exists
     const existingStaff = await Staff.findOne({ username });
     if (existingStaff) {
@@ -31,12 +51,33 @@ export const staffSignup = async (req, res) => {
     return res
       .status(201)
       .json({ message: "Staff member created successfully" });
+=======
+    // Check if the staff member already exists
+    const existingStaff = await Staff.findOne({ username });
+    if (existingStaff) {
+      return res.status(400).json({ error: "Staff member already exists" });
+    }
+
+    // Hash the password before saving it to the database
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new staff member with the hashed password
+    const staff = new Staff({ name, phone, role, username, password: hashedPassword });
+    await staff.save();
+
+    // Create a JWT token for the newly created staff member
+    const token = createToken(staff._id, role);
+
+    // Send the response back with the token and staff data
+    res.status(201).json({ success: true, token, staff });
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error creating staff member", error });
+    console.error("Error in staff signup:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
 };
+
 
 // Update staff
 export const updateStaff = async (req, res) => {
@@ -92,10 +133,10 @@ export const getAllStaff = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password, role } = req.body;
+    const { username, password } = req.body;
 
-    // Find the user by username and role
-    const user = await Staff.findOne({ username, role });
+    // Find the user by username
+    const user = await Staff.findOne({ username });
 
     // Check if the user exists
     if (!user) {
@@ -112,15 +153,18 @@ export const login = async (req, res) => {
 
     // Return the success response with the token
     return res.status(200).json({ success: true, token, user });
-
-    return res.status(200).json({ message: "logged in successfully", user });
   } catch (error) {
     console.log("Error in login controller", error.message);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
 
+<<<<<<< HEAD
 export const getStaffById = async (req, res) => {
+=======
+
+export const getStaffById = async(req,res)=>{
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
   try {
     const { id } = req.params;
     const staff = await Staff.findById(id);

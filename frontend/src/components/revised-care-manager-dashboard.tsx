@@ -51,7 +51,7 @@ const NotificationItem = ({ icon: Icon, title, description, onAction }) => (
   </div>
 );
 
-const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
+const PatientCard = ({ patient, onViewDetails, onSubmitReport, navigate }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
       <h3 className="text-lg font-semibold text-green-800">
@@ -77,7 +77,9 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport }) => (
     </p>
     <div className="flex space-x-2">
       <button
-        onClick={() => onViewDetails(patient.id)}
+        onClick={() => {
+          navigate(`/care-manager-dashboard/member-detail/${patient._id}`);
+        }}
         className="flex-1 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
       >
         View Details
@@ -142,25 +144,6 @@ const CallReportForm = ({ patientName, onSubmit, onCancel }) => {
 export default function RevisedCareManagerDashboard() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showReportForm, setShowReportForm] = useState(false);
-  const [patients, setPatients] = useState([
-    {
-      id: 1,
-      name: "Raj Kumar",
-      age: 72,
-      plan: "Premium",
-      status: "Stable",
-      lastCheck: "2023-08-20",
-    },
-    {
-      id: 2,
-      name: "Priya Sharma",
-      age: 68,
-      plan: "Basic",
-      status: "Needs Attention",
-      lastCheck: "2023-08-18",
-    },
-    // Add more mock patients as needed
-  ]);
 
   const navigate = useNavigate();
 
@@ -212,7 +195,11 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
+<<<<<<< HEAD
   console.log("patient hai", allPatient);
+=======
+
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === userData._id
   );
@@ -259,6 +246,7 @@ export default function RevisedCareManagerDashboard() {
               <PatientCard
                 key={patient.id}
                 patient={patient}
+                navigate={navigate}
                 onViewDetails={handleViewDetails}
                 onSubmitReport={handleSubmitReport}
               />

@@ -7,7 +7,12 @@ import {
   HelpCircle,
   User,
 } from "lucide-react";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
+=======
+import { useUpdateAssessment } from "../query/useUpdateAssessment";
+import { useNavigate, useParams } from "react-router-dom";
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
 const QuestionInput = ({ label, type, options = [], value, onChange, cue }) => (
   <div className="mb-6">
@@ -176,7 +181,13 @@ export default function IndianGeriatricAssessmentForm({
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
+<<<<<<< HEAD
   const navigate = useNavigate();
+=======
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
   const assessmentSections = [
     {
@@ -355,7 +366,17 @@ export default function IndianGeriatricAssessmentForm({
   };
 
   const handleSubmit = () => {
-    console.log("Submitting assessment data:", formData);
+    updateAssignementDetails(
+      {
+        id: id,
+        assessment: formData,
+      },
+      {
+        onSuccess: () => {
+          navigate("/assessor-dashboard");
+        },
+      }
+    );
     // Here you would typically send the data to your backend and mark the assessment as complete
   };
 
@@ -420,12 +441,12 @@ export default function IndianGeriatricAssessmentForm({
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <button
+            {/* <button
               onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white rounded-md mr-2"
             >
               <Save className="w-5 h-5" />
-            </button>
+            </button> */}
             {currentStep === assessmentSections.length - 1 ? (
               <button
                 onClick={handleSubmit}

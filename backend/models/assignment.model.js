@@ -21,6 +21,9 @@ const assignmentSchema = mongoose.Schema(
       enum: ["Not Completed", "Completed"],
       default: "Not Completed",
     },
+    assessment: {
+      type: mongoose.Schema.Types.Mixed,
+    },
   },
   { timestamps: true }
 );

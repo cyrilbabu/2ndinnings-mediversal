@@ -3,6 +3,7 @@ import { Search, UserPlus, Users, LogOut } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../UI/back-button";
 import { useAllPatient } from "../query/useAllPatient";
+import logout from "../services/auth";
 
 const DashboardCard = ({
   title,
@@ -130,6 +131,7 @@ export default function FrontDeskDashboard() {
             <LogOut
               className="w-5 h-5 cursor-pointer"
               onClick={() => {
+                logout();
                 navigate("/");
               }}
             />

@@ -9,7 +9,9 @@ import {
 import {
   getAssignment,
   uploadAssignment,
+  updateAssesment
 } from "../controllers/assignment.controller.js";
+import { uploadImage } from "../middleware/uploadField.js";
 const router = express.Router();
 
 router.post("/login", login);
@@ -19,4 +21,5 @@ router.get("/getAllStaff", getAllStaff);
 router.get("/getStaffById/:id", getStaffById);
 router.get("/getAssignment", getAssignment);
 router.post("/uploadAssignment", uploadAssignment);
+router.post("/updateAssessment", uploadImage.array("photos"), updateAssesment);
 export default router;

@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 
-const VisitCard = ({ name, address, phone, time, status, navigate }) => (
+const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
       <h3 className="text-lg font-semibold text-green-800">{name}</h3>
@@ -40,7 +40,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate }) => (
     {status === "Not Completed" ? (
       <button
         onClick={() => {
-          navigate("/homecare-dashboard/home-care-vitals");
+          navigate(`/homecare-dashboard/home-care-vitals/${id}`);
         }}
         className="mt-3 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
       >
@@ -95,7 +95,11 @@ export default function HomeCareStaffDashboard() {
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
 
+<<<<<<< HEAD
           <span className="text-green-800 mr-2">Welcome, {userData.name}</span>
+=======
+          <span className="text-green-800 mr-2">Welcome, {userData.name} </span>
+>>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
           <LogOut
             className="w-5 h-5 cursor-pointer"
@@ -112,6 +116,7 @@ export default function HomeCareStaffDashboard() {
         </h2>
         {notCompletedhomeCareAssignments.map((visit) => (
           <VisitCard
+            id={visit._id}
             name={visit.patient.fullName}
             address={visit.patient.address}
             phone={visit.patient.phone}

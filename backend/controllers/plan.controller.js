@@ -2,7 +2,6 @@ import Plan from "../models/plan.model.js";
 
 export const getPlanDetails = async (req, res) => {
   try {
-    const { plan } = req.params;
     const planDetails = await Plan.find();
     if (!planDetails) {
       return res.status(400).json({ error: "error in fetching plan details" });

@@ -95,7 +95,7 @@ export default function HomeCareStaffDashboard() {
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
 
-          <span className="text-green-800">Welcome, {userData.name}</span>
+          <span className="text-green-800 mr-2">Welcome, {userData.name}</span>
 
           <LogOut
             className="w-5 h-5 cursor-pointer"

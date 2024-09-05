@@ -22,6 +22,7 @@ import StaffRegistration from "./components/staff-registration";
 import ViewPatientDetails from "./components/view-patient-details";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
 import IndianGeriatricAssessmentForm from "./components/indian-geriatric-assessment-form";
+import ViewAllStaff from "./components/view-all-staff";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,6 +59,14 @@ export default function App() {
               path="admin-dashboard/add-staff"
               element={<StaffRegistration />}
             />
+            <Route
+              path="admin-dashboard/view-all-staff"
+              element={<ViewAllStaff />}
+            />
+            <Route
+              path="admin-dashboard/show-all-member"
+              element={<ShowAllPatient />}
+            />
           </Route>
 
           <Route>
@@ -85,16 +94,16 @@ export default function App() {
 
           <Route>
             <Route path="assessor-dashboard" element={<AssessorDashboard />} />
+            <Route
+              path="assessor-dashboard/geriatic-assesment"
+              element={<IndianGeriatricAssessmentForm />}
+            />
           </Route>
 
           <Route>
             <Route
               path="care-manager-dashboard"
               element={<RevisedCareManagerDashboard />}
-            />
-            <Route
-              path="care-manager-dashboard/geriatic-assesment"
-              element={<IndianGeriatricAssessmentForm />}
             />
           </Route>
 

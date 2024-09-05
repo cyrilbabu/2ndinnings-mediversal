@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { User, Phone, Key } from "lucide-react";
 import BackButton from "../UI/back-button";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const InputField = ({
   icon: Icon,
@@ -36,7 +37,13 @@ const InputField = ({
 );
 
 export default function StaffRegistration() {
-  const options = ["Care Taker", "Assessor", "Care Manager", "Home Care Staff"];
+  const options = [
+    "Front Desk",
+    "Assessor",
+    "Care Manager",
+    "Home Care Staff",
+    "Admin",
+  ];
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -52,8 +59,20 @@ export default function StaffRegistration() {
         data
       );
       console.log("Response:", response.data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+      toast.success("Staff Created successfully!");
+    } catch (err) {
+      if (
+        err.response &&
+        err.response.data &&
+        err.response.data.message === "Username already exists"
+      ) {
+        toast.error(
+          "Username already exists. Please choose a different username."
+        );
+      } else {
+        toast.error("Error submitting form. Please try again.");
+      }
+      console.error("Error submitting form:", err);
     } finally {
       setIsLoading(false);
     }

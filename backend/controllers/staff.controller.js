@@ -1,29 +1,36 @@
 import Staff from "../models/staff.model.js";
-import jwt from 'jsonwebtoken'
-
-
+import jwt from "jsonwebtoken";
 
 const createToken = (id, role) => {
-  const normalizedRole = role.replace(/\s+/g, '_'); // Replace spaces with underscores
+  const normalizedRole = role.replace(/\s+/g, "_"); // Replace spaces with underscores
   console.log("Creating token with:", { id, role: normalizedRole });
-  return jwt.sign({ id, role: normalizedRole }, process.env.SECRET_KEY || "default_secret", {
-    expiresIn: "3d",
-  });
+  return jwt.sign(
+    { id, role: normalizedRole },
+    process.env.SECRET_KEY || "default_secret",
+    {
+      expiresIn: "3d",
+    }
+  );
 };
-
 
 // Create new staff
 export const staffSignup = async (req, res) => {
   try {
     const { name, phone, role, username, password } = req.body;
 
-    
+    // Check if a staff member with the given username already exists
+    const existingStaff = await Staff.findOne({ username });
+    if (existingStaff) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
 
+    // Create a new staff member if the username does not exist
     const staff = new Staff({ name, phone, role, username, password });
     await staff.save();
 
-
-
+    return res
+      .status(201)
+      .json({ message: "Staff member created successfully" });
   } catch (error) {
     return res
       .status(500)
@@ -72,16 +79,16 @@ export const deleteStaff = async (req, res) => {
 export const getAllStaff = async (req, res) => {
   try {
     const staff = await Staff.find();
-    if(!staff){
-      return res.status(400).json({error:"error in fetching staff details"});
+    if (!staff) {
+      return res.status(400).json({ error: "error in fetching staff details" });
     }
-    return res.status(200).json({message:"staff fetched successfully",staff});
+    return res
+      .status(200)
+      .json({ message: "staff fetched successfully", staff });
   } catch (error) {
     res.status(500).json({ message: "Error fetching staff members", error });
   }
 };
-
-
 
 export const login = async (req, res) => {
   try {
@@ -113,23 +120,20 @@ export const login = async (req, res) => {
   }
 };
 
-export const getStaffById = async(req,res)=>{
+export const getStaffById = async (req, res) => {
   try {
-    const {id} = req.params;
-    const staff = await Staff.findById(id)
-    if(!staff){
-      return res
-      .status(400)
-      .json({ message: "Error in fetching staff" });
+    const { id } = req.params;
+    const staff = await Staff.findById(id);
+    if (!staff) {
+      return res.status(400).json({ message: "Error in fetching staff" });
     }
     return res
       .status(200)
-      .json({ message: "staff fetched successfully",staff });
+      .json({ message: "staff fetched successfully", staff });
   } catch (error) {
     console.log(error.message);
     return res
       .status(500)
       .json({ message: "Error in getStaffById controller", error });
   }
-}
-
+};

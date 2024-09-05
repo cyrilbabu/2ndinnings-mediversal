@@ -8,6 +8,7 @@ import {
   Phone,
   Hospital,
   FileText,
+  LogOut,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -212,7 +213,6 @@ export default function RevisedCareManagerDashboard() {
     );
   }
   console.log("patient hai", allPatient);
-  console.log("user hai", user);
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === userData._id
   );
@@ -225,7 +225,13 @@ export default function RevisedCareManagerDashboard() {
         </h1>
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
-          <span className="text-green-800">{userData.name}</span>
+          <span className="text-green-800 mr-2">{userData.name}</span>
+          <LogOut
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
         </div>
       </header>
 

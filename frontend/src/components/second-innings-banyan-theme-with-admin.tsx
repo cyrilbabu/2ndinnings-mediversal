@@ -11,6 +11,7 @@ import {
   Loader,
 } from "lucide-react";
 import { useLogin } from "../query/useLogin";
+import BackButton from "../UI/back-button";
 
 const BanyanBackground = () => (
   <svg
@@ -148,7 +149,17 @@ export default function BanyanThemePageWithAdmin() {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-green-50 overflow-hidden">
       <BanyanBackground />
-      {role === "" && (
+
+      {role !== "" ? (
+        <button
+          className="absolute top-0 right-0 text-sm font-bold m-6 mt-5 rounded-full font-samibold px-3  py-1  bg-green-600 text-slate-50 cursor-pointer hover:scale-110 hover:bg-green-700"
+          onClick={() => {
+            setRole("");
+          }}
+        >
+          Back
+        </button>
+      ) : (
         <AdminLoginButton
           onClick={() => {
             setRole("Admin");

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 
-const CareManagerRoute  = ({ children }) => {
+const CareManagerRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState("");
@@ -18,11 +18,14 @@ const CareManagerRoute  = ({ children }) => {
           return;
         }
 
-        const response = await axios.get(`${url}/api/private/care-manager-only`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${url}/api/private/care-manager-only`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         // Ensure the response data structure is as expected
         if (response.data.success && response.data.role) {
@@ -46,6 +49,10 @@ const CareManagerRoute  = ({ children }) => {
     return <div>Loading...</div>;
   }
 
+  if (isAuthenticated || role === "Care Manager") {
+    return <Navigate to="/care-manager-dashboard" />;
+  }
+
   if (!isAuthenticated || role !== "Care Manager") {
     return <Navigate to="/login" />;
   }
@@ -53,4 +60,4 @@ const CareManagerRoute  = ({ children }) => {
   return children;
 };
 
-export default CareManagerRoute ;
+export default CareManagerRoute;

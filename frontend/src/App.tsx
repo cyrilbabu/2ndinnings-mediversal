@@ -56,10 +56,26 @@ export default function App() {
             }
           />
           <Route
-            path="admin-dashboard/viewMember"
+            path="/admin-dashboard/assign-care-manager"
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Care Manager" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard/assign-assessor"
+            element={
+              <AdminRoute>
+                <AdminShowAllPatient role="Assessor" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard/assign-home-care-staff"
+            element={
+              <AdminRoute>
+                <AdminShowAllPatient role="Home Care Staff" />
               </AdminRoute>
             }
           />
@@ -123,11 +139,11 @@ export default function App() {
             }
           />
           <Route
-            path="homecare-dashboard/home-care-vitals/:id"
+            path="care-manager-dashboard/member-detail/:id"
             element={
-              <HomeCareStaffRoute>
-                <VitalsRecordingScreen />
-              </HomeCareStaffRoute>
+              <CareManagerRoute>
+                <ViewMemberDetails />
+              </CareManagerRoute>
             }
           />
 
@@ -136,6 +152,14 @@ export default function App() {
             element={
               <HomeCareStaffRoute>
                 <HomeCareStaffDashboard />
+              </HomeCareStaffRoute>
+            }
+          />
+          <Route
+            path="homecare-dashboard/home-care-vitals/:id"
+            element={
+              <HomeCareStaffRoute>
+                <VitalsRecordingScreen />
               </HomeCareStaffRoute>
             }
           />

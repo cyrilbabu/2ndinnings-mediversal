@@ -18,11 +18,14 @@ const HomeCareStaffRoute = ({ children }) => {
           return;
         }
 
-        const response = await axios.get(`${url}/api/private/home-care-staff-only`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${url}/api/private/home-care-staff-only`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         // Ensure the response data structure is as expected
         if (response.data.success && response.data.role) {
@@ -46,8 +49,12 @@ const HomeCareStaffRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated || role !== "Home Care Staff") {
+  if (isAuthenticated || role === "Home Care Staff") {
     return <Navigate to="/login" />;
+  }
+
+  if (!isAuthenticated || role !== "Home Care Staff") {
+    return <Navigate to="/homecare-dashboard" />;
   }
 
   return children;

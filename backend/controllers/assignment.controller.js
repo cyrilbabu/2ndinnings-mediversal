@@ -1,4 +1,5 @@
 import Assignment from "../models/assignment.model.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const getAssignment = async (req, res) => {
   try {
@@ -48,10 +49,22 @@ export const uploadAssignment = async (req, res) => {
 export const updateAssesment = async (req, res) => {
   try {
     const { id, assessment } = req.body;
-    // const photoes_Link = assessment.photos.map(
-    //   (photo) => (photo = req.file.path)
+    // console.log("ID:", id);
+    // console.log("Assessment:", assessment);
+    // console.log("Photos metadata:", photos); // Logging photo metadata
+
+    // // Assuming req.files contains the uploaded files
+    // const uploadedPhotos = await Promise.all(
+    //   req.files.map(async (file) => {
+    //     const result = await cloudinary.uploader.upload(file.path);
+    //     return result.secure_url; // URL of the uploaded file
+    //   })
     // );
-    // assignment.photos = photoes.link;
+
+    // console.log("Uploaded Photo URLs:", uploadedPhotos);
+
+    // const photoLinks = req.files.map((file) => file.path);
+    // assessment.photos = photoLinks; // Assuming you want to store the photos in assessment
 
     const assignment = await Assignment.findById(id);
     if (!assignment) {

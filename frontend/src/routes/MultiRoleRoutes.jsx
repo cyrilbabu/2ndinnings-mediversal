@@ -50,7 +50,11 @@ const FrontDeskRoute = ({ children }) => {
     return <Navigate to="/login" />;
   }
 
-  return children;
+  if (isAuthenticated || role === "Front Desk") {
+    return children;
+  }
+
+  // return children;
 };
 
 export default FrontDeskRoute;

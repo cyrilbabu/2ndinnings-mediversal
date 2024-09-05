@@ -50,11 +50,10 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
   const handlePhotoUpload = (event) => {
     const files = Array.from(event.target.files);
     if (files.length === 0) {
-      errors.photos = { message: "Please select at least one photo." };
+      // Do not set errors here, handle it in onSubmit
       return;
     }
-    const newPhotos = files.map((file) => URL.createObjectURL(file));
-    setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
+    setPhotos((prevPhotos) => [...prevPhotos, ...files]);
   };
 
   const removePhoto = (index) => {
@@ -70,7 +69,7 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         {photos.map((photo, index) => (
           <div key={index} className="relative">
             <img
-              src={photo}
+              src={URL.createObjectURL(photo)}
               alt={`Visit photo ${index + 1}`}
               className="w-20 h-20 object-cover rounded-md"
             />
@@ -99,14 +98,15 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         multiple
         className="hidden"
       />
-      {/* {errors.photos && (
+      {errors.photos && (
         <p className="text-red-500 text-xs mt-1">{errors.photos.message}</p>
-      )} */}
+      )}
     </div>
   );
 };
 
 export default function VitalsRecordingScreen() {
+  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -116,7 +116,7 @@ export default function VitalsRecordingScreen() {
     setError,
     clearErrors,
   } = useForm();
-  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
+
   const [photos, setPhotos] = useState([]);
 
   const onSubmit = (data) => {
@@ -124,17 +124,29 @@ export default function VitalsRecordingScreen() {
       setError("photos", { message: "Please upload at least one photo." });
       return;
     }
-    updateAssignementDetails(
-      {
-        id: id,
-        assessment: { ...data, photos },
+
+    // Prepare photo metadata for JSON serialization
+    const photoData = photos.map((photo) => ({
+      name: photo.name,
+      size: photo.size,
+    }));
+
+    const requestData = {
+      id: id,
+      assessment: data,
+      photos: photoData,
+    };
+
+    // Send request with JSON data
+    updateAssignementDetails(requestData, {
+      onSuccess: () => {
+        navigate("/assessor-dashboard");
       },
-      {
-        onSucess: () => {
-          navigate("/homecare-dashboard");
-        },
-      }
-    );
+    });
+
+    // Debug logs
+    console.log("Submitting vitals:", data);
+    console.log("Photo metadata ready for upload:", photoData);
   };
 
   return (

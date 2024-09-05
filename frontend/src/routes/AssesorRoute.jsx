@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 
-const AssessorRoute  = ({ children }) => {
+const AssessorRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState("");
@@ -46,6 +46,10 @@ const AssessorRoute  = ({ children }) => {
     return <div>Loading...</div>;
   }
 
+  if (isAuthenticated || role === "Assessor") {
+    return <Navigate to="/assessor-dashboard" />;
+  }
+
   if (!isAuthenticated || role !== "Assessor") {
     return <Navigate to="/login" />;
   }
@@ -53,4 +57,4 @@ const AssessorRoute  = ({ children }) => {
   return children;
 };
 
-export default AssessorRoute ;
+export default AssessorRoute;

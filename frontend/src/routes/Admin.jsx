@@ -46,6 +46,10 @@ const AdminRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
+  if (isAuthenticated || role === "Admin") {
+    return <Navigate to="/admin-dashboard" />;
+  }
+
   if (!isAuthenticated || role !== "Admin") {
     return <Navigate to="/login" />;
   }

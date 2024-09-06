@@ -49,11 +49,7 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
 
   const handlePhotoUpload = (event) => {
     const files = Array.from(event.target.files);
-    if (files.length === 0) {
-      errors.photos = { message: "Please select at least one photo." };
-      return;
-    }
-    setPhotos((prevPhotos) => [...prevPhotos, ...files]);
+    setPhotos((prevfile) => [...prevfile, ...files]);
   };
 
   const removePhoto = (index) => {
@@ -69,10 +65,11 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         {photos.map((photo, index) => (
           <div key={index} className="relative">
             <img
-              src={photo}
+              src={URL.createObjectURL(photo)}
               alt={`Visit photo ${index + 1}`}
               className="w-20 h-20 object-cover rounded-md"
             />
+
             <button
               onClick={() => removePhoto(index)}
               className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
@@ -117,24 +114,35 @@ export default function VitalsRecordingScreen() {
   } = useForm();
   const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const [photos, setPhotos] = useState([]);
+  console.log(photos);
 
   const onSubmit = (data) => {
     if (photos.length === 0) {
       setError("photos", { message: "Please upload at least one photo." });
       return;
     }
-    updateAssignementDetails(
-      {
-        id: id,
-        assessment: data,
-        photos: photos,
+
+    // Create FormData object to handle file uploads
+    const formData = new FormData();
+    formData.append("id", id); // Append the ID
+    formData.append("assessment", JSON.stringify(data)); // Append the form data
+
+    // Append each photo to the formData
+    photos.forEach((photo, index) => {
+      formData.append(`photos`, photo);
+    });
+
+    // Assuming formData is already created and fields are appended
+    console.log("FormData contents:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    updateAssignementDetails(formData, {
+      onSuccess: () => {
+        navigate("/homecare-dashboard");
       },
-      {
-        onSucess: () => {
-          navigate("/homecare-dashboard");
-        },
-      }
-    );
+    });
   };
 
   return (

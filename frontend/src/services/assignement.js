@@ -31,19 +31,28 @@ export async function getAllAssignement() {
       throw error;
     });
 }
-export async function updateAssignementDetails(data) {
-  let newUrl = `${url}/api/staff/updateAssessment`;
-
-  return await axios
-    .post(newUrl, data)
-    .then((res) => {
-      if (res.status === 200) {
-        console.log(res.data.assignment);
-        return res.data.assignment; // Return the email to be used in the onSuccess callback
+export async function updateAssignementDetails(formData) {
+  try {
+    const response = await axios.post(
+      `${url}/api/staff/updateAssessment`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }
-    })
-    .catch((error) => {
-      console.error("add Assignment:", error);
-      throw error;
-    });
+    );
+    console.log("Success:", response.data);
+  } catch (error) {
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      console.error("Response error:", error.response.data);
+    } else if (error.request) {
+      // No response was received
+      console.error("Request error:", error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error("Error:", error.message);
+    }
+  }
 }

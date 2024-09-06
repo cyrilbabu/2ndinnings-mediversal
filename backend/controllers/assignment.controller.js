@@ -48,28 +48,36 @@ export const uploadAssignment = async (req, res) => {
 
 export const updateAssesment = async (req, res) => {
   try {
-    const { id, assessment} = req.body;
-    if (!req.files) {
+    const { id, assessment } = req.body;
+    const parsedAssessment = JSON.parse(assessment); // Parse JSON string
+
+    if (!req.files || req.files.length === 0) {
       return res
         .status(400)
-        .json({ success: false, message: "No file uploaded" });
+        .json({ success: false, message: "No files uploaded" });
     }
-    const photoUrls = req.files.map(file => file.path);
 
+    // const photoUrls = req.files.map((file) => file.path);
+    const photoUrls = req.file.path;
     const update = {
       photos: photoUrls,
-      assessment:assessment
-   };
+      assessment: parsedAssessment,
+      status: "Completed",
+    };
 
-   const result = await Assignment.findByIdAndUpdate(id, update, {
-    new: true,
-  });
-  if (!result) {
-    return res.status(400).json({ message: "Assignment not found" });
-  }
-  return res.status(200).json({ message: "Assessment updated successfully" ,result }); 
+    const result = await Assignment.findByIdAndUpdate(id, update, {
+      new: true,
+    });
+
+    if (!result) {
+      return res.status(400).json({ message: "Assignment not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Assessment updated successfully", result });
   } catch (error) {
-    console.log(error.message);
+    console.error(error);
     return res
       .status(500)
       .json({ error: "Error in updateAssessment controller" });

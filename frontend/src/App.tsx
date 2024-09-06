@@ -127,6 +127,14 @@ export default function App() {
               </AdminRoute>
             }
           />
+          <Route
+            path="admin-dashboard/member-detail/:id"
+            element={
+              <AdminRoute>
+                <ViewMemberDetails />
+              </AdminRoute>
+            }
+          />
 
           <Route
             path="frontdesk-dashboard"

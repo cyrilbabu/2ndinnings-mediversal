@@ -26,7 +26,7 @@ const assignmentSchema = mongoose.Schema(
     },
 
     photos: {
-      type:String
+      type:[String]
     }
   },
   { timestamps: true }

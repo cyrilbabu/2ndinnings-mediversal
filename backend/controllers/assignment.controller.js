@@ -75,17 +75,19 @@ export const updateAssesment = async (req, res) => {
 };
 
 export const uploadPhotos = async (req, res) => {
-  const { id } = req.params;
   try {
-    if (!req.file) {
+    const { id } = req.body;
+    console.log(req.files)
+    if (!req.files) {
       return res
         .status(400)
         .json({ success: false, message: "No file uploaded" });
     }
     
-    const photo_url = req.file.path;
+    const photoUrls = req.files.map(file => file.path);
+    console.log(photoUrls)
     const update = {
-       photos: photo_url,
+       photos: photoUrls,
     };
    
     const result = await Assignment.findByIdAndUpdate(id, update, {
@@ -95,11 +97,9 @@ export const uploadPhotos = async (req, res) => {
     if (!result) {
       return res.status(404).json({ message: "Assignment not found" });
     }
-    // const photoUrls = req.files.map(file => file.path);
-    // console.log(photoUrls)
-    // assignment.assessmentPhotos = photoUrls
+    
 
-    return res.status(200).json({ message: "Assessment updated successfully" ,result});
+    return res.status(200).json({ message: "Assessment updated successfully" ,result });
   } catch (error) {
     console.error("Error in uploadPhotos:", error.message);
     return res.status(500).json({ error: error.message });

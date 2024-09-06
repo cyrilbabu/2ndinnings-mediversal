@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -14,7 +13,6 @@ import HomeCareStaffRoute from "./routes/HomeCareStaffRoute";
 import FrontDeskRoute from "./routes/MultiRoleRoutes";
 
 import LoginPrivateRoute from "./routes/LoginPrivateRoute";
-
 
 // Import components
 import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
@@ -54,7 +52,6 @@ export default function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <Routes>
-
           <Route path="/not-authorised" element={<NotAuthorised />} />
           <Route path="*" element={<PageNotFound />} />
           <Route
@@ -63,17 +60,14 @@ export default function App() {
               <LoginPrivateRoute>
                 <BanyanThemePageWithAdmin />
               </LoginPrivateRoute>
-
             }
           />
           <Route
             path="/"
             element={
-
               <LoginPrivateRoute>
                 <BanyanThemePageWithAdmin />
               </LoginPrivateRoute>
-
             }
           />
 
@@ -86,7 +80,6 @@ export default function App() {
             }
           />
           <Route
-
             path="admin-dashboard/add-staff"
             element={
               <AdminRoute>
@@ -103,7 +96,6 @@ export default function App() {
             }
           />
           <Route
-
             path="/admin-dashboard/assign-care-manager"
             element={
               <AdminRoute>
@@ -127,6 +119,22 @@ export default function App() {
               </AdminRoute>
             }
           />
+          <Route
+            path="/admin-dashboard/show-all-member"
+            element={
+              <AdminRoute>
+                <ShowAllPatient role="admin-dashboard" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="admin-dashboard/member-detail/:id"
+            element={
+              <AdminRoute>
+                <ViewMemberDetails />
+              </AdminRoute>
+            }
+          />
 
           <Route
             path="frontdesk-dashboard"
@@ -140,7 +148,7 @@ export default function App() {
             path="frontdesk-dashboard/show-all-member"
             element={
               <FrontDeskRoute>
-                <ShowAllPatient />
+                <ShowAllPatient role="frontdesk-dashboard" />
               </FrontDeskRoute>
             }
           />
@@ -185,6 +193,14 @@ export default function App() {
               </AssessorRoute>
             }
           />
+          <Route
+            path="assessor-dashboard/view-geriatic-assesment/:id"
+            element={
+              <AssessorRoute>
+                <ViewGeriatricReport />
+              </AssessorRoute>
+            }
+          />
 
           <Route
             path="care-manager-dashboard"
@@ -200,7 +216,6 @@ export default function App() {
               <CareManagerRoute>
                 <ViewMemberDetails />
               </CareManagerRoute>
-
             }
           />
           <Route
@@ -209,7 +224,6 @@ export default function App() {
               <CareManagerRoute>
                 <SubmitReportView />
               </CareManagerRoute>
-
             }
           />
 
@@ -226,6 +240,14 @@ export default function App() {
             element={
               <HomeCareStaffRoute>
                 <VitalsRecordingScreen />
+              </HomeCareStaffRoute>
+            }
+          />
+          <Route
+            path="homecare-dashboard/home-care-vitals-view"
+            element={
+              <HomeCareStaffRoute>
+                <HomeCareVitalDetails />
               </HomeCareStaffRoute>
             }
           />

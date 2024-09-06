@@ -3,7 +3,7 @@ import { getPlanDetails } from "../services/plans";
 
 export function useGetPlanDetails() {
   const { isLoading, data: plans} = useQuery({
-    queryKey: ["plan"],
+    queryKey: ["plans"],
     queryFn: () => getPlanDetails(),
   });
  

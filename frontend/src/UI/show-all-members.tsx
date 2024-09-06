@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useAllPatient } from "../query/useAllPatient";
 import { useAllStaff } from "../query/useAllStaff";
+import { useStaff } from "../query/useStaff";
 import BackButton from "./back-button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import StaffName from "./StaffDetails";
+import StaffDetails from "./StaffDetails";
 
 export default function ShowAllPatient() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
-
   const handleChange = (e) => {
     setName(e.target.value.toLowerCase());
   };
@@ -130,7 +132,11 @@ export default function ShowAllPatient() {
                     {patient?.emergencyContact}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {patient?.careManager}
+                    {!patient.careManager ? (
+                      <p>No Care Manager Assigned</p>
+                    ) : (
+                      <StaffDetails id={patient.careManager} />
+                    )}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.plan} {"("}

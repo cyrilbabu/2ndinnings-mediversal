@@ -1,5 +1,5 @@
-import Assignment from "../models/assignment.model.js";
 import cloudinary from "../utils/cloudinary.js";
+import Assignment from "../models/assignment.model.js";
 
 export const getAssignment = async (req, res) => {
   try {
@@ -49,40 +49,59 @@ export const uploadAssignment = async (req, res) => {
 export const updateAssesment = async (req, res) => {
   try {
     const { id, assessment } = req.body;
-    console.log("ID:", id);
-    console.log("Assessment:", assessment);
-    // console.log("Photos metadata:", photos); // Logging photo metadata
+    const assignment = await Assignment.findById(id);
+    if (!assignment) {
+      return res.status(400).json({ message: "Assignment not found" });
+    }
 
-    // Assuming req.files contains the uploaded files
-    const uploadedPhotos = await Promise.all(
-      req.files.map(async (file) => {
-        const result = await cloudinary.uploader.upload(file.path);
-        return result.secure_url; // URL of the uploaded file
-      })
-    );
+    // Update assessment and status
+    assignment.assessment = assessment;
+    assignment.status = "Completed";
 
-    console.log("Uploaded Photo URLs:", uploadedPhotos);
+    const updatedAssignment = await assignment.save();
 
-    // `const photoLinks = req.files.map((file) => file.path);
-    // assessment.photos = photoLinks; // Assuming you want to store the photos in assessment
-
-    // const assignment = await Assignment.findById(id);
-    // if (!assignment) {
-    //   return res.status(400).json({ message: "error in fetching assessment" });
-    // }
-    // assignment.assessment = assessment;
-    // assignment.status = "Completed";
-    // const result = await assignment.save();
-    // if (!result) {
-    //   return res.status(400).json({ message: "error in saving assessment" });
-    // }
-    // return res
-    //   .status(200)
-    //   .json({ message: " assessment saved successfully", assignment });`
+    return res
+      .status(200)
+      .json({
+        message: "Assessment updated successfully",
+        assignment: updatedAssignment,
+      });
   } catch (error) {
     console.log(error.message);
     return res
       .status(500)
-      .json({ error: "error in updateAssessment controller" });
+      .json({ error: "Error in updateAssessment controller" });
+  }
+};
+
+export const uploadPhotos = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
+    }
+    
+    const photo_url = req.file.path;
+    const update = {
+       photos: photo_url,
+    };
+   
+    const result = await Assignment.findByIdAndUpdate(id, update, {
+      new: true,
+    });
+    console.log(result);
+    if (!result) {
+      return res.status(404).json({ message: "Assignment not found" });
+    }
+    // const photoUrls = req.files.map(file => file.path);
+    // console.log(photoUrls)
+    // assignment.assessmentPhotos = photoUrls
+
+    return res.status(200).json({ message: "Assessment updated successfully" ,result});
+  } catch (error) {
+    console.error("Error in uploadPhotos:", error.message);
+    return res.status(500).json({ error: error.message });
   }
 };

@@ -44,17 +44,20 @@ const VitalInput = ({
   </div>
 );
 
-const PhotoUpload = ({ photos, setPhotos, errors }) => {
-  const fileInputRef = useRef(null);
+const PhotoUpload = ({ photos, errors }) => {
 
-  const handlePhotoUpload = (event) => {
-    const files = Array.from(event.target.files);
-    if (files.length === 0) {
-      errors.photos = { message: "Please select at least one photo." };
-      return;
+  const [image, setImage] = useState([]);
+
+  
+  const handleImageChange = (event) => {
+    const files = event.target.files;
+    if (files) {
+      setImage(files)}
+    else
+      setImage(null);
     }
     const newPhotos = files.map((file) => URL.createObjectURL(file));
-    setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
+    setImage((prevPhotos) => [...prevPhotos, ...newPhotos]);
   };
 
   const removePhoto = (index) => {
@@ -104,7 +107,7 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
       )} */}
     </div>
   );
-};
+;
 
 export default function VitalsRecordingScreen() {
   const navigate = useNavigate();
@@ -117,7 +120,7 @@ export default function VitalsRecordingScreen() {
     clearErrors,
   } = useForm();
   const { updateAssignementDetails, isLoading } = useUpdateAssessment();
-  const [photos, setPhotos] = useState([]);
+  
 
   const onSubmit = (data) => {
     if (photos.length === 0) {
@@ -136,6 +139,8 @@ export default function VitalsRecordingScreen() {
       }
     );
   };
+
+  
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -220,8 +225,8 @@ export default function VitalsRecordingScreen() {
             errors={errors}
           />
 
-          <PhotoUpload photos={photos} setPhotos={setPhotos} errors={errors} />
-
+          <PhotoUpload photos={photos} errors={errors} />
+     
           <div className="mb-4">
             <label className="block text-sm font-medium text-green-800 mb-1">
               Additional Notes

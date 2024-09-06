@@ -13,6 +13,7 @@ import { useAllPatient } from "../query/useAllPatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useAllStaff } from "../query/useAllStaff";
 import { useNavigate } from "react-router-dom";
+import logout from "../services/auth";
 
 const DashboardCard = ({ title, value, icon: Icon, trend }) => (
   <div className="bg-white rounded-lg shadow-md p-6 flex items-center">
@@ -173,6 +174,7 @@ export default function AdminDashboardView() {
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
+              logout();
               navigate("/");
             }}
           />

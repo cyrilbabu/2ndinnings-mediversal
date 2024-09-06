@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../query/useUser";
 import { useAllPatient } from "../query/useAllPatient";
 import { useNavigate } from "react-router-dom";
+import logout from "../services/auth";
 
 function calculateAge(dob) {
   const today = new Date();
@@ -211,12 +212,16 @@ export default function RevisedCareManagerDashboard() {
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
           <span className="text-green-800 mr-2">{userData.name}</span>
-          <LogOut
-            className="w-5 h-5 cursor-pointer"
-            onClick={() => {
-              navigate("/");
-            }}
-          />
+
+          <span>
+            <LogOut
+              onClick={() => {
+                logout();
+                navigate("/");
+              }}
+            />
+          </span>
+
         </div>
       </header>
 

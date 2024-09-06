@@ -22,8 +22,12 @@ const assignmentSchema = mongoose.Schema(
       default: "Not Completed",
     },
     assessment: {
-      type: mongoose.Schema.Types.Mixed,
+      type:mongoose.Schema.Types.Mixed
     },
+
+    photos: {
+      type:String
+    }
   },
   { timestamps: true }
 );

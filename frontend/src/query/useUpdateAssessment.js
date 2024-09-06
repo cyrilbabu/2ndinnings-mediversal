@@ -1,18 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { updateAssignementDetails as updateAssignementDetailsApi } from "../services/assignement";
+import { updateAssignement as updateAssignementApi } from "../services/assignement";
 
 export function useUpdateAssessment() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (data) => updateAssignementDetailsApi(data),
+    mutationFn: (formData) => updateAssignementApi(formData),
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["AllAssignment"] });
-      toast.success("Done");
+      toast.success("Assessment updated successfully!");
     },
-    onError: (err) => {
-      toast.error("Not Done");
+    onError: () => {
+      toast.error("Failed to update assessment.");
     },
   });
 

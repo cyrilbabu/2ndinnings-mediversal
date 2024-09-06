@@ -7,12 +7,8 @@ import {
   HelpCircle,
   User,
 } from "lucide-react";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-=======
 import { useUpdateAssessment } from "../query/useUpdateAssessment";
 import { useNavigate, useParams } from "react-router-dom";
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
 const QuestionInput = ({ label, type, options = [], value, onChange, cue }) => (
   <div className="mb-6">
@@ -181,13 +177,10 @@ export default function IndianGeriatricAssessmentForm({
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
-<<<<<<< HEAD
-  const navigate = useNavigate();
-=======
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { updateAssignementDetails, isLoading } = useUpdateAssessment();
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
   const assessmentSections = [
     {

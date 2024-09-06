@@ -3,23 +3,15 @@ import { useAllPatient } from "../query/useAllPatient";
 import { useAllStaff } from "../query/useAllStaff";
 import { useStaff } from "../query/useStaff";
 import BackButton from "./back-button";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-=======
 import { useNavigate, useParams } from "react-router-dom";
 import StaffName from "./StaffDetails";
 import StaffDetails from "./StaffDetails";
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
 
 export default function ShowAllPatient() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
-<<<<<<< HEAD
-  const navigate = useNavigate();
 
-=======
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
   const handleChange = (e) => {
     setName(e.target.value.toLowerCase());
   };
@@ -116,17 +108,15 @@ export default function ShowAllPatient() {
                 <tr
                   key={patient._id}
                   onClick={() => {
-<<<<<<< HEAD
-                    navigate(`/show-patient/${patient._id}`);
-                  }}
-                  className="hover:bg-green-200 hover:cursor-pointer"
-=======
+                    //   navigate(`/show-patient/${patient._id}`);
+                    // }}
+                    // className="hover:bg-green-200 hover:cursor-pointer"
+
                     navigate(
                       `/frontdesk-dashboard/member-detail/${patient._id}`
                     );
                   }}
                   className="hover:bg-green-200"
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
                 >
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.fullName}

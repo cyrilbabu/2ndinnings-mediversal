@@ -38,18 +38,11 @@ const InputField = ({
 
 export default function StaffRegistration() {
   const options = [
-<<<<<<< HEAD
-=======
     "Admin",
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
     "Front Desk",
     "Assessor",
     "Care Manager",
     "Home Care Staff",
-<<<<<<< HEAD
-    "Admin",
-=======
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
   ];
   const [isLoading, setIsLoading] = useState(false);
   const {

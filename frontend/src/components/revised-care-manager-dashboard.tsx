@@ -85,10 +85,12 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport, navigate }) => (
         View Details
       </button>
       <button
-        onClick={() => onSubmitReport(patient.id)}
+        onClick={() =>
+          navigate(`/care-manager-dashboard/call-report/${patient._id}`)
+        }
         className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
-        Submit Report
+        Start Wellness Call
       </button>
     </div>
   </div>
@@ -195,11 +197,7 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
-<<<<<<< HEAD
   console.log("patient hai", allPatient);
-=======
-
->>>>>>> d5bd17fe0833a03ac7e75e430d531573e1bf706c
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === userData._id
   );
@@ -259,10 +257,7 @@ export default function RevisedCareManagerDashboard() {
             <h2 className="text-xl font-semibold text-green-800 mb-4">
               Quick Actions
             </h2>
-            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mb-2">
-              Start Wellness Call
-            </button>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
               View All Reports
             </button>
           </div>

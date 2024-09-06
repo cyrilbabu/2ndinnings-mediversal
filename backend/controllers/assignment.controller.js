@@ -1,5 +1,6 @@
 import cloudinary from "../utils/cloudinary.js";
 import Assignment from "../models/assignment.model.js";
+import getDataUri from "../utils/datauri.js";
 
 export const getAssignment = async (req, res) => {
   try {
@@ -46,40 +47,49 @@ export const uploadAssignment = async (req, res) => {
   }
 };
 
-export const updateAssesment = async (req, res) => {
+
+
+export const updateAssessment = async (req, res) => {
   try {
     const { id, assessment } = req.body;
-    const parsedAssessment = JSON.parse(assessment); // Parse JSON string
+
 
     if (!req.files || req.files.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No files uploaded" });
+      return res.status(400).json({ success: false, message: "No files uploaded" });
     }
 
-    // const photoUrls = req.files.map((file) => file.path);
-    const photoUrls = req.file.path;
+    // Process multiple files
+    const uploadPromises = req.files.map(async (file) => {
+      const dataUri = getDataUri(file);
+      const result = await cloudinary.uploader.upload(dataUri, {
+        folder: 'assignments' // Optional: Specify a folder in Cloudinary
+      });
+      return result.secure_url;
+    });
+
+    // Upload all images and get their URLs
+    const photoUrls = await Promise.all(uploadPromises);
+
+    // Update the assignment document
     const update = {
-      photos: photoUrls,
-      assessment: parsedAssessment,
-      status: "Completed",
+      photos: photoUrls, // Set the photos field as an array of URLs
+      assessment,
+      status : "Completed"
     };
 
-    const result = await Assignment.findByIdAndUpdate(id, update, {
+    const updatedAssignment = await Assignment.findByIdAndUpdate(id, update, {
       new: true,
     });
 
-    if (!result) {
+    if (!updatedAssignment) {
       return res.status(400).json({ message: "Assignment not found" });
     }
 
-    return res
-      .status(200)
-      .json({ message: "Assessment updated successfully", result });
+    return res.status(200).json({ message: "Assessment updated successfully", updatedAssignment });
+
   } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Error in updateAssessment controller" });
+    console.log(error.message);
+    return res.status(500).json({ error: "Error in updateAssessment controller" });
+
   }
 };

@@ -2,7 +2,7 @@ import { url } from "./url";
 import axios from "axios";
 
 export async function addAssignement(data) {
-  let newUrl = `${url}/api/staff/uploadAssignment`;
+  let newUrl = `${url}/api/staff/updateassessment`;
 
   return await axios
     .post(newUrl, data)
@@ -31,15 +31,17 @@ export async function getAllAssignement() {
       throw error;
     });
 }
-export async function updateAssignementDetails(formData) {
-  try {
-    const response = await axios.post(
-      `${url}/api/staff/updateAssessment`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+
+export async function updateAssignementDetails(data) {
+  let newUrl = `${url}/api/staff/updateAssessment`;
+
+  return await axios
+    .post(newUrl, data)
+    .then((res) => {
+      if (res.status === 200) {
+        console.log(res.data);
+        return res.data; // Return the email to be used in the onSuccess callback
+
       }
     );
     console.log("Success:", response.data);

@@ -18,7 +18,7 @@ const NotAuthorised = () => {
       </div>
       <div className="mt-2">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
           className="bg-green-800 rounded-full px-3 py-2"
         >
           <div className="flex justify-center text-white  items-center">

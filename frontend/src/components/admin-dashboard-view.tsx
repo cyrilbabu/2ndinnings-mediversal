@@ -94,6 +94,7 @@ export default function AdminDashboardView() {
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
   if (isLoading || loadingStaff || loadingAssignments) {

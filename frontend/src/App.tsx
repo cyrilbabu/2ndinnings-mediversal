@@ -96,7 +96,9 @@ export default function App() {
             }
           />
           <Route
+
             path="admin-dashboard/assign-care-manager"
+
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Care Manager" />
@@ -120,10 +122,12 @@ export default function App() {
             }
           />
           <Route
+
             path="admin-dashboard/show-all-member"
             element={
               <AdminRoute>
                 <ShowAllPatient />
+
               </AdminRoute>
             }
           />
@@ -148,7 +152,7 @@ export default function App() {
             path="frontdesk-dashboard/show-all-member"
             element={
               <FrontDeskRoute>
-                <ShowAllPatient />
+                <ShowAllPatient role="frontdesk-dashboard" />
               </FrontDeskRoute>
             }
           />
@@ -193,6 +197,14 @@ export default function App() {
               </AssessorRoute>
             }
           />
+          <Route
+            path="assessor-dashboard/view-geriatic-assesment/:id"
+            element={
+              <AssessorRoute>
+                <ViewGeriatricReport />
+              </AssessorRoute>
+            }
+          />
 
           <Route
             path="care-manager-dashboard"
@@ -232,6 +244,14 @@ export default function App() {
             element={
               <HomeCareStaffRoute>
                 <VitalsRecordingScreen />
+              </HomeCareStaffRoute>
+            }
+          />
+          <Route
+            path="homecare-dashboard/home-care-vitals-view"
+            element={
+              <HomeCareStaffRoute>
+                <HomeCareVitalDetails />
               </HomeCareStaffRoute>
             }
           />

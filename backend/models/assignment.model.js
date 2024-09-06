@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const assignmentSchema = mongoose.Schema(
   {
     patient: {
@@ -24,9 +25,10 @@ const assignmentSchema = mongoose.Schema(
     assessment: {
       type: mongoose.Schema.Types.Mixed,
     },
-
     photos: {
-      type: String,
+
+      type: [String], // Changed to an array of strings
+
     },
   },
   { timestamps: true }

@@ -52,7 +52,7 @@ const VisitCard = ({ visit, onActionClick, navigate, activeTab }) => (
           ? navigate(
               `/assessor-dashboard/idian-geriatric-assessment-form/${visit._id}`
             )
-          : navigate(`/assessor-dashboard/view-geriatic-assesment`);
+          : navigate(`/assessor-dashboard/view-geriatic-assesment/${visit.id}`);
       }}
       className={`w-full py-2 rounded-md transition duration-300 flex items-center justify-center ${
         visit.status === "Not Completed"

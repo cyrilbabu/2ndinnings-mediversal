@@ -24,6 +24,9 @@ const assignmentSchema = mongoose.Schema(
     assessment: {
       type: mongoose.Schema.Types.Mixed,
     },
+    assessmentPhotos: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

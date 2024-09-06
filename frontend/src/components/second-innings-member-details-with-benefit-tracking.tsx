@@ -8,6 +8,7 @@ import {
   Calendar,
   Edit,
   AlertCircle,
+  BadgePercent,
   Activity,
   Gift,
   Check,
@@ -15,6 +16,7 @@ import {
 import { useParams } from "react-router-dom";
 import { usePatient } from "../query/usePatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
+import { useGetPlanDetails } from "../query/useGetPlanDetails";
 
 function calculateRenewalDate(createdAt, planDuration) {
   const createdDate = new Date(createdAt);
@@ -68,8 +70,8 @@ const BenefitItem = ({ benefit, availableCount, onAvail }) => (
 
 const TabButton = ({ active, children, onClick }) => (
   <button
-    className={`px-4 py-2 font-medium rounded-t-lg ${
-      active ? "bg-white text-green-800" : "bg-green-100 text-green-600"
+    className={`px-4 py-2 pb-3 font-medium rounded-t-lg ${
+      active ? "bg-white text-green-800" : "bg-green-200 text-green-900"
     }`}
     onClick={onClick}
   >
@@ -80,9 +82,10 @@ const TabButton = ({ active, children, onClick }) => (
 export default function ViewMemberDetails() {
   const { id } = useParams();
   const { isLoading, patient } = usePatient(id);
-
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
   const [activeTab, setActiveTab] = useState("personal");
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+  const { isLoading: loadingPlan, plans } = useGetPlanDetails();
   const [benefits, setBenefits] = useState([
     { name: "24/7 Emergency Support", count: 2 },
     { name: "Monthly Health Check-ups", count: 12 },
@@ -105,7 +108,7 @@ export default function ViewMemberDetails() {
     }
   };
 
-  if (isLoading || loadingAssignments) {
+  if (isLoading || loadingAssignments || loadingPlan) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
@@ -114,9 +117,15 @@ export default function ViewMemberDetails() {
     );
   }
 
+  // console.log(patient.planDuration);
+
+
   const assessorAssignments = assignments.filter(
-    (assignment) => assignment.patient._id === "66cb0892414953d08e0b05d3"
+    (assignment) => assignment.patient._id === id
   );
+
+  const patientPlan = plans.filter((plan) => plan.plan === patient.plan)[0];
+  console.log(patientPlan);
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -141,7 +150,7 @@ export default function ViewMemberDetails() {
           </div>
         </div>
 
-        <div className="bg-green-100 p-4 flex space-x-4">
+        <div className="bg-green-200 p-3 pb-0 flex space-x-4">
           <TabButton
             active={activeTab === "personal"}
             onClick={() => setActiveTab("personal")}
@@ -159,6 +168,24 @@ export default function ViewMemberDetails() {
             onClick={() => setActiveTab("activities")}
           >
             Activities
+          </TabButton>
+          <TabButton
+            active={activeTab === "vitals"}
+            onClick={() => setActiveTab("vitals")}
+          >
+            Vitals
+          </TabButton>
+          <TabButton
+            active={activeTab === "homeCare"}
+            onClick={() => setActiveTab("homeCare")}
+          >
+            Home Care
+          </TabButton>
+          <TabButton
+            active={activeTab === "assessor"}
+            onClick={() => setActiveTab("assessor")}
+          >
+            Assessor
           </TabButton>
         </div>
 
@@ -221,14 +248,238 @@ export default function ViewMemberDetails() {
                 Benefits
               </h3>
               <div className="bg-green-50 rounded-md p-4">
-                {benefits.map((benefit, index) => (
-                  <BenefitItem
-                    key={index}
-                    benefit={benefit.name}
-                    availableCount={benefit.count}
-                    onAvail={() => handleAvailBenefit(index)}
-                  />
-                ))}
+                <BenefitItem
+                  benefit="Annual Basic Health Checkup Package - 58 Parameters"
+                  availableCount={
+                    patientPlan.annualBasicHealthCheckupPackage58Parameters < 1
+                      ? 0
+                      : patientPlan.annualBasicHealthCheckupPackage58Parameters
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="General Physician Doctor Consultation - In Person at Home"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? Math.floor(
+                          patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear /
+                            12
+                        )
+                      : patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="General Physician Doctor Consultation - Virtual"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth
+                      : patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth *
+                        12
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="Super Specialist Consultation"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? Math.floor(
+                          patientPlan.superSpecialistConsultationPerYear / 12
+                        )
+                      : patientPlan.superSpecialistConsultationPerYear
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="Wellness Call Check by MPG"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? patientPlan.WellnessCallCheckbyMPGPerMonth
+                      : patientPlan.WellnessCallCheckbyMPGPerMonth * 12
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="Vital Check at Home"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? Math.floor(patientPlan.VitalCheckatHomePerMonth)
+                      : patientPlan.VitalCheckatHomePerMonth * 12
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="BLS Emergency Ambulance Evacuation Coverage (Within Patna)"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? Math.floor(
+                          patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear /
+                            12
+                        )
+                      : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear
+                  }
+                  onAvail={() => {}}
+                />
+                <BenefitItem
+                  benefit="Free Dental & Eye Checkup"
+                  availableCount={
+                    patient.planDuration === "monthly"
+                      ? patientPlan.freeDentalAndEyeCheckupPerMonth
+                      : patientPlan.freeDentalAndEyeCheckupPerMonth * 12
+                  }
+                  onAvail={() => {}}
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-green-800 mt-6 mb-4">
+                Discount
+              </h3>
+              <div className="bg-green-50 rounded-md p-4">
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {"Discount on Consultation (Online/Offline) after limit"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {
+                        patientPlan.discountonConsultationOnlineOfflineafterlimitInPercent
+                      }
+                      %
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {
+                        "Home Delivery of Medicine with Discount and No Delivery Charge"
+                      }
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {
+                        patientPlan.homeDeliveryofMedicinewithDiscountandNoDeliveryChargeInPercent
+                      }
+                      %
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {
+                        "Discount on IPD Services - Total Bill *Not Applicable for Insurance"
+                      }
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {
+                        patientPlan.discountOnIPDServicesTotalBillNotApplicableforInsuranceInPercent
+                      }
+                      %
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {
+                        "Discount on Diagnostics & Lab Services - Only for OPD Visits"
+                      }
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {
+                        patientPlan.discountOnDiagnosticsAndLabServicesOnlyForOPDVisitsInPercent
+                      }
+                      %
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {"Discount on Physiotherapy at Home"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {patientPlan.discountOnPhysiotherapyAtHome}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {"Nursing Care Services at Home"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {patientPlan.nursingCareServicesAtHomeInPercent}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {"Home Sample Collection"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {patientPlan.homeSampleCollectionInPercent}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {"Discount on Health Check"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {patientPlan.discountOnHealthCheckInPercent}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <BadgePercent className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-green-800">
+                      {"Discount on Eye/Dental/ENT/Skin Procedures"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 mr-2">
+                      {
+                        patientPlan.discountOnEyeDentalENTSkinProceduresInPercent
+                      }
+                      %
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           )}

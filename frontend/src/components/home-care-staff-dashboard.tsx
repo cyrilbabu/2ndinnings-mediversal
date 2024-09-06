@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
+import logout from "../services/auth";
 
 const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
@@ -100,6 +101,7 @@ export default function HomeCareStaffDashboard() {
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
+              logout();
               navigate("/");
             }}
           />

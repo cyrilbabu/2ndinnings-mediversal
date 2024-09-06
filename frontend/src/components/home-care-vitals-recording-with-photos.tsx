@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUpdateAssessment } from "../query/useUpdateAssessment";
+import cloudinary from "../services/cloudinary.js";
 
 const VitalInput = ({
   icon: Icon,
@@ -47,13 +48,45 @@ const VitalInput = ({
 const PhotoUpload = ({ photos, setPhotos, errors }) => {
   const fileInputRef = useRef(null);
 
-  const handlePhotoUpload = (event) => {
-    const files = Array.from(event.target.files);
+  const handlePhotoUpload = async (event) => {
+    console.log(event.target.files);
+    const files = event.target.files;
+
     if (files.length === 0) {
-      // Do not set errors here, handle it in onSubmit
       return;
     }
-    setPhotos((prevPhotos) => [...prevPhotos, ...files]);
+
+    try {
+      const uploadPreset = "your-upload-preset"; // Replace with your actual upload preset name
+      const cloudName = "dhfky54ml"; // Your Cloudinary cloud name
+
+      const uploadPromises = Array.from(files).map((file) => {
+        const formData = new FormData();
+        formData.append("file", file); // The file to upload
+        formData.append("upload_preset", uploadPreset); // Your unsigned upload preset
+
+        // Sending the request to Cloudinary
+        return fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              throw new Error(data.error.message); // Handle Cloudinary-specific errors
+            }
+            return data.secure_url; // Return the URL of the uploaded image
+          });
+      });
+
+      const photoUrls = await Promise.all(uploadPromises);
+      setPhotos((prevPhotos) => [...prevPhotos, ...photoUrls]);
+    } catch (error) {
+      console.error("Error uploading photos:", error);
+    }
   };
 
   const removePhoto = (index) => {
@@ -69,8 +102,8 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         {photos.map((photo, index) => (
           <div key={index} className="relative">
             <img
-              src={URL.createObjectURL(photo)}
-              alt={`Visit photo ${index + 1}`}
+              src={photo}
+              // alt={`Visit photo ${index + 1}`}
               className="w-20 h-20 object-cover rounded-md"
             />
             <button
@@ -118,6 +151,7 @@ export default function VitalsRecordingScreen() {
   } = useForm();
 
   const [photos, setPhotos] = useState([]);
+  console.log(photos);
 
   const onSubmit = (data) => {
     if (photos.length === 0) {
@@ -125,16 +159,16 @@ export default function VitalsRecordingScreen() {
       return;
     }
 
-    // Prepare photo metadata for JSON serialization
-    const photoData = photos.map((photo) => ({
-      name: photo.name,
-      size: photo.size,
-    }));
+    console.log("Cyril", photos);
+    // const photoData = photos.map((photo) => ({
+    //   name: photo.name,
+    //   size: photo.size,
+    // }));
 
     const requestData = {
       id: id,
-      assessment: data,
-      photos: photoData,
+      assessment: { ...data, photos },
+      // photos: photos,
     };
 
     // Send request with JSON data
@@ -145,8 +179,8 @@ export default function VitalsRecordingScreen() {
     });
 
     // Debug logs
-    console.log("Submitting vitals:", data);
-    console.log("Photo metadata ready for upload:", photoData);
+    // console.log("Submitting vitals:", data);
+    // console.log("Photo metadata ready for upload:", photoData);
   };
 
   return (

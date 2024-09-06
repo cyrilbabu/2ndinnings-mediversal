@@ -110,7 +110,7 @@ export default function ShowAllPatient({ role }) {
                   onClick={() => {
                     navigate(`/${role}/member-detail/${patient._id}`);
                   }}
-                  className="hover:bg-green-200"
+                  className="hover:bg-green-200 cursor-pointer"
                 >
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {patient?.fullName}

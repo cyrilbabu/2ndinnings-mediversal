@@ -47,34 +47,29 @@ export const uploadAssignment = async (req, res) => {
   }
 };
 
-
-
 export const updateAssessment = async (req, res) => {
+  let photoUrls = [];
   try {
     const { id, assessment } = req.body;
-
-
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ success: false, message: "No files uploaded" });
-    }
-
-    // Process multiple files
-    const uploadPromises = req.files.map(async (file) => {
-      const dataUri = getDataUri(file);
-      const result = await cloudinary.uploader.upload(dataUri, {
-        folder: 'assignments' // Optional: Specify a folder in Cloudinary
+    if (req.files) {
+      const uploadPromises = req.files.map(async (file) => {
+        const dataUri = getDataUri(file);
+        const result = await cloudinary.uploader.upload(dataUri, {
+          folder: "assignments", // Optional: Specify a folder in Cloudinary
+        });
+        return result.secure_url;
       });
-      return result.secure_url;
-    });
 
-    // Upload all images and get their URLs
-    const photoUrls = await Promise.all(uploadPromises);
+      // Upload all images and get their URLs
+      photoUrls = await Promise.all(uploadPromises);
+    }
+    // Process multiple files
 
     // Update the assignment document
     const update = {
       photos: photoUrls, // Set the photos field as an array of URLs
       assessment,
-      status : "Completed"
+      status: "Completed",
     };
 
     const updatedAssignment = await Assignment.findByIdAndUpdate(id, update, {
@@ -85,11 +80,13 @@ export const updateAssessment = async (req, res) => {
       return res.status(400).json({ message: "Assignment not found" });
     }
 
-    return res.status(200).json({ message: "Assessment updated successfully", updatedAssignment });
-
+    return res
+      .status(200)
+      .json({ message: "Assessment updated successfully", updatedAssignment });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ error: "Error in updateAssessment controller" });
-
+    return res
+      .status(500)
+      .json({ error: "Error in updateAssessment controller" });
   }
 };

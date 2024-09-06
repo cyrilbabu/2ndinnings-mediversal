@@ -179,24 +179,28 @@ export default function ViewMemberDetails({ role }) {
           >
             Activities
           </TabButton>
-          <TabButton
-            active={activeTab === "vitals"}
-            onClick={() => setActiveTab("vitals")}
-          >
-            Vitals
-          </TabButton>
-          <TabButton
-            active={activeTab === "homeCare"}
-            onClick={() => setActiveTab("homeCare")}
-          >
-            Home Care
-          </TabButton>
-          <TabButton
-            active={activeTab === "assessor"}
-            onClick={() => setActiveTab("assessor")}
-          >
-            Assessor
-          </TabButton>
+          {role === "admin-dashboard" && (
+            <>
+              <TabButton
+                active={activeTab === "vitals"}
+                onClick={() => setActiveTab("vitals")}
+              >
+                Vitals
+              </TabButton>
+              <TabButton
+                active={activeTab === "homeCare"}
+                onClick={() => setActiveTab("homeCare")}
+              >
+                Home Care
+              </TabButton>
+              <TabButton
+                active={activeTab === "assessor"}
+                onClick={() => setActiveTab("assessor")}
+              >
+                Assessor
+              </TabButton>
+            </>
+          )}
         </div>
 
         <div className="p-6">

@@ -50,7 +50,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
     ) : (
       <button
         onClick={() => {
-          navigate(`/homecare-dashboard/vitals-detail/${id}`);
+          navigate(`/homecare-dashboard/home-care-vitals-view`);
         }}
         className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >

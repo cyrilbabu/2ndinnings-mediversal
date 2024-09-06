@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUpdateAssessment } from "../query/useUpdateAssessment";
-import cloudinary from "../services/cloudinary.js";
 
 const VitalInput = ({
   icon: Icon,
@@ -48,45 +47,13 @@ const VitalInput = ({
 const PhotoUpload = ({ photos, setPhotos, errors }) => {
   const fileInputRef = useRef(null);
 
-  const handlePhotoUpload = async (event) => {
-    console.log(event.target.files);
-    const files = event.target.files;
-
+  const handlePhotoUpload = (event) => {
+    const files = Array.from(event.target.files);
     if (files.length === 0) {
+      errors.photos = { message: "Please select at least one photo." };
       return;
     }
-
-    try {
-      const uploadPreset = "your-upload-preset"; // Replace with your actual upload preset name
-      const cloudName = "dhfky54ml"; // Your Cloudinary cloud name
-
-      const uploadPromises = Array.from(files).map((file) => {
-        const formData = new FormData();
-        formData.append("file", file); // The file to upload
-        formData.append("upload_preset", uploadPreset); // Your unsigned upload preset
-
-        // Sending the request to Cloudinary
-        return fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.error) {
-              throw new Error(data.error.message); // Handle Cloudinary-specific errors
-            }
-            return data.secure_url; // Return the URL of the uploaded image
-          });
-      });
-
-      const photoUrls = await Promise.all(uploadPromises);
-      setPhotos((prevPhotos) => [...prevPhotos, ...photoUrls]);
-    } catch (error) {
-      console.error("Error uploading photos:", error);
-    }
+    setPhotos((prevPhotos) => [...prevPhotos, ...files]);
   };
 
   const removePhoto = (index) => {
@@ -103,7 +70,7 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
           <div key={index} className="relative">
             <img
               src={photo}
-              // alt={`Visit photo ${index + 1}`}
+              alt={`Visit photo ${index + 1}`}
               className="w-20 h-20 object-cover rounded-md"
             />
             <button
@@ -131,15 +98,14 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         multiple
         className="hidden"
       />
-      {errors.photos && (
+      {/* {errors.photos && (
         <p className="text-red-500 text-xs mt-1">{errors.photos.message}</p>
-      )}
+      )} */}
     </div>
   );
 };
 
 export default function VitalsRecordingScreen() {
-  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -149,38 +115,26 @@ export default function VitalsRecordingScreen() {
     setError,
     clearErrors,
   } = useForm();
-
+  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const [photos, setPhotos] = useState([]);
-  console.log(photos);
 
   const onSubmit = (data) => {
     if (photos.length === 0) {
       setError("photos", { message: "Please upload at least one photo." });
       return;
     }
-
-    console.log("Cyril", photos);
-    // const photoData = photos.map((photo) => ({
-    //   name: photo.name,
-    //   size: photo.size,
-    // }));
-
-    const requestData = {
-      id: id,
-      assessment: { ...data, photos },
-      // photos: photos,
-    };
-
-    // Send request with JSON data
-    updateAssignementDetails(requestData, {
-      onSuccess: () => {
-        navigate("/assessor-dashboard");
+    updateAssignementDetails(
+      {
+        id: id,
+        assessment: data,
+        photos: photos,
       },
-    });
-
-    // Debug logs
-    // console.log("Submitting vitals:", data);
-    // console.log("Photo metadata ready for upload:", photoData);
+      {
+        onSucess: () => {
+          navigate("/homecare-dashboard");
+        },
+      }
+    );
   };
 
   return (

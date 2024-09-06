@@ -48,60 +48,30 @@ export const uploadAssignment = async (req, res) => {
 
 export const updateAssesment = async (req, res) => {
   try {
-    const { id, assessment } = req.body;
-    const assignment = await Assignment.findById(id);
-    if (!assignment) {
-      return res.status(400).json({ message: "Assignment not found" });
-    }
-
-    // Update assessment and status
-    assignment.assessment = assessment;
-    assignment.status = "Completed";
-
-    const updatedAssignment = await assignment.save();
-
-    return res
-      .status(200)
-      .json({
-        message: "Assessment updated successfully",
-        assignment: updatedAssignment,
-      });
-  } catch (error) {
-    console.log(error.message);
-    return res
-      .status(500)
-      .json({ error: "Error in updateAssessment controller" });
-  }
-};
-
-export const uploadPhotos = async (req, res) => {
-  try {
-    const { id } = req.body;
-    console.log(req.files)
+    const { id, assessment} = req.body;
     if (!req.files) {
       return res
         .status(400)
         .json({ success: false, message: "No file uploaded" });
     }
-    
     const photoUrls = req.files.map(file => file.path);
-    console.log(photoUrls)
-    const update = {
-       photos: photoUrls,
-    };
-   
-    const result = await Assignment.findByIdAndUpdate(id, update, {
-      new: true,
-    });
-    console.log(result);
-    if (!result) {
-      return res.status(404).json({ message: "Assignment not found" });
-    }
-    
 
-    return res.status(200).json({ message: "Assessment updated successfully" ,result });
+    const update = {
+      photos: photoUrls,
+      assessment:assessment
+   };
+
+   const result = await Assignment.findByIdAndUpdate(id, update, {
+    new: true,
+  });
+  if (!result) {
+    return res.status(400).json({ message: "Assignment not found" });
+  }
+  return res.status(200).json({ message: "Assessment updated successfully" ,result }); 
   } catch (error) {
-    console.error("Error in uploadPhotos:", error.message);
-    return res.status(500).json({ error: error.message });
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ error: "Error in updateAssessment controller" });
   }
 };

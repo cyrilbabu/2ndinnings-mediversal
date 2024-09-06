@@ -24,10 +24,10 @@ const assignmentSchema = mongoose.Schema(
     assessment: {
       type:mongoose.Schema.Types.Mixed
     },
+
     photos: {
       type:String
     }
-
   },
   { timestamps: true }
 );

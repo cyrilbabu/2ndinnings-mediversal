@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUpdateAssessment } from "../query/useUpdateAssessment";
+import cloudinary from "../services/cloudinary.js";
 
 const VitalInput = ({
   icon: Icon,
@@ -44,20 +45,48 @@ const VitalInput = ({
   </div>
 );
 
-const PhotoUpload = ({ photos, errors }) => {
+const PhotoUpload = ({ photos, setPhotos, errors }) => {
+  const fileInputRef = useRef(null);
 
-  const [image, setImage] = useState([]);
-
-  
-  const handleImageChange = (event) => {
+  const handlePhotoUpload = async (event) => {
+    console.log(event.target.files);
     const files = event.target.files;
-    if (files) {
-      setImage(files)}
-    else
-      setImage(null);
+
+    if (files.length === 0) {
+      return;
     }
-    const newPhotos = files.map((file) => URL.createObjectURL(file));
-    setImage((prevPhotos) => [...prevPhotos, ...newPhotos]);
+
+    try {
+      const uploadPreset = "your-upload-preset"; // Replace with your actual upload preset name
+      const cloudName = "dhfky54ml"; // Your Cloudinary cloud name
+
+      const uploadPromises = Array.from(files).map((file) => {
+        const formData = new FormData();
+        formData.append("file", file); // The file to upload
+        formData.append("upload_preset", uploadPreset); // Your unsigned upload preset
+
+        // Sending the request to Cloudinary
+        return fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              throw new Error(data.error.message); // Handle Cloudinary-specific errors
+            }
+            return data.secure_url; // Return the URL of the uploaded image
+          });
+      });
+
+      const photoUrls = await Promise.all(uploadPromises);
+      setPhotos((prevPhotos) => [...prevPhotos, ...photoUrls]);
+    } catch (error) {
+      console.error("Error uploading photos:", error);
+    }
   };
 
   const removePhoto = (index) => {
@@ -74,7 +103,7 @@ const PhotoUpload = ({ photos, errors }) => {
           <div key={index} className="relative">
             <img
               src={photo}
-              alt={`Visit photo ${index + 1}`}
+              // alt={`Visit photo ${index + 1}`}
               className="w-20 h-20 object-cover rounded-md"
             />
             <button
@@ -102,14 +131,15 @@ const PhotoUpload = ({ photos, errors }) => {
         multiple
         className="hidden"
       />
-      {/* {errors.photos && (
+      {errors.photos && (
         <p className="text-red-500 text-xs mt-1">{errors.photos.message}</p>
-      )} */}
+      )}
     </div>
   );
-;
+};
 
 export default function VitalsRecordingScreen() {
+  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -119,28 +149,39 @@ export default function VitalsRecordingScreen() {
     setError,
     clearErrors,
   } = useForm();
-  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
-  
+
+  const [photos, setPhotos] = useState([]);
+  console.log(photos);
 
   const onSubmit = (data) => {
     if (photos.length === 0) {
       setError("photos", { message: "Please upload at least one photo." });
       return;
     }
-    updateAssignementDetails(
-      {
-        id: id,
-        assessment: { ...data, photos },
-      },
-      {
-        onSucess: () => {
-          navigate("/homecare-dashboard");
-        },
-      }
-    );
-  };
 
-  
+    console.log("Cyril", photos);
+    // const photoData = photos.map((photo) => ({
+    //   name: photo.name,
+    //   size: photo.size,
+    // }));
+
+    const requestData = {
+      id: id,
+      assessment: { ...data, photos },
+      // photos: photos,
+    };
+
+    // Send request with JSON data
+    updateAssignementDetails(requestData, {
+      onSuccess: () => {
+        navigate("/assessor-dashboard");
+      },
+    });
+
+    // Debug logs
+    // console.log("Submitting vitals:", data);
+    // console.log("Photo metadata ready for upload:", photoData);
+  };
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -225,8 +266,8 @@ export default function VitalsRecordingScreen() {
             errors={errors}
           />
 
-          <PhotoUpload photos={photos} errors={errors} />
-     
+          <PhotoUpload photos={photos} setPhotos={setPhotos} errors={errors} />
+
           <div className="mb-4">
             <label className="block text-sm font-medium text-green-800 mb-1">
               Additional Notes

@@ -9,7 +9,6 @@ export async function login(data) {
     .post(newUrl, data)
     .then((res) => {
       if (res.status === 200) {
-        localStorage.setItem("token", res.data.token); // Store token in localStorage
         return res.data.user; // Return the email to be used in the onSuccess callback
       }
     })

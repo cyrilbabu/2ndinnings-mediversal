@@ -11,6 +11,7 @@ import AssessorRoute from "./routes/AssesorRoute";
 import CareManagerRoute from "./routes/CareManagerRoute";
 import HomeCareStaffRoute from "./routes/HomeCareStaffRoute";
 import FrontDeskRoute from "./routes/MultiRoleRoutes";
+import LoginPrivateRoute from "./routes/LoginPrivateRoute";
 
 // Import components
 import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
@@ -26,7 +27,8 @@ import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
-
+import NotAuthorised from "./UI/NotAuthorised";
+import PageNotFound from "./UI/PageNotFound";
 import ViewMemberDetails from "./components/second-innings-member-details-with-benefit-tracking";
 import IndianGeriatricAssessmentForm from "./components/indian-geriatric-assessment-form";
 
@@ -44,8 +46,24 @@ export default function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<BanyanThemePageWithAdmin />} />
-          <Route path="/" element={<BanyanThemePageWithAdmin />} />
+          <Route path="/not-authorised" element={<NotAuthorised />} />
+          <Route path="*" element={<PageNotFound />} />
+          <Route
+            path="/login"
+            element={
+              <LoginPrivateRoute>
+                <BanyanThemePageWithAdmin />
+              </LoginPrivateRoute>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <LoginPrivateRoute>
+                <BanyanThemePageWithAdmin />
+              </LoginPrivateRoute>
+            }
+          />
 
           <Route
             path="admin-dashboard"
@@ -56,10 +74,26 @@ export default function App() {
             }
           />
           <Route
-            path="admin-dashboard/viewMember"
+            path="/admin-dashboard/assign-care-manager"
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Care Manager" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard/assign-assessor"
+            element={
+              <AdminRoute>
+                <AdminShowAllPatient role="Assessor" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard/assign-home-care-staff"
+            element={
+              <AdminRoute>
+                <AdminShowAllPatient role="Home Care Staff" />
               </AdminRoute>
             }
           />
@@ -96,6 +130,14 @@ export default function App() {
               </FrontDeskRoute>
             }
           />
+          <Route
+            path="frontdesk-dashboard/view-all-plans"
+            element={
+              <FrontDeskRoute>
+                <ViewAllPlans />
+              </FrontDeskRoute>
+            }
+          />
 
           <Route
             path="assessor-dashboard"
@@ -123,11 +165,11 @@ export default function App() {
             }
           />
           <Route
-            path="homecare-dashboard/home-care-vitals/:id"
+            path="care-manager-dashboard/member-detail/:id"
             element={
-              <HomeCareStaffRoute>
-                <VitalsRecordingScreen />
-              </HomeCareStaffRoute>
+              <CareManagerRoute>
+                <ViewMemberDetails />
+              </CareManagerRoute>
             }
           />
 
@@ -136,6 +178,14 @@ export default function App() {
             element={
               <HomeCareStaffRoute>
                 <HomeCareStaffDashboard />
+              </HomeCareStaffRoute>
+            }
+          />
+          <Route
+            path="homecare-dashboard/home-care-vitals/:id"
+            element={
+              <HomeCareStaffRoute>
+                <VitalsRecordingScreen />
               </HomeCareStaffRoute>
             }
           />

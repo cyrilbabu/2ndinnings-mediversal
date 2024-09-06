@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
+import logout from "../services/auth";
 
 import { useNavigate } from "react-router-dom";
 
@@ -116,6 +117,7 @@ export default function AssessorDashboard() {
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
+              logout();
               navigate("/");
             }}
           />

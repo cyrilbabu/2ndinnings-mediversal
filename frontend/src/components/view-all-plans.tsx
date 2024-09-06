@@ -183,16 +183,30 @@ export default function ViewAllPlans() {
           <thead>
             <tr>
               <th className="px-5 py-3 w-1/4  md:w-2/5 border-b-2 border-gray-200 bg-gray-50 text-left text-xs md:text-lg text-gray-600 uppercase tracking-wider">
-                Price
+                Price Per Year
               </th>
               <th className="px-5 py-3  w-1/4 md:w-1/5 border-b-2 border-gray-200 bg-gray-50 text-center text-xs md:text-sm text-gray-600  tracking-wider">
-                299/Month or 3499/Year Per Person
+                ₹ 3499
               </th>
               <th className="px-5 py-3 w-1/4  md:w-1/5 border-b-2 border-gray-200 bg-gray-50 text-center text-xs md:text-sm text-gray-600  tracking-wider">
-                599/Month or 7099/Year Per Person
+                ₹ 7099
               </th>
               <th className="px-5 py-3 w-1/4  md:w-1/5 border-b-2 border-gray-200 bg-gray-50 text-center text-xs md:text-sm text-gray-600 tracking-wider">
-                799/Month or 9499/Year Per Person
+                ₹ 9499
+              </th>
+            </tr>
+            <tr>
+              <th className="px-5 py-3 w-1/4  md:w-2/5 border-b-2 border-gray-200 bg-gray-50 text-left text-xs md:text-lg text-gray-600 uppercase tracking-wider">
+                Price Per Month
+              </th>
+              <th className="px-5 py-3  w-1/4 md:w-1/5 border-b-2 border-gray-200 bg-gray-50 text-center text-xs md:text-sm text-gray-600  tracking-wider">
+                ₹ 299
+              </th>
+              <th className="px-5 py-3 w-1/4  md:w-1/5 border-b-2 border-gray-200 bg-gray-50 text-center text-xs md:text-sm text-gray-600  tracking-wider">
+                ₹ 599
+              </th>
+              <th className="px-5 py-3 w-1/4  md:w-1/5 border-b-2 border-gray-200 bg-gray-50 text-center text-xs md:text-sm text-gray-600 tracking-wider">
+                ₹ 799
               </th>
             </tr>
           </thead>

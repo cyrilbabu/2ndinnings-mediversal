@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import StaffName from "./StaffDetails";
 import StaffDetails from "./StaffDetails";
 
-export default function ShowAllPatient() {
+export default function ShowAllPatient({ role }) {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const { isLoading, allPatient: patients } = useAllPatient();
@@ -108,13 +108,7 @@ export default function ShowAllPatient() {
                 <tr
                   key={patient._id}
                   onClick={() => {
-                    //   navigate(`/show-patient/${patient._id}`);
-                    // }}
-                    // className="hover:bg-green-200 hover:cursor-pointer"
-
-                    navigate(
-                      `/frontdesk-dashboard/member-detail/${patient._id}`
-                    );
+                    navigate(`/${role}/member-detail/${patient._id}`);
                   }}
                   className="hover:bg-green-200"
                 >

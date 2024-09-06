@@ -2,7 +2,7 @@ import { url } from "./url";
 import axios from "axios";
 
 export async function addAssignement(data) {
-  let newUrl = `${url}/api/staff/uploadAssignment`;
+  let newUrl = `${url}/api/staff/updateassessment`;
 
   return await axios
     .post(newUrl, data)
@@ -38,8 +38,8 @@ export async function updateAssignementDetails(data) {
     .post(newUrl, data)
     .then((res) => {
       if (res.status === 200) {
-        console.log(res.data.assignment);
-        return res.data.assignment; // Return the email to be used in the onSuccess callback
+        console.log(res.data);
+        return res.data; // Return the email to be used in the onSuccess callback
       }
     })
     .catch((error) => {

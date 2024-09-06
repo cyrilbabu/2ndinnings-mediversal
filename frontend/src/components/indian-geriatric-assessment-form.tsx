@@ -177,6 +177,7 @@ export default function IndianGeriatricAssessmentForm({
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { updateAssignementDetails, isLoading } = useUpdateAssessment();
@@ -376,7 +377,13 @@ export default function IndianGeriatricAssessmentForm({
     <div className="min-h-screen bg-green-50 p-6">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <ArrowLeft className="w-6 h-6 text-green-800 mr-2" />
+          <button
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <ArrowLeft className="w-6 h-6 text-green-800 mr-2" />
+          </button>
           <h1 className="text-2xl font-bold text-green-800">
             {assessmentType} Geriatric Assessment
           </h1>

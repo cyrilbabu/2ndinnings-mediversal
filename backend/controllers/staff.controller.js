@@ -1,6 +1,5 @@
 import Staff from "../models/staff.model.js";
-import jwt from 'jsonwebtoken'
-
+import jwt from "jsonwebtoken";
 
 const createToken = (id, role) => {
   console.log("Creating token with:", { id, role });
@@ -9,11 +8,9 @@ const createToken = (id, role) => {
   });
 };
 
-
-
 // Create new staff
 // Import the necessary modules
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 // Create new staff
 export const staffSignup = async (req, res) => {
@@ -31,7 +28,13 @@ export const staffSignup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create a new staff member with the hashed password
-    const staff = new Staff({ name, phone, role, username, password: hashedPassword });
+    const staff = new Staff({
+      name,
+      phone,
+      role,
+      username,
+      password: hashedPassword,
+    });
     await staff.save();
 
     // Create a JWT token for the newly created staff member
@@ -44,7 +47,6 @@ export const staffSignup = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 };
-
 
 // Update staff
 export const updateStaff = async (req, res) => {
@@ -87,10 +89,12 @@ export const deleteStaff = async (req, res) => {
 export const getAllStaff = async (req, res) => {
   try {
     const staff = await Staff.find();
-    if(!staff){
-      return res.status(400).json({error:"error in fetching staff details"});
+    if (!staff) {
+      return res.status(400).json({ error: "error in fetching staff details" });
     }
-    return res.status(200).json({message:"staff fetched successfully",staff});
+    return res
+      .status(200)
+      .json({ message: "staff fetched successfully", staff });
   } catch (error) {
     res.status(500).json({ message: "Error fetching staff members", error });
   }
@@ -124,24 +128,20 @@ export const login = async (req, res) => {
   }
 };
 
-
-export const getStaffById = async(req,res)=>{
+export const getStaffById = async (req, res) => {
   try {
-    const {id} = req.params;
-    const staff = await Staff.findById(id)
-    if(!staff){
-      return res
-      .status(400)
-      .json({ message: "Error in fetching staff" });
+    const { id } = req.params;
+    const staff = await Staff.findById(id);
+    if (!staff) {
+      return res.status(400).json({ message: "Error in fetching staff" });
     }
     return res
       .status(200)
-      .json({ message: "staff fetched successfully",staff });
+      .json({ message: "staff fetched successfully", staff });
   } catch (error) {
     console.log(error.message);
     return res
       .status(500)
       .json({ message: "Error in getStaffById controller", error });
   }
-}
-
+};

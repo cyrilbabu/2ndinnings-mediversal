@@ -1,3 +1,4 @@
+
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,7 +12,9 @@ import AssessorRoute from "./routes/AssesorRoute";
 import CareManagerRoute from "./routes/CareManagerRoute";
 import HomeCareStaffRoute from "./routes/HomeCareStaffRoute";
 import FrontDeskRoute from "./routes/MultiRoleRoutes";
+
 import LoginPrivateRoute from "./routes/LoginPrivateRoute";
+
 
 // Import components
 import BanyanThemePageWithAdmin from "./components/second-innings-banyan-theme-with-admin";
@@ -27,10 +30,15 @@ import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
+
 import NotAuthorised from "./UI/NotAuthorised";
 import PageNotFound from "./UI/PageNotFound";
+
 import ViewMemberDetails from "./components/second-innings-member-details-with-benefit-tracking";
 import IndianGeriatricAssessmentForm from "./components/indian-geriatric-assessment-form";
+import SubmitReportView from "./components/care-manager-submit-report";
+import ViewGeriatricReport from "./components/view-geriatric-report";
+import ViewAllStaff from "./components/view-all-staff";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +54,7 @@ export default function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <Routes>
+
           <Route path="/not-authorised" element={<NotAuthorised />} />
           <Route path="*" element={<PageNotFound />} />
           <Route
@@ -54,14 +63,17 @@ export default function App() {
               <LoginPrivateRoute>
                 <BanyanThemePageWithAdmin />
               </LoginPrivateRoute>
+
             }
           />
           <Route
             path="/"
             element={
+
               <LoginPrivateRoute>
                 <BanyanThemePageWithAdmin />
               </LoginPrivateRoute>
+
             }
           />
 
@@ -74,6 +86,24 @@ export default function App() {
             }
           />
           <Route
+
+            path="admin-dashboard/add-staff"
+            element={
+              <AdminRoute>
+                <StaffRegistration />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="admin-dashboard/view-all-staff"
+            element={
+              <AdminRoute>
+                <ViewAllStaff />
+              </AdminRoute>
+            }
+          />
+          <Route
+
             path="/admin-dashboard/assign-care-manager"
             element={
               <AdminRoute>
@@ -170,6 +200,16 @@ export default function App() {
               <CareManagerRoute>
                 <ViewMemberDetails />
               </CareManagerRoute>
+
+            }
+          />
+          <Route
+            path="care-manager-dashboard/call-report/:id"
+            element={
+              <CareManagerRoute>
+                <SubmitReportView />
+              </CareManagerRoute>
+
             }
           />
 

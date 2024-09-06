@@ -86,10 +86,12 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport, navigate }) => (
         View Details
       </button>
       <button
-        onClick={() => onSubmitReport(patient.id)}
+        onClick={() =>
+          navigate(`/care-manager-dashboard/call-report/${patient._id}`)
+        }
         className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
-        Submit Report
+        Start Wellness Call
       </button>
     </div>
   </div>
@@ -196,7 +198,7 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
-
+  console.log("patient hai", allPatient);
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === userData._id
   );
@@ -210,6 +212,7 @@ export default function RevisedCareManagerDashboard() {
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
           <span className="text-green-800 mr-2">{userData.name}</span>
+
           <span>
             <LogOut
               onClick={() => {
@@ -218,6 +221,7 @@ export default function RevisedCareManagerDashboard() {
               }}
             />
           </span>
+
         </div>
       </header>
 
@@ -258,10 +262,7 @@ export default function RevisedCareManagerDashboard() {
             <h2 className="text-xl font-semibold text-green-800 mb-4">
               Quick Actions
             </h2>
-            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mb-2">
-              Start Wellness Call
-            </button>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
               View All Reports
             </button>
           </div>

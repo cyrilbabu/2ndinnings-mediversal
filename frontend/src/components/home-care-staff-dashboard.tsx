@@ -50,7 +50,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
     ) : (
       <button
         onClick={() => {
-          navigate("/homecare-dashboard/home-care-vitals-details");
+          navigate(`/homecare-dashboard/vitals-detail/${id}`);
         }}
         className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
@@ -96,7 +96,7 @@ export default function HomeCareStaffDashboard() {
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
 
-          <span className="text-green-800 mr-2">Welcome, {userData.name} </span>
+          <span className="text-green-800 mr-2">Welcome, {userData.name}</span>
 
           <LogOut
             className="w-5 h-5 cursor-pointer"
@@ -129,8 +129,10 @@ export default function HomeCareStaffDashboard() {
         <h2 className="text-xl font-semibold text-green-800 mb-4">
           Completed Visits
         </h2>
+
         {completedhomeCareAssignments.map((visit) => (
           <VisitCard
+            id={visit._id}
             name={visit.patient.fullName}
             address={visit.patient.address}
             phone={visit.patient.phone}

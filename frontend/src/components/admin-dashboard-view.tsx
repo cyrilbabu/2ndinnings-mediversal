@@ -94,6 +94,8 @@ export default function AdminDashboardView() {
   const { isLoading, allPatient: patients } = useAllPatient();
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
+  console.log("ye le patients", patients);
+  console.log("ye le staff", allStaff);
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
   if (isLoading || loadingStaff || loadingAssignments) {
@@ -124,6 +126,8 @@ export default function AdminDashboardView() {
     currentDate.getMonth() - 1,
     1
   );
+
+  // for patients
   const patientsThisMonth = patients.filter((patient) => {
     const createdAt = new Date(patient.createdAt);
     return createdAt >= startOfThisMonth;
@@ -137,10 +141,29 @@ export default function AdminDashboardView() {
     patientsThisMonth.length - patientsLastMonth.length;
 
   // Calculate the percentage increase in patients
-  const percentageIncrease =
+  const percentageIncreaseInPatients =
     patientsLastMonth.length === 0
       ? 100
       : (increaseInPatients / patientsLastMonth.length) * 100;
+
+  // for  staff
+
+  const staffsThisMonth = allStaff.filter((staff) => {
+    const createdAt = new Date(staff.createdAt);
+    return createdAt >= startOfThisMonth;
+  });
+  const staffsLastMonth = allStaff.filter((staff) => {
+    const createdAt = new Date(staff.createdAt);
+    return createdAt >= startOfLastMonth && createdAt < startOfThisMonth;
+  });
+
+  const increaseInStaffs = staffsThisMonth.length - staffsLastMonth.length;
+
+  // Calculate the percentage increase in patients
+  const percentageIncreaseInStaffs =
+    staffsLastMonth.length === 0
+      ? 100
+      : (increaseInStaffs / staffsLastMonth.length) * 100;
 
   return (
     <div className="bg-gray-100 min-h-screen ">
@@ -166,13 +189,13 @@ export default function AdminDashboardView() {
               title="Total Members"
               value={`${patients.length}`}
               icon={Users}
-              trend={percentageIncrease}
+              trend={percentageIncreaseInPatients}
             />
             <DashboardCard
               title="Active Staff"
               value={`${allStaff.length}`}
               icon={Users}
-              trend={-2.1}
+              trend={percentageIncreaseInStaffs}
             />
             <DashboardCard
               title="Reports This Month"
@@ -219,13 +242,22 @@ export default function AdminDashboardView() {
                 <QuickActionButton
                   label="View Vitals"
                   icon={Activity}
-                  onClick={() => {}}
+                  onClick={() => {
+                    navigate("/admin-dashboard/show-all-member");
+                  }}
                 />
                 <QuickActionButton
                   label="Assign Home Care Staff"
                   icon={Clipboard}
                   onClick={() => {
                     navigate("/admin-dashboard/assign-home-care-staff");
+                  }}
+                />
+                <QuickActionButton
+                  label="View All Staff"
+                  icon={Clipboard}
+                  onClick={() => {
+                    navigate("/admin-dashboard/view-all-staff");
                   }}
                 />
               </div>

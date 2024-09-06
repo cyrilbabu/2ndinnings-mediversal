@@ -16,7 +16,7 @@ import logout from "../services/auth";
 
 import { useNavigate } from "react-router-dom";
 
-const VisitCard = ({ visit, onActionClick, navigate }) => (
+const VisitCard = ({ visit, onActionClick, navigate, activeTab }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
       <h3 className="text-lg font-semibold text-green-800">
@@ -47,11 +47,13 @@ const VisitCard = ({ visit, onActionClick, navigate }) => (
       Geriatric Assessment
     </div>
     <button
-      onClick={() =>
-        navigate(
-          `/assessor-dashboard/idian-geriatric-assessment-form/${visit._id}`
-        )
-      }
+      onClick={() => {
+        activeTab === "assigned"
+          ? navigate(
+              `/assessor-dashboard/idian-geriatric-assessment-form/${visit._id}`
+            )
+          : navigate(`/assessor-dashboard/view-geriatic-assesment`);
+      }}
       className={`w-full py-2 rounded-md transition duration-300 flex items-center justify-center ${
         visit.status === "Not Completed"
           ? "bg-green-600 text-white hover:bg-green-700"
@@ -112,7 +114,7 @@ export default function AssessorDashboard() {
         <div className="flex items-center">
           <User className="w-5 h-5 text-green-600 mr-2" />
 
-          <span className="text-green-800">Welcome, {userData.name}</span>
+          <span className="text-green-800 mr-2">Welcome, {userData.name}</span>
 
           <LogOut
             className="w-5 h-5 cursor-pointer"
@@ -160,6 +162,7 @@ export default function AssessorDashboard() {
                 visit={visit}
                 navigate={navigate}
                 onActionClick={() => handleActionClick(visit)}
+                activeTab={activeTab}
               />
             ))
           : completedAssignments.map((visit) => (

@@ -96,7 +96,9 @@ export default function App() {
             }
           />
           <Route
-            path="/admin-dashboard/assign-care-manager"
+
+            path="admin-dashboard/assign-care-manager"
+
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Care Manager" />
@@ -104,7 +106,7 @@ export default function App() {
             }
           />
           <Route
-            path="/admin-dashboard/assign-assessor"
+            path="admin-dashboard/assign-assessor"
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Assessor" />
@@ -112,7 +114,7 @@ export default function App() {
             }
           />
           <Route
-            path="/admin-dashboard/assign-home-care-staff"
+            path="admin-dashboard/assign-home-care-staff"
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Home Care Staff" />
@@ -120,10 +122,12 @@ export default function App() {
             }
           />
           <Route
-            path="/admin-dashboard/show-all-member"
+
+            path="admin-dashboard/show-all-member"
             element={
               <AdminRoute>
-                <ShowAllPatient role="admin-dashboard" />
+                <ShowAllPatient />
+
               </AdminRoute>
             }
           />

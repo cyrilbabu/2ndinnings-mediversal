@@ -129,7 +129,9 @@ export default function VitalsRecordingScreen() {
 
     // Append each photo to the formData
     photos.forEach((photo, index) => {
+
       formData.append("photos", photo);
+
     });
 
     // Assuming formData is already created and fields are appended

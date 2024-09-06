@@ -80,6 +80,8 @@ export default function HomeCareStaffDashboard() {
       assignment.staff._id === userData._id
   );
 
+  console.log(homeCareAssignments);
+
   const completedhomeCareAssignments = homeCareAssignments.filter(
     (assignment) => assignment.status === "Completed"
   );

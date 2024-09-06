@@ -53,6 +53,7 @@ export const updateAssessment = async (req, res) => {
   try {
     const { id, assessment } = req.body;
 
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, message: "No files uploaded" });
     }
@@ -89,5 +90,6 @@ export const updateAssessment = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ error: "Error in updateAssessment controller" });
+
   }
 };

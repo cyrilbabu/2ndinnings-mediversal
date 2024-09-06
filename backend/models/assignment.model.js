@@ -26,7 +26,9 @@ const assignmentSchema = mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
     },
     photos: {
+
       type: [String], // Changed to an array of strings
+
     },
   },
   { timestamps: true }

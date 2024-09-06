@@ -25,9 +25,9 @@ const assignmentSchema = mongoose.Schema(
       type:mongoose.Schema.Types.Mixed
     },
 
-    photos: {
-      type:[String]
-    }
+    // photos: {
+    //   type:[String]
+    // }
   },
   { timestamps: true }
 );

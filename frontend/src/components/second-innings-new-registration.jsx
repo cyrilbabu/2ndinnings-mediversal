@@ -3,8 +3,10 @@ import { User, Phone, Mail, Home, AlertTriangle } from "lucide-react";
 import axios from "axios";
 import BackButton from "../UI/back-button";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { url } from "../services/url";
+import { useAllPatient } from "../query/useAllPatient";
 
 const InputField = ({
   icon: Icon,
@@ -14,7 +16,7 @@ const InputField = ({
   value,
   onChange,
   className,
-  disabled=false,
+  disabled = false,
 }) => (
   <div className="flex items-center bg-white rounded-lg shadow-sm p-2 mb-4">
     <Icon className="text-green-600 w-5 h-5 mr-2" />
@@ -34,6 +36,9 @@ const InputField = ({
 
 export default function NewRegistration() {
   const [id, setMemberId] = useState("");
+  const { isLoading: loading, allPatient: patients } = useAllPatient();
+
+  console.log(patients);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -72,8 +77,6 @@ export default function NewRegistration() {
         ...formData,
         memberId: id,
       });
-      // alert("Registration successful!");
-    
       setFormData({
         fullName: "",
         dob: "",
@@ -88,11 +91,12 @@ export default function NewRegistration() {
         emergencyName: "",
         gender,
       });
+      navigate("/frontdesk-dashboard");
+      toast.success("Member Added");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Something went wrong!";
       console.log(errorMessage);
-      
     } finally {
       setIsLoading(false);
     }
@@ -100,10 +104,19 @@ export default function NewRegistration() {
 
   useEffect(() => {
     function createMemberID() {
+      const latestPatient = patients.reduce((latest, current) => {
+        return new Date(current.createdAt) > new Date(latest.createdAt)
+          ? current
+          : latest;
+      });
+
+      const serial = latestPatient.memberId.split(" ")[3];
+      const no = parseInt(serial, 10) + 1;
+      const fourDigitString = no.toString().padStart(4, "0");
       const date = new Date();
       const year = date.getFullYear();
-      const serial = "0001"
-      setMemberId(() => `MHPL 2INN ${year} ${serial}`);
+      // const serial = "0001";
+      setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`);
     }
 
     createMemberID();
@@ -126,7 +139,7 @@ export default function NewRegistration() {
             disabled={true}
             name="memberId"
             value={id}
-            className="cursor-not-allowed text-slate-400 py-1 px-2 rounded-lg" 
+            className="cursor-not-allowed text-slate-400 py-1 px-2 rounded-lg"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
@@ -231,7 +244,7 @@ export default function NewRegistration() {
                   Plan Duration
                 </label>
                 <div className="flex space-x-4">
-                  {["Monthly", "Yearly"].map((planDuration) => (
+                  {["monthly", "yearly"].map((planDuration) => (
                     <label key={planDuration} className="flex items-center">
                       <input
                         type="radio"

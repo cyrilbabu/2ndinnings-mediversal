@@ -2,7 +2,7 @@ import { url } from "./url";
 import axios from "axios";
 
 export async function addAssignement(data) {
-  let newUrl = `${url}/api/staff/updateassessment`;
+  let newUrl = `${url}/api/staff/uploadAssignment`;
 
   return await axios
     .post(newUrl, data)

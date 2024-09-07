@@ -4,6 +4,8 @@ import { User, Phone, Key } from "lucide-react";
 import BackButton from "../UI/back-button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { url } from "../services/url";
+import { useNavigate } from "react-router-dom";
 
 const InputField = ({
   icon: Icon,
@@ -45,6 +47,7 @@ export default function StaffRegistration() {
     "Home Care Staff",
   ];
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -54,12 +57,10 @@ export default function StaffRegistration() {
   async function checksubmit(data) {
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/staff/signup",
-        data
-      );
+      const response = await axios.post(`${url}/api/staff/signup`, data);
       console.log("Response:", response.data);
       toast.success("Staff Created successfully!");
+      navigate("/admin-dashboard");
     } catch (err) {
       if (
         err.response &&

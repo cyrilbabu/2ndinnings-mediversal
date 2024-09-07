@@ -7,9 +7,9 @@ import {
   HelpCircle,
   User,
 } from "lucide-react";
-import { useUpdateAssessment } from "../query/useUpdateAssessment";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAssignmentById } from "../query/useAssignmentById";
+import { useUpdateAssessment } from "../query/useUpdateAssessment";
 
 const QuestionInput = ({ label, type, options = [], value, onChange, cue }) => (
   <div className="mb-6">
@@ -182,6 +182,7 @@ export default function IndianGeriatricAssessmentForm({
   const { id } = useParams();
   const navigate = useNavigate();
   const { isLoading, assignment } = useAssignmentById(id);
+  const { updateAssignementDetails, isLoading: asd } = useUpdateAssessment(id);
 
   const assessmentSections = [
     {

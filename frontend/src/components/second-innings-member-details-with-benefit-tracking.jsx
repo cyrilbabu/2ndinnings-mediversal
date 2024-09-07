@@ -19,6 +19,7 @@ import { usePatient } from "../query/usePatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useGetPlanDetails } from "../query/useGetPlanDetails";
 import ViewCallReports from "../routes/view-call-reports";
+import { useEditPatient } from "../query/useEditPatient";
 
 function calculateRenewalDate(createdAt, planDuration) {
   const createdDate = new Date(createdAt);
@@ -89,6 +90,7 @@ export default function ViewMemberDetails({ role }) {
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const { isLoading: loadingPlan, plans } = useGetPlanDetails();
   const navigate = useNavigate();
+  const { editPatient, isLoading: editing } = useEditPatient();
   const [benefits, setBenefits] = useState([
     { name: "24/7 Emergency Support", count: 2 },
     { name: "Monthly Health Check-ups", count: 12 },
@@ -284,7 +286,17 @@ export default function ViewMemberDetails({ role }) {
                     patient.benefits
                       .annualBasicHealthCheckupPackage_58Parameters
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        annualBasicHealthCheckupPackage_58Parameters:
+                          patient.benefits
+                            .annualBasicHealthCheckupPackage_58Parameters + 1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="General Physician Doctor Consultation - In Person at Home"
@@ -298,7 +310,18 @@ export default function ViewMemberDetails({ role }) {
                     patient.benefits
                       .generalPhysicianDoctorConsultation_InPersonatHome
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        generalPhysicianDoctorConsultation_InPersonatHome:
+                          patient.benefits
+                            .generalPhysicianDoctorConsultation_InPersonatHome +
+                          1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="General Physician Doctor Consultation - Virtual"
@@ -309,7 +332,17 @@ export default function ViewMemberDetails({ role }) {
                         12) -
                     patient.benefits.generalPhysicianDoctorConsultation_Virtual
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        generalPhysicianDoctorConsultation_Virtual:
+                          patient.benefits
+                            .generalPhysicianDoctorConsultation_Virtual + 1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="Super Specialist Consultation"
@@ -321,7 +354,16 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.superSpecialistConsultationPerYear) -
                     patient.benefits.superSpecialistConsultation
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        superSpecialistConsultation:
+                          patient.benefits.superSpecialistConsultation + 1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="Wellness Call Check by MPG"
@@ -331,7 +373,16 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.WellnessCallCheckbyMPGPerMonth * 12) -
                     patient.benefits.wellnessCallCheckbyMPG
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        wellnessCallCheckbyMPG:
+                          patient.benefits.wellnessCallCheckbyMPG + 1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="Vital Check at Home"
@@ -341,7 +392,16 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.VitalCheckatHomePerMonth * 12) -
                     patient.benefits.vitalCheckatHome
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        id: patient._id,
+                        vitalCheckatHome: patient.benefits.vitalCheckatHome + 1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="BLS Emergency Ambulance Evacuation Coverage (Within Patna)"
@@ -354,7 +414,17 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear) -
                     patient.benefits.BLSEmergencyAmbulanceEvacuationCoverage
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        BLSEmergencyAmbulanceEvacuationCoverage:
+                          patient.benefits
+                            .BLSEmergencyAmbulanceEvacuationCoverage + 1,
+                      },
+                    });
+                  }}
                 />
                 <BenefitItem
                   benefit="Free Dental & Eye Checkup"
@@ -364,7 +434,16 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.freeDentalAndEyeCheckupPerMonth * 12) -
                     patient.benefits.freeDentalAndEyeCheckup
                   }
-                  onAvail={() => {}}
+                  onAvail={() => {
+                    editPatient({
+                      id: patient._id,
+                      benefits: {
+                        ...patient.benefits,
+                        freeDentalAndEyeCheckup:
+                          patient.benefits.freeDentalAndEyeCheckup + 1,
+                      },
+                    });
+                  }}
                 />
               </div>
               <h3 className="text-xl font-semibold text-green-800 mt-6 mb-4">

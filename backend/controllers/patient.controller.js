@@ -14,7 +14,10 @@ export const registerPatient = async (req, res) => {
       emergencyContact,
       healthCondition,
       emergencyName,
-      emergencyEmail
+      emergencyEmail,
+      memberId,
+      gender,
+      benefits
     } = req.body;
 
     // Check if patient already exists
@@ -35,7 +38,10 @@ export const registerPatient = async (req, res) => {
       emergencyContact,
       healthCondition,
       emergencyName,
-      emergencyEmail
+      emergencyEmail,
+      gender,
+      memberId,
+      benefits
     });
 
     await patient.save();
@@ -43,6 +49,7 @@ export const registerPatient = async (req, res) => {
       .status(201)
       .json({ message: "Patient registered successfully", patient });
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({ message: "Server error", error });
   }
 };
@@ -152,10 +159,6 @@ export const validationToken = async (req, res, next) => {
     return res.status(400).json({ success: false, message: 'Invalid token' });
   }
 }
-
-
-import Patient from '../models/patientModel'; // Adjust the path as needed
-
 // Controller to update patient details
 export const updatePatientDetails = async (req, res) => {
   try {
@@ -173,11 +176,44 @@ export const updatePatientDetails = async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Patient details updated successfully",
-      data: updatedPatient,
+      message: "Patient details updated successfully", updatedPatient
     });
   } catch (error) {
     console.error("Error updating patient details:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const updatePatientCallDetails = async (req, res) => {
+  try {
+    
+    const {id,reportData} = req.body;
+    console.log(reportData)
+
+    if (!reportData) {
+      return res.status(400).json({ message: "Call details are required" });
+    }
+
+    // Find the patient by ID and push new call details into the callDetails array
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      id,
+      {
+        $push: { callDetails: reportData }, // Push new call details to the array
+      },
+      { new: true, runValidators: true } // Return the updated document
+    );
+
+    if (!updatedPatient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    res.status(200).json({
+      message: "Call details updated successfully",
+      updatedPatient,
+    });
+  } catch (error) {
+    console.error("Error updating call details:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+

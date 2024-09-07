@@ -32,7 +32,6 @@ export default function HomeCareVitalDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { isLoading, assignment } = useAssignmentById(id);
-  console.log(assignment);
 
   // Function to download the page content as a PDF
   const downloadPDF = () => {
@@ -162,6 +161,7 @@ export default function HomeCareVitalDetails() {
           <div className="flex flex-wrap">
             {assignment.photos.map((photo) => (
               <img
+                key={photo}
                 onClick={() => (window.location.href = photo)}
                 className="w-1/6 p-2"
                 src={photo}

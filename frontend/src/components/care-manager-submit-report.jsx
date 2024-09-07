@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ArrowLeft, Save, Send } from "lucide-react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useUpdatePatient } from "../query/useUpdatePatient";
 
 const InputField = ({
   label,
@@ -46,6 +47,9 @@ const InputField = ({
 
 export default function SubmitReportView({ patientName, onSubmit, onCancel }) {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const userData = JSON.parse(localStorage.getItem("userData")) || null;
+  const { updatePatient, isLoading } = useUpdatePatient();
   const [reportData, setReportData] = useState({
     callDate: "",
     callDuration: "",
@@ -69,7 +73,8 @@ export default function SubmitReportView({ patientName, onSubmit, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(reportData);
+    console.log({ id, reportData: reportData });
+    updatePatient({ id, reportData: { reportData, userData } });
   };
 
   return (
@@ -222,6 +227,7 @@ export default function SubmitReportView({ patientName, onSubmit, onCancel }) {
           >
             Cancel
           </button>
+
           <button
             type="submit"
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300 flex items-center"

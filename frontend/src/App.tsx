@@ -96,9 +96,7 @@ export default function App() {
             }
           />
           <Route
-
             path="admin-dashboard/assign-care-manager"
-
             element={
               <AdminRoute>
                 <AdminShowAllPatient role="Care Manager" />
@@ -122,12 +120,10 @@ export default function App() {
             }
           />
           <Route
-
             path="admin-dashboard/show-all-member"
             element={
               <AdminRoute>
-                <ShowAllPatient />
-
+                <ShowAllPatient role="admin-dashboard" />
               </AdminRoute>
             }
           />

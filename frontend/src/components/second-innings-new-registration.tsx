@@ -158,17 +158,17 @@ export default function NewRegistration() {
                 ))}
               </div>
               <div className="flex space-x-4">
-                {["Monthly", "Yearly"].map((plantime) => (
-                  <label key={plantime} className="flex items-center">
+                {["Monthly", "Yearly"].map((planDuration) => (
+                  <label key={planDuration} className="flex items-center">
                     <input
                       type="radio"
-                      name="plantime"
-                      value={plantime}
-                      checked={formData.planDuration === plantime}
+                      name="planDuration"
+                      value={planDuration}
+                      checked={formData.planDuration === planDuration}
                       onChange={handleInputChange}
                       className="mr-2"
                     />
-                    <span>{plantime}</span>
+                    <span>{planDuration}</span>
                   </label>
                 ))}
               </div>

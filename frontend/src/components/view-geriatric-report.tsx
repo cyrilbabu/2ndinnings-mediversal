@@ -142,51 +142,235 @@ export default function ViewGeriatricReport() {
       </header>
 
       <div className="bg-white rounded-lg shadow-md p-6">
-        {geriatricData.map((data, index) => (
-          <div key={index}>
-            {/* <h2 className="text-xl font-semibold text-green-800 mb-4">
-              {data.title}
-            </h2>
-            <div className="mb-6">
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold text-green-800 mb-3">
+            Physical Health
+          </h2>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Mobility
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Observe patient's gait and movement
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Vision
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Ask about difficulty reading or watching TV
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Hearing
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Note if patient has difficulty understanding conversation
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+        </div>
+
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold text-green-800 mb-3">
+            Cognitive Function
+          </h2>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Memory
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Ask patient to recall 3 common Indian objects after 5 minutes
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Attention
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Ask patient to count backwards from 100 by 7s
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+        </div>
+
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold text-green-800 mb-3">
+            Physical Health
+          </h2>
+
+          <div>
+            <div className="text-base font-semibold text-green-800 ">
+              Activities of Daily Living (ADL)
+            </div>
+            <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
-                Mobility
+                Bathing
               </label>
               <p className="text-xs text-gray-600 mb-2">
-                Observe patient's gait and movement
+                Assess ability to bathe independently
               </p>
-              <div className="w-full p-2 border border-green-300 rounded-md">
-                Fully independent, including stairs
-              </div>
-            </div> */}
-
-            {
-              <div className="mb-10">
-                <h2 className="text-xl font-semibold text-green-800 mb-3">
-                  {data.title}
-                </h2>
-                {data.title === "Functional Status" && (
-                  <div className="text-base font-semibold text-green-800 ">
-                    {data.subTitle}
-                  </div>
-                )}
-                {data.questions &&
-                  data.questions.map((question, index) => (
-                    <div key={index}>
-                      <label className="block text-sm font-medium text-green-800 mb-1">
-                        {question.field}
-                      </label>
-                      <p className="text-xs text-gray-600 mb-2">
-                        {question.cue}
-                      </p>
-                      <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
-                        {question.options}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            }
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Dressing
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to select and put on clothes
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Toileting
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to use the toilet
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Transferring
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to move from bed to chair
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Continence
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess bladder and bowel control
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Feeding
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to feed oneself
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
           </div>
-        ))}
+          <div>
+            <div className="text-base font-semibold mb-4 text-green-800 ">
+              Instrumental Activities of Daily Living (IADL)
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Using telephone/mobile
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to use phone/mobile
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Shopping
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to shop for necessities
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Food preparation
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to prepare meals
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Housekeeping
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to maintain home
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Laundry
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to do laundry
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Transportation
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to use transportation
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Medication management
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to manage medications
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-800 mb-1">
+                Finances
+              </label>
+              <p className="text-xs text-gray-600 mb-2">
+                Assess ability to manage finances
+              </p>
+              <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold text-green-800 mb-3">
+            Social and Emotional Health
+          </h2>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Mood
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Observe affect and ask about feelings of sadness
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">
+              Social Engagement
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Ask about participation in family events, religious activities, or
+              community gatherings
+            </p>
+            <div className="w-full p-2 mb-2 border border-green-300 rounded-md"></div>
+          </div>
+        </div>
       </div>
     </div>
   );

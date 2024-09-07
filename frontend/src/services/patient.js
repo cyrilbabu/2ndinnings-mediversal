@@ -60,3 +60,25 @@ export async function assignCareManager(data) {
     throw error;
   }
 }
+
+export async function updatePatient(data) {
+  const apiUrl = `${url}/api/patient/updateCallDetails`;
+
+  try {
+    const response = await axios.put(apiUrl, data);
+
+    if (response.status === 200) {
+      console.log(response);
+      return response.data.updatedPatient; // Assuming response.data contains the array of admin details
+    } else {
+      console.error(
+        "Failed to fetch employee information:",
+        response.data.error
+      );
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching employee information:", error);
+    throw error;
+  }
+}

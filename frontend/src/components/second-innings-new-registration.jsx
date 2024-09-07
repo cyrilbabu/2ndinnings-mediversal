@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User, Phone, Mail, Home, AlertTriangle } from "lucide-react";
 import axios from "axios";
 import BackButton from "../UI/back-button";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import {url} from "../services/url"
+
+import { url } from "../services/url";
 
 const InputField = ({
   icon: Icon,
@@ -13,6 +13,8 @@ const InputField = ({
   type = "text",
   value,
   onChange,
+  className,
+  disabled=false,
 }) => (
   <div className="flex items-center bg-white rounded-lg shadow-sm p-2 mb-4">
     <Icon className="text-green-600 w-5 h-5 mr-2" />
@@ -23,13 +25,16 @@ const InputField = ({
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full outline-none text-green-800"
+        disabled={disabled}
+        className={`w-full outline-none ${className} text-green-800`}
       />
     </div>
   </div>
 );
 
 export default function NewRegistration() {
+  const [id, setMemberId] = useState("");
+
   const [formData, setFormData] = useState({
     fullName: "",
     dob: "",
@@ -40,8 +45,9 @@ export default function NewRegistration() {
     plan: "",
     planDuration: "",
     healthCondition: "",
-    emergencyEmail:"",
-    emergencyName:""
+    emergencyEmail: "",
+    emergencyName: "",
+    gender: "",
   });
 
   const navigate = useNavigate();
@@ -62,9 +68,12 @@ export default function NewRegistration() {
     console.log(formData);
 
     try {
-       const response= await axios.post(`${url}/api/patient/register`, formData);
+      const response = await axios.post(`${url}/api/patient/register`, {
+        ...formData,
+        memberId: id,
+      });
       // alert("Registration successful!");
-      toast.success(response.data.message || "Registration successful!");
+    
       setFormData({
         fullName: "",
         dob: "",
@@ -75,18 +84,30 @@ export default function NewRegistration() {
         plan: "",
         planDuration: "",
         healthCondition: "",
-        emergencyEmail:"",
-        emergencyName:"" 
-        // Reset key
+        emergencyEmail: "",
+        emergencyName: "",
+        gender,
       });
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Something went wrong!";
-      console.log(errorMessage)
-      toast.error(errorMessage);
+      const errorMessage =
+        error.response?.data?.message || "Something went wrong!";
+      console.log(errorMessage);
+      
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    function createMemberID() {
+      const date = new Date();
+      const year = date.getFullYear();
+      const serial = "0001"
+      setMemberId(() => `MHPL 2INN ${year} ${serial}`);
+    }
+
+    createMemberID();
+  });
 
   return (
     <>
@@ -99,6 +120,14 @@ export default function NewRegistration() {
           className="bg-white rounded-lg shadow-md p-6"
           onSubmit={handleSubmit}
         >
+          <InputField
+            icon={User}
+            label="Member ID:"
+            disabled={true}
+            name="memberId"
+            value={id}
+            className="cursor-not-allowed text-slate-400 py-1 px-2 rounded-lg" 
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
               icon={User}
@@ -124,13 +153,13 @@ export default function NewRegistration() {
               onChange={handleInputChange}
             />
             <InputField
-            icon={AlertTriangle}
-            label="Emergency Name"
-            name="emergencyName"
-            type="text"
-            value={formData.emergencyName}
-            onChange={handleInputChange}
-          />
+              icon={AlertTriangle}
+              label="Emergency Name"
+              name="emergencyName"
+              type="text"
+              value={formData.emergencyName}
+              onChange={handleInputChange}
+            />
             <InputField
               icon={Mail}
               label="Email Address"
@@ -161,11 +190,26 @@ export default function NewRegistration() {
               value={formData.emergencyContact}
               onChange={handleInputChange}
             />
-            
           </div>
 
           <div className="mt-6  md:flex justify-between">
             <div>
+              <label className="block text-green-800 mb-2 ">Gender</label>
+              <div className="flex space-x-4">
+                {["Male", "Female", "Others"].map((gender) => (
+                  <label key={gender} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={gender}
+                      checked={formData.gender === gender}
+                      onChange={handleInputChange}
+                      className="mr-2"
+                    />
+                    <span>{gender}</span>
+                  </label>
+                ))}
+              </div>
               <label className="block text-green-800 mb-2 ">Plan Details</label>
               <div className="flex space-x-4">
                 {["Basic", "Advance", "Premium"].map((plan) => (
@@ -201,7 +245,6 @@ export default function NewRegistration() {
                     </label>
                   ))}
                 </div>
-                
               </div>
             </div>
             <button

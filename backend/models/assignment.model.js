@@ -13,6 +13,10 @@ const assignmentSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    date:{
+      type:String,
+      required:true
+    },
     role: {
       type: String,
       required: true,

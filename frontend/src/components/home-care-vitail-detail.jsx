@@ -4,13 +4,15 @@ import {
   ArrowLeft,
   Droplet,
   Heart,
+  Link,
   Sandwich,
   Scale,
   Thermometer,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { useAssignmentById } from "../query/useAssignmentById";
 
 const VitalInput = ({ icon: Icon, label, unit, value }) => (
   <div className="mb-4">
@@ -28,20 +30,9 @@ const VitalInput = ({ icon: Icon, label, unit, value }) => (
 
 export default function HomeCareVitalDetails() {
   const navigate = useNavigate();
-
-  const patientVitals = {
-    fullName: "Priyanshu",
-    visitTime: "12/08/2024 - 10:00 AM",
-    bloodPressure: "120/80",
-    heartRate: 72,
-    temperature: 98.6,
-    oxygenSaturation: 97,
-    respiratoryRate: 18,
-    weight: 70,
-    bloodSugar: 105,
-    finalReport:
-      "Patient is stable with normal vitals. Blood pressure slightly elevated but within acceptable range. No signs of distress observed.",
-  };
+  const { id } = useParams();
+  const { isLoading, assignment } = useAssignmentById(id);
+  console.log(assignment);
 
   // Function to download the page content as a PDF
   const downloadPDF = () => {
@@ -69,9 +60,19 @@ export default function HomeCareVitalDetails() {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`${patientVitals.fullName}-vital-report.pdf`);
+      pdf.save(`${report}l-report.pdf`);
     });
   };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-green-50">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
+        <span className="ml-2 text-green-800">Loading...</span>
+      </div>
+    );
+  }
+
+  const report = JSON.parse(assignment.assessment);
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -98,8 +99,11 @@ export default function HomeCareVitalDetails() {
 
       <div id="pdf-content" className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl flex font-semibold text-green-800 mb-4 justify-between">
-          <div>{patientVitals.fullName}</div>
-          <div>{patientVitals.visitTime}</div>
+          <div>{assignment.patient.fullName}</div>
+          <div>
+            {"Date: "}
+            {assignment.updatedAt.split("T")[0]} {"Time:"} {assignment.time}
+          </div>
         </h2>
 
         <form>
@@ -107,51 +111,64 @@ export default function HomeCareVitalDetails() {
             icon={Activity}
             label="Blood Pressure"
             unit="mmHg"
-            value={patientVitals.bloodPressure}
+            value={report.bloodPressure}
             name="bloodPressure"
           />
           <VitalInput
             icon={Heart}
             label="Heart Rate"
             unit="bpm"
-            value={patientVitals.heartRate}
+            value={report.heartRate}
             name="heartRate"
           />
           <VitalInput
             icon={Thermometer}
             label="Temperature"
             unit="°F"
-            value={patientVitals.temperature}
+            value={report.temperature}
             name="temperature"
           />
           <VitalInput
             icon={Droplet}
             label="Oxygen Saturation"
             unit="%"
-            value={patientVitals.oxygenSaturation}
+            value={report.oxygenSaturation}
             name="oxygenSaturation"
           />
           <VitalInput
             icon={Activity}
             label="Respiratory Rate"
             unit="breaths/min"
-            value={patientVitals.respiratoryRate}
+            value={report.respiratoryRate}
             name="respiratoryRate"
           />
           <VitalInput
             icon={Scale}
             label="Weight"
             unit="kg"
-            value={patientVitals.weight}
+            value={report.weight}
             name="weight"
           />
           <VitalInput
             icon={Sandwich}
             label="Blood Sugar"
             unit="mg/dL"
-            value={patientVitals.bloodSugar}
+            value={report.bloodSugar}
             name="bloodSugar"
           />
+          <label className="block text-sm font-medium text-green-800 mb-1">
+            Photos
+          </label>
+          <div className="flex flex-wrap">
+            {assignment.photos.map((photo) => (
+              <img
+                onClick={() => (window.location.href = photo)}
+                className="w-1/6 p-2"
+                src={photo}
+                alt="assignment photo"
+              />
+            ))}
+          </div>
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-green-800 mb-1">
@@ -160,7 +177,7 @@ export default function HomeCareVitalDetails() {
             <textarea
               className="w-full p-2 border border-green-300 rounded-md"
               rows="4"
-              value={patientVitals.finalReport}
+              value={report.finalReport}
               readOnly
             ></textarea>
           </div>

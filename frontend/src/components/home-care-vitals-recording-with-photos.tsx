@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUpdateAssessment } from "../query/useUpdateAssessment";
-import cloudinary from "../services/cloudinary.js";
 
 const VitalInput = ({
   icon: Icon,
@@ -48,45 +47,9 @@ const VitalInput = ({
 const PhotoUpload = ({ photos, setPhotos, errors }) => {
   const fileInputRef = useRef(null);
 
-  const handlePhotoUpload = async (event) => {
-    console.log(event.target.files);
-    const files = event.target.files;
-
-    if (files.length === 0) {
-      return;
-    }
-
-    try {
-      const uploadPreset = "your-upload-preset"; // Replace with your actual upload preset name
-      const cloudName = "dhfky54ml"; // Your Cloudinary cloud name
-
-      const uploadPromises = Array.from(files).map((file) => {
-        const formData = new FormData();
-        formData.append("file", file); // The file to upload
-        formData.append("upload_preset", uploadPreset); // Your unsigned upload preset
-
-        // Sending the request to Cloudinary
-        return fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.error) {
-              throw new Error(data.error.message); // Handle Cloudinary-specific errors
-            }
-            return data.secure_url; // Return the URL of the uploaded image
-          });
-      });
-
-      const photoUrls = await Promise.all(uploadPromises);
-      setPhotos((prevPhotos) => [...prevPhotos, ...photoUrls]);
-    } catch (error) {
-      console.error("Error uploading photos:", error);
-    }
+  const handlePhotoUpload = (event) => {
+    const files = Array.from(event.target.files);
+    setPhotos((prevfile) => [...prevfile, ...files]);
   };
 
   const removePhoto = (index) => {
@@ -102,10 +65,11 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         {photos.map((photo, index) => (
           <div key={index} className="relative">
             <img
-              src={photo}
-              // alt={`Visit photo ${index + 1}`}
+              src={URL.createObjectURL(photo)}
+              alt={`Visit photo ${index + 1}`}
               className="w-20 h-20 object-cover rounded-md"
             />
+
             <button
               onClick={() => removePhoto(index)}
               className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
@@ -131,15 +95,14 @@ const PhotoUpload = ({ photos, setPhotos, errors }) => {
         multiple
         className="hidden"
       />
-      {errors.photos && (
+      {/* {errors.photos && (
         <p className="text-red-500 text-xs mt-1">{errors.photos.message}</p>
-      )}
+      )} */}
     </div>
   );
 };
 
 export default function VitalsRecordingScreen() {
-  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -149,7 +112,7 @@ export default function VitalsRecordingScreen() {
     setError,
     clearErrors,
   } = useForm();
-
+  const { updateAssignementDetails, isLoading } = useUpdateAssessment();
   const [photos, setPhotos] = useState([]);
   console.log(photos);
 
@@ -159,28 +122,29 @@ export default function VitalsRecordingScreen() {
       return;
     }
 
-    console.log("Cyril", photos);
-    // const photoData = photos.map((photo) => ({
-    //   name: photo.name,
-    //   size: photo.size,
-    // }));
+    // Create FormData object to handle file uploads
+    const formData = new FormData();
+    formData.append("id", id); // Append the ID
+    formData.append("assessment", JSON.stringify(data)); // Append the form data
 
-    const requestData = {
-      id: id,
-      assessment: { ...data, photos },
-      // photos: photos,
-    };
+    // Append each photo to the formData
+    photos.forEach((photo, index) => {
 
-    // Send request with JSON data
-    updateAssignementDetails(requestData, {
-      onSuccess: () => {
-        navigate("/assessor-dashboard");
-      },
+      formData.append("photos", photo);
+
     });
 
-    // Debug logs
-    // console.log("Submitting vitals:", data);
-    // console.log("Photo metadata ready for upload:", photoData);
+    // Assuming formData is already created and fields are appended
+    console.log("FormData contents:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    updateAssignementDetails(formData, {
+      onSuccess: () => {
+        navigate("/homecare-dashboard");
+      },
+    });
   };
 
   return (

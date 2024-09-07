@@ -1,5 +1,6 @@
 import cloudinary from "../utils/cloudinary.js";
 import Assignment from "../models/assignment.model.js";
+import getDataUri from "../utils/datauri.js";
 
 export const getAssignment = async (req, res) => {
   try {
@@ -46,31 +47,50 @@ export const uploadAssignment = async (req, res) => {
   }
 };
 
-export const updateAssesment = async (req, res) => {
+
+
+export const updateAssessment = async (req, res) => {
   try {
     const { id, assessment } = req.body;
-    const assignment = await Assignment.findById(id);
-    if (!assignment) {
+
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ success: false, message: "No files uploaded" });
+    }
+
+    // Process multiple files
+    const uploadPromises = req.files.map(async (file) => {
+      const dataUri = getDataUri(file);
+      const result = await cloudinary.uploader.upload(dataUri, {
+        folder: 'assignments' // Optional: Specify a folder in Cloudinary
+      });
+      return result.secure_url;
+    });
+
+    // Upload all images and get their URLs
+    const photoUrls = await Promise.all(uploadPromises);
+
+    // Update the assignment document
+    const update = {
+      photos: photoUrls, // Set the photos field as an array of URLs
+      assessment,
+      status : "Completed"
+    };
+
+    const updatedAssignment = await Assignment.findByIdAndUpdate(id, update, {
+      new: true,
+    });
+
+    if (!updatedAssignment) {
       return res.status(400).json({ message: "Assignment not found" });
     }
 
-    // Update assessment and status
-    assignment.assessment = assessment;
-    assignment.status = "Completed";
+    return res.status(200).json({ message: "Assessment updated successfully", updatedAssignment });
 
-    const updatedAssignment = await assignment.save();
-
-    return res
-      .status(200)
-      .json({
-        message: "Assessment updated successfully",
-        assignment: updatedAssignment,
-      });
   } catch (error) {
     console.log(error.message);
-    return res
-      .status(500)
-      .json({ error: "Error in updateAssessment controller" });
+    return res.status(500).json({ error: "Error in updateAssessment controller" });
+
   }
 };
 

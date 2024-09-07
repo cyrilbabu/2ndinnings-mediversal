@@ -12,8 +12,9 @@ import {
   Activity,
   Gift,
   Check,
+  ArrowLeft,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePatient } from "../query/usePatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useGetPlanDetails } from "../query/useGetPlanDetails";
@@ -79,13 +80,14 @@ const TabButton = ({ active, children, onClick }) => (
   </button>
 );
 
-export default function ViewMemberDetails() {
+export default function ViewMemberDetails({ role }) {
   const { id } = useParams();
   const { isLoading, patient } = usePatient(id);
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
   const [activeTab, setActiveTab] = useState("personal");
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const { isLoading: loadingPlan, plans } = useGetPlanDetails();
+  const navigate = useNavigate();
   const [benefits, setBenefits] = useState([
     { name: "24/7 Emergency Support", count: 2 },
     { name: "Monthly Health Check-ups", count: 12 },
@@ -119,7 +121,6 @@ export default function ViewMemberDetails() {
 
   // console.log(patient.planDuration);
 
-
   const assessorAssignments = assignments.filter(
     (assignment) => assignment.patient._id === id
   );
@@ -130,7 +131,16 @@ export default function ViewMemberDetails() {
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-green-800">Member Details</h1>
+        <h1 className="text-3xl font-bold text-green-800">
+          <button
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <ArrowLeft className="w-6 h-6 text-green-800 mr-2" />
+          </button>
+          Member Details
+        </h1>
         <button className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
           <Edit className="w-4 h-4 mr-2" />
           Edit Details

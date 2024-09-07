@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { updateAssignementDetails as updateAssignementApi } from "../services/assignement";
+import { updateAssignmentDetails as updateAssignementApi } from "../services/assignement";
 
 export function useUpdateAssessment() {
   const queryClient = useQueryClient();

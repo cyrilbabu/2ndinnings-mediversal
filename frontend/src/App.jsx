@@ -123,7 +123,11 @@ export default function App() {
             path="admin-dashboard/show-all-member"
             element={
               <AdminRoute>
+
                 <ShowAllPatient role="admin-dashboard" />
+
+                
+
               </AdminRoute>
             }
           />
@@ -244,7 +248,7 @@ export default function App() {
             }
           />
           <Route
-            path="homecare-dashboard/home-care-vitals-view"
+            path="homecare-dashboard/home-care-vitals-view/:id"
             element={
               <HomeCareStaffRoute>
                 <HomeCareVitalDetails />

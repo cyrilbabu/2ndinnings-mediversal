@@ -10,10 +10,10 @@ import {
   getAssignment,
   uploadAssignment,
   updateAssessment,
+  getAssignmentById,
 } from "../controllers/assignment.controller.js";
 
 import { upload } from "../middleware/multer.js";
-
 const router = express.Router();
 
 router.post("/login", login);
@@ -25,5 +25,7 @@ router.get("/getAssignment", getAssignment);
 router.post("/uploadAssignment", uploadAssignment);
 
 router.post("/updateAssessment", upload.single("photos", 10), updateAssessment);
+
+router.get("/getAssignmentById/:id", getAssignmentById);
 
 export default router;

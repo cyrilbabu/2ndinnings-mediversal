@@ -3,6 +3,8 @@ import { User, Phone, Mail, Home, AlertTriangle } from "lucide-react";
 import axios from "axios";
 import BackButton from "../UI/back-button";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import {url} from "../services/url"
 
 const InputField = ({
   icon: Icon,
@@ -38,6 +40,8 @@ export default function NewRegistration() {
     plan: "",
     planDuration: "",
     healthCondition: "",
+    emergencyEmail:"",
+    emergencyName:""
   });
 
   const navigate = useNavigate();
@@ -58,8 +62,9 @@ export default function NewRegistration() {
     console.log(formData);
 
     try {
-      await axios.post("http://localhost:3000/api/patient/register", formData);
+       const response= await axios.post(`${url}/api/patient/register`, formData);
       // alert("Registration successful!");
+      toast.success(response.data.message || "Registration successful!");
       setFormData({
         fullName: "",
         dob: "",
@@ -69,10 +74,15 @@ export default function NewRegistration() {
         emergencyContact: "",
         plan: "",
         planDuration: "",
-        healthCondition: "", // Reset key
+        healthCondition: "",
+        emergencyEmail:"",
+        emergencyName:"" 
+        // Reset key
       });
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.response?.data?.message || "Something went wrong!";
+      console.log(errorMessage)
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -114,11 +124,27 @@ export default function NewRegistration() {
               onChange={handleInputChange}
             />
             <InputField
+            icon={AlertTriangle}
+            label="Emergency Name"
+            name="emergencyName"
+            type="text"
+            value={formData.emergencyName}
+            onChange={handleInputChange}
+          />
+            <InputField
               icon={Mail}
               label="Email Address"
               name="email"
               type="email"
               value={formData.email}
+              onChange={handleInputChange}
+            />
+            <InputField
+              icon={AlertTriangle}
+              label="Emergency Email"
+              name="emergencyEmail"
+              type="email"
+              value={formData.emergencyEmail}
               onChange={handleInputChange}
             />
             <InputField
@@ -135,13 +161,12 @@ export default function NewRegistration() {
               value={formData.emergencyContact}
               onChange={handleInputChange}
             />
+            
           </div>
 
           <div className="mt-6  md:flex justify-between">
             <div>
-              <label className="block text-green-800 mb-2">
-                Membership Plan
-              </label>
+              <label className="block text-green-800 mb-2 ">Plan Details</label>
               <div className="flex space-x-4">
                 {["Basic", "Advance", "Premium"].map((plan) => (
                   <label key={plan} className="flex items-center">
@@ -157,20 +182,26 @@ export default function NewRegistration() {
                   </label>
                 ))}
               </div>
-              <div className="flex space-x-4">
-                {["Monthly", "Yearly"].map((plantime) => (
-                  <label key={plantime} className="flex items-center">
-                    <input
-                      type="radio"
-                      name="plantime"
-                      value={plantime}
-                      checked={formData.planDuration === plantime}
-                      onChange={handleInputChange}
-                      className="mr-2"
-                    />
-                    <span>{plantime}</span>
-                  </label>
-                ))}
+              <div>
+                <label className="block text-green-800 mb-2">
+                  Plan Duration
+                </label>
+                <div className="flex space-x-4">
+                  {["Monthly", "Yearly"].map((planDuration) => (
+                    <label key={planDuration} className="flex items-center">
+                      <input
+                        type="radio"
+                        name="planDuration"
+                        value={planDuration}
+                        checked={formData.planDuration === planDuration}
+                        onChange={handleInputChange}
+                        className="mr-2"
+                      />
+                      <span>{planDuration}</span>
+                    </label>
+                  ))}
+                </div>
+                
               </div>
             </div>
             <button

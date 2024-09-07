@@ -35,16 +35,12 @@ export async function getAllAssignement() {
 export async function updateAssignementDetails(data) {
   let newUrl = `${url}/api/staff/updateAssessment`;
 
-  return await axios
-    .post(newUrl, data)
-    .then((res) => {
-      if (res.status === 200) {
-        console.log(res.data);
-        return res.data; // Return the email to be used in the onSuccess callback
-
-      }
-    );
-    console.log("Success:", response.data);
+  try {
+    const res = await axios.post(newUrl, data);
+    if (res.status === 200) {
+      console.log(res.data);
+      return res.data; // Return the data to be used in the onSuccess callback
+    }
   } catch (error) {
     if (error.response) {
       // Server responded with a status other than 2xx

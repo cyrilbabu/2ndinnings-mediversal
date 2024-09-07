@@ -13,6 +13,8 @@ export const registerPatient = async (req, res) => {
       dob,
       emergencyContact,
       healthCondition,
+      emergencyName,
+      emergencyEmail
     } = req.body;
 
     // Check if patient already exists
@@ -32,6 +34,8 @@ export const registerPatient = async (req, res) => {
       dob,
       emergencyContact,
       healthCondition,
+      emergencyName,
+      emergencyEmail
     });
 
     await patient.save();
@@ -150,3 +154,30 @@ export const validationToken = async (req, res, next) => {
 }
 
 
+import Patient from '../models/patientModel'; // Adjust the path as needed
+
+// Controller to update patient details
+export const updatePatientDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    // Find the patient by ID and update with new data
+    const updatedPatient = await Patient.findByIdAndUpdate(id, updateData, {
+      new: true, // Return the updated document
+      runValidators: true, // Ensure new data meets schema requirements
+    });
+
+    if (!updatedPatient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    res.status(200).json({
+      message: "Patient details updated successfully",
+      data: updatedPatient,
+    });
+  } catch (error) {
+    console.error("Error updating patient details:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

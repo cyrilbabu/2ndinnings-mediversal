@@ -38,6 +38,14 @@ const patientSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    emergencyName: {
+      type: String,
+      required: true,
+    },
+    emergencyEmail: {
+      type: String,
+      required: true,
+    },
     healthCondition: {
       type: String,
     },
@@ -46,6 +54,9 @@ const patientSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Staff",
     },
+    callDetails:[{
+      type:mongoose.Schema.Types.Mixed
+    }]
   },
   { timestamps: true }
 );

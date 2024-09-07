@@ -9,14 +9,10 @@ import {
 import {
   getAssignment,
   uploadAssignment,
-
-  updateAssesment,
-} from "../controllers/assignment.controller.js";
-
-
   updateAssessment,
-  
 } from "../controllers/assignment.controller.js";
+
+
 import { upload } from "../middleware/multer.js";
 
 const router = express.Router();
@@ -27,10 +23,7 @@ router.post("/updateStaff", updateStaff);
 router.get("/getAllStaff", getAllStaff);
 router.get("/getStaffById/:id", getStaffById);
 router.get("/getAssignment", getAssignment);
-router.post("/uploadAssignment", uploadAssignment);
-
-router.post("/updateAssessment", uploadImage.single("photos"), updateAssesment);
-
+router.post("/uploadAssignment", uploadAssignment)
 router.post("/updateassessment", upload.array('photos',10), updateAssessment);
 
 export default router;

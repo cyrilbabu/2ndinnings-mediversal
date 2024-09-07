@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { usePatient } from "../query/usePatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useGetPlanDetails } from "../query/useGetPlanDetails";
+import ViewCallReports from "../routes/view-call-reports";
 
 function calculateRenewalDate(createdAt, planDuration) {
   const createdDate = new Date(createdAt);
@@ -110,6 +111,8 @@ export default function ViewMemberDetails({ role }) {
     }
   };
 
+  const [dataIndex, setDataIndex] = useState(null);
+
   if (isLoading || loadingAssignments || loadingPlan) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
@@ -119,10 +122,20 @@ export default function ViewMemberDetails({ role }) {
     );
   }
 
+  console.log(patient);
+
   // console.log(patient.planDuration);
 
-  const assessorAssignments = assignments.filter(
+  const Assignments = assignments.filter(
     (assignment) => assignment.patient._id === id
+  );
+
+  const assessorAssignments = Assignments.filter(
+    (assignment) => assignment.role === "Assessor"
+  );
+
+  const homeCareAssignments = Assignments.filter(
+    (assignment) => assignment.role === "Home Care Staff"
   );
 
   const patientPlan = plans.filter((plan) => plan.plan === patient.plan)[0];
@@ -188,16 +201,16 @@ export default function ViewMemberDetails({ role }) {
                 Vitals
               </TabButton>
               <TabButton
-                active={activeTab === "homeCare"}
-                onClick={() => setActiveTab("homeCare")}
+                active={activeTab === "callReports"}
+                onClick={() => setActiveTab("callReports")}
               >
-                Home Care
+                Call Reports
               </TabButton>
               <TabButton
                 active={activeTab === "assessor"}
                 onClick={() => setActiveTab("assessor")}
               >
-                Assessor
+                Geriatic Assessment
               </TabButton>
             </>
           )}
@@ -265,81 +278,91 @@ export default function ViewMemberDetails({ role }) {
                 <BenefitItem
                   benefit="Annual Basic Health Checkup Package - 58 Parameters"
                   availableCount={
-                    patientPlan.annualBasicHealthCheckupPackage58Parameters < 1
+                    (patient.planDuration === "monthly"
                       ? 0
-                      : patientPlan.annualBasicHealthCheckupPackage58Parameters
+                      : patientPlan.annualBasicHealthCheckupPackage58Parameters) -
+                    patient.benefits
+                      .annualBasicHealthCheckupPackage_58Parameters
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="General Physician Doctor Consultation - In Person at Home"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? Math.floor(
                           patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear /
                             12
                         )
-                      : patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear
+                      : patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear) -
+                    patient.benefits
+                      .generalPhysicianDoctorConsultation_InPersonatHome
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="General Physician Doctor Consultation - Virtual"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth
                       : patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth *
-                        12
+                        12) -
+                    patient.benefits.generalPhysicianDoctorConsultation_Virtual
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="Super Specialist Consultation"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? Math.floor(
                           patientPlan.superSpecialistConsultationPerYear / 12
                         )
-                      : patientPlan.superSpecialistConsultationPerYear
+                      : patientPlan.superSpecialistConsultationPerYear) -
+                    patient.benefits.superSpecialistConsultation
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="Wellness Call Check by MPG"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? patientPlan.WellnessCallCheckbyMPGPerMonth
-                      : patientPlan.WellnessCallCheckbyMPGPerMonth * 12
+                      : patientPlan.WellnessCallCheckbyMPGPerMonth * 12) -
+                    patient.benefits.wellnessCallCheckbyMPG
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="Vital Check at Home"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? Math.floor(patientPlan.VitalCheckatHomePerMonth)
-                      : patientPlan.VitalCheckatHomePerMonth * 12
+                      : patientPlan.VitalCheckatHomePerMonth * 12) -
+                    patient.benefits.vitalCheckatHome
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="BLS Emergency Ambulance Evacuation Coverage (Within Patna)"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? Math.floor(
                           patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear /
                             12
                         )
-                      : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear
+                      : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear) -
+                    patient.benefits.BLSEmergencyAmbulanceEvacuationCoverage
                   }
                   onAvail={() => {}}
                 />
                 <BenefitItem
                   benefit="Free Dental & Eye Checkup"
                   availableCount={
-                    patient.planDuration === "monthly"
+                    (patient.planDuration === "monthly"
                       ? patientPlan.freeDentalAndEyeCheckupPerMonth
-                      : patientPlan.freeDentalAndEyeCheckupPerMonth * 12
+                      : patientPlan.freeDentalAndEyeCheckupPerMonth * 12) -
+                    patient.benefits.freeDentalAndEyeCheckup
                   }
                   onAvail={() => {}}
                 />
@@ -498,7 +521,7 @@ export default function ViewMemberDetails({ role }) {
             </div>
           )}
 
-          {activeTab === "activities" && (
+          {/* {activeTab === "activities" && (
             <div>
               <h3 className="text-xl font-semibold text-green-800 mb-4">
                 Recent Activities
@@ -514,6 +537,102 @@ export default function ViewMemberDetails({ role }) {
                         : "Home Care Check Up"
                     }
                   />
+                ))}
+              </div>
+            </div>
+          )} */}
+          {activeTab === "vitals" && (
+            <div>
+              <h3 className="text-xl font-semibold text-green-800 mb-4">
+                Recent Activities
+              </h3>
+              <div className="bg-green-50 rounded-md p-4">
+                {homeCareAssignments.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer rounded px-4 hover:bg-green-300"
+                    onClick={() =>
+                      navigate(
+                        `/admin-dashboard/home-care-vitals-view/${activity._id}`
+                      )
+                    }
+                  >
+                    <ActivityItem
+                      date={activity.updatedAt.split("T")[0]}
+                      activity={`${activity.staff.name} (${activity.status})`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {activeTab === "callReports" && (
+            <div>
+              <h3 className="text-xl font-semibold text-green-800 mb-4">
+                Recent Activities
+              </h3>
+              <div className="bg-green-50 rounded-md p-4">
+                {patient.callDetails?.map((activity, index) => (
+                  <div
+                    key={index}
+                    className={`cursor-pointer rounded px-4 ${
+                      index === dataIndex && "py-4"
+                    } hover:bg-green-300`}
+                    onClick={() => setDataIndex(index)}
+                  >
+                    <ActivityItem
+                      date={activity?.reportData?.callDate}
+                      activity={activity?.userData?.name}
+                    />
+                    {index === dataIndex && (
+                      <>
+                        {/* Close button */}
+                        <div
+                          className="absolute z-50 right-3 top-3 px-4 py-1 rounded text-white bg-gray-900 text-lg font-bold cursor-pointer"
+                          onClick={(e) => {
+                            console.log("Clicked");
+                            e.stopPropagation(); // Prevents the event from bubbling up
+                            setDataIndex(null); // Reset the state
+                          }}
+                        >
+                          close
+                        </div>
+
+                        {/* Modal overlay */}
+                        <div className="fixed inset-0 z-40 bg-gray-600 bg-opacity-60 flex justify-center items-center h-screen w-screen">
+                          <ViewCallReports
+                            data={activity}
+                            setDataIndex={setDataIndex}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {activeTab === "assessor" && (
+            <div>
+              <h3 className="text-xl font-semibold text-green-800 mb-4">
+                Recent Activities
+              </h3>
+              <div className="bg-green-50 rounded-md p-4">
+                {assessorAssignments.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer rounded px-4 hover:bg-green-300"
+                    onClick={() =>
+                      navigate(
+                        `/admin-dashboard/view-geriatic-assesment/${activity._id}`
+                      )
+                    }
+                  >
+                    <ActivityItem
+                      date={activity.updatedAt.split("T")[0]}
+                      activity={`${activity.staff.name} (${activity.status})`}
+                    />
+                  </div>
                 ))}
               </div>
             </div>

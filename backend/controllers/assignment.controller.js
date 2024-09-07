@@ -110,3 +110,4 @@ export const updateAssessment = async (req, res) => {
       .json({ error: "Error in updateAssessment controller" });
   }
 };
+

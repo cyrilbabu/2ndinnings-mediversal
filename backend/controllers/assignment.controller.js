@@ -21,6 +21,26 @@ export const getAssignment = async (req, res) => {
   }
 };
 
+export const getAssignmentById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const assignment = await Assignment.findById(id);
+    if (!assignment) {
+      return res
+        .status(400)
+        .json({ message: "error in fetching assignment details" });
+    }
+
+    return res.status(200).json({
+      message: "fetched assignment details successfully",
+      assignment,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ error: "error in getAssignmet controller" });
+  }
+};
+
 export const uploadAssignment = async (req, res) => {
   try {
     const { patient, staff, date, time, role } = req.body;

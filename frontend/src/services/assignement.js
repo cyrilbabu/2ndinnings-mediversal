@@ -55,3 +55,19 @@ export async function updateAssignmentDetails(data) {
     }
   }
 }
+
+export async function getAssignmentById(id) {
+  let newUrl = `${url}/api/staff/getAssignmentById/${id}`;
+
+  return await axios
+    .get(newUrl)
+    .then((res) => {
+      if (res.status === 200) {
+        return res.data.assignment; // Return the email to be used in the onSuccess callback
+      }
+    })
+    .catch((error) => {
+      console.error("get Assignment:", error);
+      throw error;
+    });
+}

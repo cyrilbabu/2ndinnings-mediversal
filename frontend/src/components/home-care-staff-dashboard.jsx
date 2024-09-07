@@ -50,7 +50,7 @@ const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
     ) : (
       <button
         onClick={() => {
-          navigate(`/homecare-dashboard/home-care-vitals-view`);
+          navigate(`/homecare-dashboard/home-care-vitals-view/${id}`);
         }}
         className="mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
@@ -79,8 +79,6 @@ export default function HomeCareStaffDashboard() {
       assignment.role === "Home Care Staff" &&
       assignment.staff._id === userData._id
   );
-
-  console.log(homeCareAssignments);
 
   const completedhomeCareAssignments = homeCareAssignments.filter(
     (assignment) => assignment.status === "Completed"

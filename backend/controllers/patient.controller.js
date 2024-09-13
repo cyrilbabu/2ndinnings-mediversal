@@ -163,11 +163,14 @@ export const validationToken = async (req, res, next) => {
 // Controller to update patient details
 export const updatePatientDetails = async (req, res) => {
   try {
-    const { id, benefits } = req.body;
-
+    const { id, benefits, activity } = req.body;
+    console.log(activity);
     const updateData = {
       $set: {
         benefits: benefits,
+      },
+      $push: {
+        activities: { activities: activity },
       },
     };
 

@@ -129,7 +129,7 @@ export default function ViewMemberDetails({ role }) {
     );
   }
 
-  console.log(patient);
+  console.log(patient.activities);
 
   // console.log(patient.planDuration);
 
@@ -146,7 +146,6 @@ export default function ViewMemberDetails({ role }) {
   );
 
   const patientPlan = plans.filter((plan) => plan.plan === patient.plan)[0];
-  console.log(patientPlan);
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -175,8 +174,9 @@ export default function ViewMemberDetails({ role }) {
           <div>
             <h2 className="text-2xl font-bold">{patient.fullName}</h2>
             <p className="text-green-200">
-              Member ID: 2I001 | {patient.plan} Plan
+              Member ID: {patient?.memberId}  
             </p>
+            <p className="text-green-200">{patient.plan} Plan</p>
           </div>
         </div>
 
@@ -243,7 +243,7 @@ export default function ViewMemberDetails({ role }) {
                 <h3 className="text-xl font-semibold text-green-800 mb-4">
                   Emergency Contact
                 </h3>
-                <InfoItem icon={User} label="Name" value="Jane Doe" />
+                <InfoItem icon={User} label="Name" value={patient?.emergencyName} />
                 <InfoItem
                   icon={Phone}
                   label="Phone"
@@ -252,7 +252,7 @@ export default function ViewMemberDetails({ role }) {
                 <InfoItem
                   icon={Mail}
                   label="Email"
-                  value="jane.doe@email.com"
+                  value={patient?.emergencyEmail}
                 />
               </div>
             </div>
@@ -314,6 +314,8 @@ export default function ViewMemberDetails({ role }) {
                             patient.benefits
                               .annualBasicHealthCheckupPackage_58Parameters + 1,
                         },
+                        activity:
+                          "Annual Basic Health Checkup Package - 58 Parameters",
                       });
                     }
                   }}
@@ -362,6 +364,8 @@ export default function ViewMemberDetails({ role }) {
                               .generalPhysicianDoctorConsultation_InPersonatHome +
                             1,
                         },
+                        activity:
+                          "General Physician Doctor Consultation - In Person at Home",
                       });
                     }
                   }}
@@ -402,6 +406,8 @@ export default function ViewMemberDetails({ role }) {
                             patient.benefits
                               .generalPhysicianDoctorConsultation_Virtual + 1,
                         },
+                        activity:
+                          "General Physician Doctor Consultation - Virtual",
                       });
                     }
                   }}
@@ -442,6 +448,7 @@ export default function ViewMemberDetails({ role }) {
                           superSpecialistConsultation:
                             patient.benefits.superSpecialistConsultation + 1,
                         },
+                        activity: "Super Specialist Consultation",
                       });
                     }
                   }}
@@ -476,6 +483,7 @@ export default function ViewMemberDetails({ role }) {
                           wellnessCallCheckbyMPG:
                             patient.benefits.wellnessCallCheckbyMPG + 1,
                         },
+                        activity: "Wellness Call Check by MPG",
                       });
                     }
                   }}
@@ -511,6 +519,7 @@ export default function ViewMemberDetails({ role }) {
                           vitalCheckatHome:
                             patient.benefits.vitalCheckatHome + 1,
                         },
+                        activity: "Vital Check at Home",
                       });
                     }
                   }}
@@ -556,6 +565,8 @@ export default function ViewMemberDetails({ role }) {
                             patient.benefits
                               .BLSEmergencyAmbulanceEvacuationCoverage + 1,
                         },
+                        activity:
+                          "BLS Emergency Ambulance Evacuation Coverage (Within Patna)",
                       });
                     }
                   }}
@@ -590,6 +601,7 @@ export default function ViewMemberDetails({ role }) {
                           freeDentalAndEyeCheckup:
                             patient.benefits.freeDentalAndEyeCheckup + 1,
                         },
+                        activity: "Free Dental & Eye Checkup",
                       });
                     }
                   }}
@@ -749,26 +761,32 @@ export default function ViewMemberDetails({ role }) {
             </div>
           )}
 
-          {/* {activeTab === "activities" && (
+          {activeTab === "activities" && (
             <div>
               <h3 className="text-xl font-semibold text-green-800 mb-4">
                 Recent Activities
               </h3>
               <div className="bg-green-50 rounded-md p-4">
-                {assessorAssignments.map((activity, index) => (
+                {patient.activities.map((activity, index) => (
                   <ActivityItem
                     key={index}
-                    date={activity.updatedAt.split("T")[0]}
-                    activity={
-                      activity.staff.role === "Assessor"
-                        ? "Geriatric Assessment"
-                        : "Home Care Check Up"
-                    }
+                    date={`${activity.createdAt.split("T")[0]} / ${
+                      activity.createdAt
+                        .split("T")[1]
+                        .split(".")[0]
+                        .split(":")[0]
+                    }:${
+                      activity.createdAt
+                        .split("T")[1]
+                        .split(".")[0]
+                        .split(":")[1]
+                    }`}
+                    activity={activity?.activities}
                   />
                 ))}
               </div>
             </div>
-          )} */}
+          )}
           {activeTab === "vitals" && (
             <div>
               <h3 className="text-xl font-semibold text-green-800 mb-4">

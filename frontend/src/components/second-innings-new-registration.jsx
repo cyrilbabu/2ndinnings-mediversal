@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 
 import { url } from "../services/url";
 import { useAllPatient } from "../query/useAllPatient";
+import { useRegisterPatient } from "../query/useRegisterPatient";
 
 const InputField = ({
   icon: Icon,
@@ -36,9 +37,9 @@ const InputField = ({
 
 export default function NewRegistration() {
   const [id, setMemberId] = useState("");
+  const { registerPatient, isLoading: registerLoading } = useRegisterPatient();
   const { isLoading: loading, allPatient: patients } = useAllPatient();
-
-  console.log(patients);
+  console.log(id);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -70,47 +71,39 @@ export default function NewRegistration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(formData);
-
-    try {
-      const response = await axios.post(`${url}/api/patient/register`, {
-        ...formData,
-        memberId: id,
-      });
-      setFormData({
-        fullName: "",
-        dob: "",
-        phone: "",
-        email: "",
-        address: "",
-        emergencyContact: "",
-        plan: "",
-        planDuration: "",
-        healthCondition: "",
-        emergencyEmail: "",
-        emergencyName: "",
-        gender,
-      });
-      navigate("/frontdesk-dashboard");
-      toast.success("Member Added");
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Something went wrong!";
-      console.log(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    navigate("/frontdesk-dashboard");
+    registerPatient(
+      { ...formData, memberId: id },
+      {
+        onSuccess: () => {
+          setFormData({
+            fullName: "",
+            dob: "",
+            phone: "",
+            email: "",
+            address: "",
+            emergencyContact: "",
+            plan: "",
+            planDuration: "",
+            healthCondition: "",
+            emergencyEmail: "",
+            emergencyName: "",
+            gender,
+          });
+        },
+      }
+    );
   };
 
   useEffect(() => {
     function createMemberID() {
-      const latestPatient = patients.reduce((latest, current) => {
+      const latestPatient = patients?.reduce((latest, current) => {
         return new Date(current.createdAt) > new Date(latest.createdAt)
           ? current
           : latest;
       });
 
-      const serial = latestPatient.memberId.split(" ")[3];
+      const serial = latestPatient?.memberId.split(" ")[3];
       const no = parseInt(serial, 10) + 1;
       const fourDigitString = no.toString().padStart(4, "0");
       const date = new Date();
@@ -120,7 +113,16 @@ export default function NewRegistration() {
     }
 
     createMemberID();
-  });
+  }, [patients]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-green-50">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-green-500"></div>
+        <span className="ml-2 text-green-800">Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -259,7 +261,6 @@ export default function NewRegistration() {
                     </label>
                   ))}
                 </div>
-
               </div>
             </div>
             <button
@@ -288,9 +289,9 @@ export default function NewRegistration() {
           <button
             type="submit"
             className="mt-6 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
-            disabled={isLoading}
+            disabled={registerLoading}
           >
-            {isLoading ? (
+            {registerLoading ? (
               <svg
                 className="animate-spin h-5 w-5 text-white mx-auto"
                 viewBox="0 0 24 24"

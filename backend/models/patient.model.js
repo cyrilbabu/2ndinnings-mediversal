@@ -17,6 +17,13 @@ const benefitAvailabilitySchema = mongoose.Schema({
   freeDentalAndEyeCheckup: { type: Number, default: 0 },
 });
 
+const activitySchema= mongoose.Schema({
+  activities:{
+    type:String
+  }
+},{
+  timestamps:true
+})
 const patientSchema = mongoose.Schema(
   {
     memberId: {
@@ -88,6 +95,10 @@ const patientSchema = mongoose.Schema(
     benefits: {
       type: benefitAvailabilitySchema,
       default: () => ({}), // Ensure an empty object is assigned by default
+    },
+    activities: {
+      type: [activitySchema],
+      default:[] // Ensure an empty array is assigned by default
     },
   },
   { timestamps: true }

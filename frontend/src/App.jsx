@@ -123,7 +123,7 @@ export default function App() {
             path="admin-dashboard/show-all-member"
             element={
               <AdminRoute>
-
+                <ShowAllPatient role="admin-dashboard" />
               </AdminRoute>
             }
           />

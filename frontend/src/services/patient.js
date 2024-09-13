@@ -104,3 +104,23 @@ export async function editPatient(data) {
     throw error;
   }
 }
+
+
+export async function patientRegister(data) {
+  let newUrl = `${url}/api/patient/register`;
+
+  return await axios
+    .post(newUrl, data)
+    .then((res) => {
+      if (res.status === 200) {
+        return res.data.user; // Return the email to be used in the onSuccess callback
+      }
+    })
+    .catch((error) => {
+      console.error("Register error:", error);
+      throw error;
+    });
+}
+
+
+

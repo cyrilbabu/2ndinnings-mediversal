@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function AssignModal({ isOpen, onClose, onSubmit, dropDown }) {
   const [time, setTime] = useState("");
+  const [date, setDate] = useState(""); // New state for date
 
   if (!isOpen) return null;
 
@@ -9,12 +10,26 @@ function AssignModal({ isOpen, onClose, onSubmit, dropDown }) {
     <div className="fixed inset-0 bg-gray-600 bg-opacity-60 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 w-1/3">
         <h2 className="text-xl font-bold mb-4">Assign Care Manager</h2>
-        <form onSubmit={(e) => onSubmit(e, { time })}>
+        <form onSubmit={(e) => onSubmit(e, { time, date })}>
+          {" "}
+          {/* Include date in the onSubmit */}
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Select Staff
             </label>
             {dropDown}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Date
+            </label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">

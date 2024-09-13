@@ -36,6 +36,7 @@ export default function AdminShowAllPatient({ role }) {
       staff: selectedOption,
       role: selectedOption?.role,
       patient: selectedPatient,
+      date: data.date,
       time: data.time,
     });
 
@@ -43,6 +44,7 @@ export default function AdminShowAllPatient({ role }) {
       staff: selectedOption,
       patient: selectedPatient,
       role: selectedOption?.role,
+      date: data.date,
       time: data.time,
     });
 

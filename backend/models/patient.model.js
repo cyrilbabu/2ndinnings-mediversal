@@ -87,7 +87,7 @@ const patientSchema = mongoose.Schema(
     ],
     benefits: {
       type: benefitAvailabilitySchema,
-      default: () => ({}),  // Ensure an empty object is assigned by default
+      default: () => ({}), // Ensure an empty object is assigned by default
     },
   },
   { timestamps: true }

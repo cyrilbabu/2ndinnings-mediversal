@@ -38,7 +38,10 @@ const VisitCard = ({ visit, onActionClick, navigate, activeTab }) => (
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-2">
       <Calendar className="w-4 h-4 mr-2" />
-      {/* {date} at {visit.time} */}
+      {visit.date}
+    </div>
+    <div className="flex items-center text-gray-600 text-sm mb-2">
+      <Clock className="w-4 h-4 mr-2" />
       {visit.time}
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-3">
@@ -52,7 +55,9 @@ const VisitCard = ({ visit, onActionClick, navigate, activeTab }) => (
           ? navigate(
               `/assessor-dashboard/idian-geriatric-assessment-form/${visit._id}`
             )
-          : navigate(`/assessor-dashboard/view-geriatic-assesment/${visit.id}`);
+          : navigate(
+              `/assessor-dashboard/view-geriatic-assesment/${visit._id}`
+            );
       }}
       className={`w-full py-2 rounded-md transition duration-300 flex items-center justify-center ${
         visit.status === "Not Completed"

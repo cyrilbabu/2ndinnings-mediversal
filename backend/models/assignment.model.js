@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const assignmentSchema = mongoose.Schema(
   {
     patient: {
@@ -13,9 +12,8 @@ const assignmentSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    date:{
-      type:String,
-      required:true
+    date: {
+      type: String,
     },
     role: {
       type: String,
@@ -30,9 +28,7 @@ const assignmentSchema = mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
     },
     photos: {
-
       type: [String], // Changed to an array of strings
-
     },
   },
   { timestamps: true }

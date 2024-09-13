@@ -35,26 +35,30 @@ export async function getAllAssignement() {
 export async function updateAssignmentDetails(data) {
   const newUrl = `${url}/api/staff/updateAssessment`;
 
-  try {
-    const res = await axios.post(newUrl, data);
 
-    if (res.status === 200) {
-      console.log("Success:", res.data);
-      return res.data; // Return the data to be used in the onSuccess callback
-    }
-  } catch (error) {
-    if (error.response) {
-      // Server responded with a status other than 2xx
-      console.error("Response error:", error.response.data);
-    } else if (error.request) {
-      // No response was received
-      console.error("Request error:", error.request);
-    } else {
-      // Something happened in setting up the request
-      console.error("Error:", error.message);
-    }
+  return await axios
+    .post(newUrl, data)
+    .then((res) => {
+      if (res.status === 200) {
+        console.log(res.data);
+        return res.data; // Return the email to be used in the onSuccess callback
+        console.log("Success:", response.data);
+      }
+    })
+
+    .catch((error) => {
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.error("Response error:", error.response.data);
+      } else if (error.request) {
+        // No response was received
+        console.error("Request error:", error.request);
+      } else {
+        // Something happened in setting up the request
+        console.error("Error:", error.message);
+      }
+    });
   }
-}
 
 export async function getAssignmentById(id) {
   let newUrl = `${url}/api/staff/getAssignmentById/${id}`;
@@ -70,4 +74,4 @@ export async function getAssignmentById(id) {
       console.error("get Assignment:", error);
       throw error;
     });
-}
+  }

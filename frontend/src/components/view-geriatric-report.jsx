@@ -68,9 +68,11 @@ export default function ViewGeriatricReport() {
             <p className="text-xs text-gray-600 mb-2">
               Observe patient's gait and movement
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.mobility}
             </div>
+
           </div>
 
           <div>
@@ -80,9 +82,11 @@ export default function ViewGeriatricReport() {
             <p className="text-xs text-gray-600 mb-2">
               Ask about difficulty reading or watching TV
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.vision}
             </div>
+
           </div>
           <div>
             <label className="block text-sm font-medium text-green-800 mb-1">
@@ -91,9 +95,11 @@ export default function ViewGeriatricReport() {
             <p className="text-xs text-gray-600 mb-2">
               Note if patient has difficulty understanding conversation
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.hearing}
             </div>
+
           </div>
         </div>
 
@@ -109,6 +115,7 @@ export default function ViewGeriatricReport() {
             <p className="text-xs text-gray-600 mb-2">
               Ask patient to recall 3 common Indian objects after 5 minutes
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.memory}
             </div>
@@ -121,9 +128,11 @@ export default function ViewGeriatricReport() {
             <p className="text-xs text-gray-600 mb-2">
               Ask patient to count backwards from 100 by 7s
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.attention}
             </div>
+
           </div>
         </div>
 
@@ -131,12 +140,12 @@ export default function ViewGeriatricReport() {
           <h2 className="text-xl font-semibold text-green-800 mb-3">
             Physical Health
           </h2>
-
           <div>
             <div className="text-base font-semibold text-green-800 ">
               Activities of Daily Living (ADL)
             </div>
             <div>
+
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Bathing
               </label>
@@ -309,9 +318,11 @@ export default function ViewGeriatricReport() {
             <p className="text-xs text-gray-600 mb-2">
               Observe affect and ask about feelings of sadness
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.mood}
             </div>
+
           </div>
 
           <div>
@@ -322,9 +333,11 @@ export default function ViewGeriatricReport() {
               Ask about participation in family events, religious activities, or
               community gatherings
             </p>
+
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
               {assignment.assessment.socialEngagement}
             </div>
+
           </div>
         </div>
       </div>

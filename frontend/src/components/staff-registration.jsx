@@ -61,11 +61,7 @@ export default function StaffRegistration() {
       console.log("Response:", response.data);
       toast.success("Staff Created successfully!");
     } catch (err) {
-      if (
-        err.response &&
-        err.response.data &&
-        err.response.data.message === "Username already exists"
-      ) {
+      if (err.response.data.error === "Staff member already exists") {
         toast.error(
           "Username already exists. Please choose a different username."
         );

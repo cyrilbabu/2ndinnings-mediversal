@@ -226,6 +226,7 @@ export default function NewRegistration() {
                   </label>
                 ))}
               </div>
+
               <div>
                 <label className="block text-green-800 mb-2">
                   Plan Duration
@@ -245,6 +246,7 @@ export default function NewRegistration() {
                     </label>
                   ))}
                 </div>
+
               </div>
             </div>
             <button

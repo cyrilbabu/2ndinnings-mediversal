@@ -24,6 +24,9 @@ router.get("/getAllStaff", getAllStaff);
 router.get("/getStaffById/:id", getStaffById);
 router.get("/getAssignment", getAssignment);
 router.post("/uploadAssignment", uploadAssignment);
+
+router.post("/updateAssessment", upload.single("photos", 10), updateAssessment);
+
 router.get("/getAssignmentById/:id", getAssignmentById);
-router.post("/updateassessment", upload.array("photos", 10), updateAssessment);
+
 export default router;

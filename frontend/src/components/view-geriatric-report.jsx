@@ -69,7 +69,7 @@ export default function ViewGeriatricReport() {
               Observe patient's gait and movement
             </p>
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
-              {assignment.assessment.mobility}
+              {assignment.assessment?.mobility}
             </div>
           </div>
 
@@ -81,7 +81,7 @@ export default function ViewGeriatricReport() {
               Ask about difficulty reading or watching TV
             </p>
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
-              {assignment.assessment.vision}
+              {assignment.assessment?.vision}
             </div>
           </div>
           <div>

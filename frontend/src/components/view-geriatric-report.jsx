@@ -70,7 +70,7 @@ export default function ViewGeriatricReport() {
             </p>
 
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
-              {assignment.assessment.mobility}
+              {assignment.assessment?.mobility}
             </div>
 
           </div>
@@ -84,7 +84,7 @@ export default function ViewGeriatricReport() {
             </p>
 
             <div className="w-full p-2 mb-2 border border-green-300 rounded-md">
-              {assignment.assessment.vision}
+              {assignment.assessment?.vision}
             </div>
 
           </div>

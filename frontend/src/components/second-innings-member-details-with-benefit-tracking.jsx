@@ -19,6 +19,8 @@ import { usePatient } from "../query/usePatient";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import { useGetPlanDetails } from "../query/useGetPlanDetails";
 import ViewCallReports from "../routes/view-call-reports";
+import { useEditPatient } from "../query/useEditPatient";
+import toast from "react-hot-toast";
 
 function calculateRenewalDate(createdAt, planDuration) {
   const createdDate = new Date(createdAt);
@@ -50,7 +52,7 @@ const ActivityItem = ({ date, activity }) => (
   </div>
 );
 
-const BenefitItem = ({ benefit, availableCount, onAvail }) => (
+const BenefitItem = ({ benefit, availableCount, onAvail, canAvail }) => (
   <div className="flex items-center justify-between py-2 border-b border-green-100 last:border-b-0">
     <div className="flex items-center">
       <Gift className="text-green-600 w-4 h-4 mr-2 flex-shrink-0" />
@@ -62,7 +64,11 @@ const BenefitItem = ({ benefit, availableCount, onAvail }) => (
       </span>
       <button
         onClick={onAvail}
-        className="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600 transition duration-300"
+        className={`bg-green-500 ${
+          canAvail
+            ? "cursor-not-allowed bg-slate-300"
+            : "hover:bg-green-600 transition duration-300"
+        } text-white px-2 py-1 rounded text-xs `}
       >
         Avail
       </button>
@@ -89,6 +95,7 @@ export default function ViewMemberDetails({ role }) {
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const { isLoading: loadingPlan, plans } = useGetPlanDetails();
   const navigate = useNavigate();
+  const { editPatient, isLoading: editing } = useEditPatient();
   const [benefits, setBenefits] = useState([
     { name: "24/7 Emergency Support", count: 2 },
     { name: "Monthly Health Check-ups", count: 12 },
@@ -284,7 +291,32 @@ export default function ViewMemberDetails({ role }) {
                     patient.benefits
                       .annualBasicHealthCheckupPackage_58Parameters
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patientPlan.annualBasicHealthCheckupPackage58Parameters ===
+                    (patient.planDuration === "monthly"
+                      ? 0
+                      : patientPlan.annualBasicHealthCheckupPackage58Parameters)
+                  }
+                  onAvail={() => {
+                    if (
+                      patientPlan.annualBasicHealthCheckupPackage58Parameters ===
+                      (patient.planDuration === "monthly"
+                        ? 0
+                        : patientPlan.annualBasicHealthCheckupPackage58Parameters)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          annualBasicHealthCheckupPackage_58Parameters:
+                            patient.benefits
+                              .annualBasicHealthCheckupPackage_58Parameters + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="General Physician Doctor Consultation - In Person at Home"
@@ -298,7 +330,41 @@ export default function ViewMemberDetails({ role }) {
                     patient.benefits
                       .generalPhysicianDoctorConsultation_InPersonatHome
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits
+                      .generalPhysicianDoctorConsultation_InPersonatHome ===
+                    (patient.planDuration === "monthly"
+                      ? Math.floor(
+                          patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear /
+                            12
+                        )
+                      : patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits
+                        .generalPhysicianDoctorConsultation_InPersonatHome ===
+                      (patient.planDuration === "monthly"
+                        ? Math.floor(
+                            patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear /
+                              12
+                          )
+                        : patientPlan.generalPhysicianDoctorConsultationInPersonatHomePerYear)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          generalPhysicianDoctorConsultation_InPersonatHome:
+                            patient.benefits
+                              .generalPhysicianDoctorConsultation_InPersonatHome +
+                            1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="General Physician Doctor Consultation - Virtual"
@@ -309,7 +375,36 @@ export default function ViewMemberDetails({ role }) {
                         12) -
                     patient.benefits.generalPhysicianDoctorConsultation_Virtual
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits
+                      .generalPhysicianDoctorConsultation_Virtual ===
+                    (patient.planDuration === "monthly"
+                      ? patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth
+                      : patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth *
+                        12)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits
+                        .generalPhysicianDoctorConsultation_Virtual ===
+                      (patient.planDuration === "monthly"
+                        ? patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth
+                        : patientPlan.generalPhysicianDoctorConsultationVirtualPerMonth *
+                          12)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          generalPhysicianDoctorConsultation_Virtual:
+                            patient.benefits
+                              .generalPhysicianDoctorConsultation_Virtual + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="Super Specialist Consultation"
@@ -321,7 +416,35 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.superSpecialistConsultationPerYear) -
                     patient.benefits.superSpecialistConsultation
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits.superSpecialistConsultation ===
+                    (patient.planDuration === "monthly"
+                      ? Math.floor(
+                          patientPlan.superSpecialistConsultationPerYear / 12
+                        )
+                      : patientPlan.superSpecialistConsultationPerYear)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits.superSpecialistConsultation ===
+                      (patient.planDuration === "monthly"
+                        ? Math.floor(
+                            patientPlan.superSpecialistConsultationPerYear / 12
+                          )
+                        : patientPlan.superSpecialistConsultationPerYear)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          superSpecialistConsultation:
+                            patient.benefits.superSpecialistConsultation + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="Wellness Call Check by MPG"
@@ -331,7 +454,31 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.WellnessCallCheckbyMPGPerMonth * 12) -
                     patient.benefits.wellnessCallCheckbyMPG
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits.wellnessCallCheckbyMPG ===
+                    (patient.planDuration === "monthly"
+                      ? patientPlan.WellnessCallCheckbyMPGPerMonth
+                      : patientPlan.WellnessCallCheckbyMPGPerMonth * 12)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits.wellnessCallCheckbyMPG ===
+                      (patient.planDuration === "monthly"
+                        ? patientPlan.WellnessCallCheckbyMPGPerMonth
+                        : patientPlan.WellnessCallCheckbyMPGPerMonth * 12)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          wellnessCallCheckbyMPG:
+                            patient.benefits.wellnessCallCheckbyMPG + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="Vital Check at Home"
@@ -341,7 +488,32 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.VitalCheckatHomePerMonth * 12) -
                     patient.benefits.vitalCheckatHome
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits.vitalCheckatHome ===
+                    (patient.planDuration === "monthly"
+                      ? Math.floor(patientPlan.VitalCheckatHomePerMonth)
+                      : patientPlan.VitalCheckatHomePerMonth * 12)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits.vitalCheckatHome ===
+                      (patient.planDuration === "monthly"
+                        ? Math.floor(patientPlan.VitalCheckatHomePerMonth)
+                        : patientPlan.VitalCheckatHomePerMonth * 12)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          id: patient._id,
+                          vitalCheckatHome:
+                            patient.benefits.vitalCheckatHome + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="BLS Emergency Ambulance Evacuation Coverage (Within Patna)"
@@ -354,7 +526,39 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear) -
                     patient.benefits.BLSEmergencyAmbulanceEvacuationCoverage
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits.BLSEmergencyAmbulanceEvacuationCoverage ===
+                    (patient.planDuration === "monthly"
+                      ? Math.floor(
+                          patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear /
+                            12
+                        )
+                      : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits
+                        .BLSEmergencyAmbulanceEvacuationCoverage ===
+                      (patient.planDuration === "monthly"
+                        ? Math.floor(
+                            patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear /
+                              12
+                          )
+                        : patientPlan.BLSEmergencyAmbulanceEvacuationCoveragePerYear)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          BLSEmergencyAmbulanceEvacuationCoverage:
+                            patient.benefits
+                              .BLSEmergencyAmbulanceEvacuationCoverage + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
                 <BenefitItem
                   benefit="Free Dental & Eye Checkup"
@@ -364,7 +568,31 @@ export default function ViewMemberDetails({ role }) {
                       : patientPlan.freeDentalAndEyeCheckupPerMonth * 12) -
                     patient.benefits.freeDentalAndEyeCheckup
                   }
-                  onAvail={() => {}}
+                  canAvail={
+                    patient.benefits.freeDentalAndEyeCheckup ===
+                    (patient.planDuration === "monthly"
+                      ? patientPlan.freeDentalAndEyeCheckupPerMonth
+                      : patientPlan.freeDentalAndEyeCheckupPerMonth * 12)
+                  }
+                  onAvail={() => {
+                    if (
+                      patient.benefits.freeDentalAndEyeCheckup ===
+                      (patient.planDuration === "monthly"
+                        ? patientPlan.freeDentalAndEyeCheckupPerMonth
+                        : patientPlan.freeDentalAndEyeCheckupPerMonth * 12)
+                    ) {
+                      return toast.error("No Availability");
+                    } else {
+                      editPatient({
+                        id: patient._id,
+                        benefits: {
+                          ...patient.benefits,
+                          freeDentalAndEyeCheckup:
+                            patient.benefits.freeDentalAndEyeCheckup + 1,
+                        },
+                      });
+                    }
+                  }}
                 />
               </div>
               <h3 className="text-xl font-semibold text-green-800 mt-6 mb-4">
@@ -551,11 +779,12 @@ export default function ViewMemberDetails({ role }) {
                   <div
                     key={index}
                     className="cursor-pointer rounded px-4 hover:bg-green-300"
-                    onClick={() =>
-                      navigate(
-                        `/admin-dashboard/home-care-vitals-view/${activity._id}`
-                      )
-                    }
+                    onClick={() => {
+                      if (activity.status === "Completed")
+                        navigate(
+                          `/admin-dashboard/home-care-vitals-view/${activity._id}`
+                        );
+                    }}
                   >
                     <ActivityItem
                       date={activity.updatedAt.split("T")[0]}
@@ -584,7 +813,7 @@ export default function ViewMemberDetails({ role }) {
                       date={activity?.reportData?.callDate}
                       activity={activity?.userData?.name}
                     />
-                    {index === dataIndex && (
+                    {index === dataIndex && activity.reportData.callDate && (
                       <>
                         {/* Close button */}
                         <div
@@ -622,11 +851,12 @@ export default function ViewMemberDetails({ role }) {
                   <div
                     key={index}
                     className="cursor-pointer rounded px-4 hover:bg-green-300"
-                    onClick={() =>
-                      navigate(
-                        `/admin-dashboard/view-geriatic-assesment/${activity._id}`
-                      )
-                    }
+                    onClick={() => {
+                      if (activity.status === "Completed")
+                        navigate(
+                          `/admin-dashboard/view-geriatic-assesment/${activity._id}`
+                        );
+                    }}
                   >
                     <ActivityItem
                       date={activity.updatedAt.split("T")[0]}

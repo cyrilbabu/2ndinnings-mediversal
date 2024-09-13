@@ -12,7 +12,16 @@ import { useNavigate } from "react-router-dom";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import logout from "../services/auth";
 
-const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
+const VisitCard = ({
+  name,
+  address,
+  phone,
+  time,
+  status,
+  navigate,
+  date,
+  id,
+}) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
     <div className="flex justify-between items-center mb-2">
       <h3 className="text-lg font-semibold text-green-800">{name}</h3>
@@ -34,9 +43,13 @@ const VisitCard = ({ name, address, phone, time, status, navigate, id }) => (
       <Phone className="w-4 h-4 mr-2" />
       {phone}
     </div>
-    <div className="flex items-center text-gray-600 text-sm">
+    <div className="flex items-center text-gray-600 text-sm mb-2">
       <Clock className="w-4 h-4 mr-2" />
       {time}
+    </div>
+    <div className="flex items-center text-gray-600 text-sm mb-2">
+      <Calendar className="w-4 h-4 mr-2" />
+      {date}
     </div>
     {status === "Not Completed" ? (
       <button
@@ -121,6 +134,7 @@ export default function HomeCareStaffDashboard() {
             time={visit.time}
             status={visit.status}
             navigate={navigate}
+            date={visit.date}
           />
         ))}
       </div>

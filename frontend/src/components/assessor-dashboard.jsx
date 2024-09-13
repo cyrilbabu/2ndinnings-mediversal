@@ -38,7 +38,10 @@ const VisitCard = ({ visit, onActionClick, navigate, activeTab }) => (
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-2">
       <Calendar className="w-4 h-4 mr-2" />
-      {/* {date} at {visit.time} */}
+      {visit.date}
+    </div>
+    <div className="flex items-center text-gray-600 text-sm mb-2">
+      <Clock className="w-4 h-4 mr-2" />
       {visit.time}
     </div>
     <div className="flex items-center text-gray-600 text-sm mb-3">

@@ -231,7 +231,7 @@ export default function NewRegistration() {
                   Plan Duration
                 </label>
                 <div className="flex space-x-4">
-                  {["Monthly", "Yearly"].map((planDuration) => (
+                  {["monthly", "yearly"].map((planDuration) => (
                     <label key={planDuration} className="flex items-center">
                       <input
                         type="radio"

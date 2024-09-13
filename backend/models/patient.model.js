@@ -52,7 +52,7 @@ const patientSchema = mongoose.Schema(
 
     planDuration: {
       type: String,
-      enum: ["Yearly", "Monthly"],
+      enum: ["yearly", "monthly"],
     },
 
     dob: {

@@ -53,9 +53,6 @@ export default function ViewAllStaff() {
                 Phone Number
               </th>
               <th className="px-5 py-3  border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
-                Password
-              </th>
-              <th className="px-5 py-3  border-b-2 border-gray-200 bg-gray-100 text-left text-xs text-gray-600 uppercase tracking-wider">
                 Role
               </th>
             </tr>
@@ -72,9 +69,6 @@ export default function ViewAllStaff() {
                   </td>
                   <td className="px-5 py-3  border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {staff.phone}
-                  </td>
-                  <td className="px-5 py-3  border-b-2 border-gray-200 text-left text-xs text-gray-600">
-                    {staff.password}
                   </td>
                   <td className="px-5 py-3  border-b-2 border-gray-200 text-left text-xs text-gray-600">
                     {staff.role}

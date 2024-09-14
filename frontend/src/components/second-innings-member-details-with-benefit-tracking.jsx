@@ -770,20 +770,21 @@ export default function ViewMemberDetails({ role }) {
                 {patient.activities.map((activity, index) => (
                   <ActivityItem
                     key={index}
-                    date={`${activity.createdAt.split("T")[0]} / ${
-                      activity.createdAt
-                        .split("T")[1]
-                        .split(".")[0]
-                        .split(":")[0]
-                    }:${
-                      activity.createdAt
-                        .split("T")[1]
-                        .split(".")[0]
-                        .split(":")[1]
-                    }`}
+                    
+                    date={new Date(activity.createdAt).toLocaleString("en-IN", {
+                      timeZone: "Asia/Kolkata",
+                      year: 'numeric',
+                      month: 'numeric',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                    
                     activity={activity?.activities}
+                    
                   />
                 ))}
+               
               </div>
             </div>
           )}

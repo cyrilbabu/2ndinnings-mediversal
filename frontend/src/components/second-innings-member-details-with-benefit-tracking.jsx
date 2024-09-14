@@ -777,8 +777,9 @@ export default function ViewMemberDetails({ role }) {
                       month: 'numeric',
                       day: 'numeric',
                       hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                      minute: '2-digit',
+                      hour12: true
+                    }).replace('am', 'AM').replace('pm', 'PM')}
                     
                     activity={activity?.activities}
                     

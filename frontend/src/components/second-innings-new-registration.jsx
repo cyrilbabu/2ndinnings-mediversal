@@ -97,19 +97,28 @@ export default function NewRegistration() {
 
   useEffect(() => {
     function createMemberID() {
-      const latestPatient = patients?.reduce((latest, current) => {
-        return new Date(current.createdAt) > new Date(latest.createdAt)
-          ? current
-          : latest;
-      });
+      if (patients.length==0) {
+        const date = new Date();
+        const year = date.getFullYear();
+        setMemberId(() => `MHPL 2INN ${year} 0001`);
+      }
+      else{
+        const latestPatient = patients?.reduce((latest, current) => {
+          return new Date(current.createdAt) > new Date(latest.createdAt)
+            ? current
+            : latest;
+        });
 
-      const serial = latestPatient?.memberId.split(" ")[3];
-      const no = parseInt(serial, 10) + 1;
-      const fourDigitString = no.toString().padStart(4, "0");
-      const date = new Date();
-      const year = date.getFullYear();
-      // const serial = "0001";
-      setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`);
+        const serial = latestPatient?.memberId.split(" ")[3];
+        const no = parseInt(serial, 10) + 1;
+        const fourDigitString = no.toString().padStart(4, "0");
+        const date = new Date();
+        const year = date.getFullYear();
+        // const serial = "0001";
+        setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`)
+    
+      }
+
     }
 
     createMemberID();

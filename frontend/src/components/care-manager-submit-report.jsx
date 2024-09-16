@@ -75,6 +75,24 @@ export default function SubmitReportView({ patientName, onSubmit, onCancel }) {
     e.preventDefault();
     console.log({ id, reportData: reportData });
     updatePatient({ id, reportData: { reportData, userData } });
+    setReportData({
+      callDate: "",
+      callDuration: "",
+      patientMood: "",
+      physicalHealth: "",
+      mentalHealth: "",
+      medicationAdherence: "",
+      dietAdherence: "",
+      exerciseAdherence: "",
+      socialEngagement: "",
+      concerns: "",
+      actionsTaken: "",
+      followUpNeeded: "",
+      followUpDetails: "",
+      additionalNotes: "",
+    });
+
+    navigate("/care-manager-dashboard");
   };
 
   return (

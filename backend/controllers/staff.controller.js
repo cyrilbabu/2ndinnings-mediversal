@@ -19,7 +19,7 @@ export const staffSignup = async (req, res) => {
     const { name, phone, role, username, password } = req.body;
 
     // Check if the staff member already exists
-    const existingStaff = await Staff.findOne({ username });
+    const existingStaff = await Staff.findOne({ username,role});
     if (existingStaff) {
       return res.status(400).json({ error: "Staff member already exists" });
     }
@@ -103,10 +103,10 @@ export const getAllStaff = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password,role } = req.body;
 
     // Find the user by username
-    const user = await Staff.findOne({ username });
+    const user = await Staff.findOne({ username ,role});
 
     // Check if the user exists
     if (!user) {

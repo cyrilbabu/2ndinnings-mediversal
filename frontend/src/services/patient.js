@@ -60,3 +60,67 @@ export async function assignCareManager(data) {
     throw error;
   }
 }
+
+export async function updatePatient(data) {
+  const apiUrl = `${url}/api/patient/updateCallDetails`;
+
+  try {
+    const response = await axios.put(apiUrl, data);
+
+    if (response.status === 200) {
+      console.log(response);
+      return response.data.updatedPatient; // Assuming response.data contains the array of admin details
+    } else {
+      console.error(
+        "Failed to fetch employee information:",
+        response.data.error
+      );
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching employee information:", error);
+    throw error;
+  }
+}
+
+export async function editPatient(data) {
+  const apiUrl = `${url}/api/patient/updatePatient`;
+
+  try {
+    const response = await axios.put(apiUrl, data);
+
+    if (response.status === 200) {
+      console.log(response);
+      return response.data.updatedPatient; // Assuming response.data contains the array of admin details
+    } else {
+      console.error(
+        "Failed to fetch employee information:",
+        response.data.error
+      );
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching employee information:", error);
+    throw error;
+  }
+}
+
+
+export async function patientRegister(data) {
+  let newUrl = `${url}/api/patient/register`;
+
+  return await axios
+    .post(newUrl, data)
+    .then((res) => {
+      if (res.status === 200) {
+        return res.data.user; // Return the email to be used in the onSuccess callback
+      }
+    })
+    .catch((error) => {
+      console.error("Register error:", error);
+      throw error;
+    });
+}
+
+
+

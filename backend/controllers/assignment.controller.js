@@ -43,14 +43,15 @@ export const getAssignmentById = async (req, res) => {
 
 export const uploadAssignment = async (req, res) => {
   try {
-    const { patient, staff, date, time, role } = req.body;
+    const { patient, staff, time, role, date } = req.body;
     const newAssignment = new Assignment({
       patient,
       staff,
-      time,
       date,
+      time,
       role,
     });
+    console.log(newAssignment);
 
     const result = await newAssignment.save();
     if (!result) {

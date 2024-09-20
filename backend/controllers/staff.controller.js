@@ -1,5 +1,6 @@
 import Staff from "../models/staff.model.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const createToken = (id, role) => {
   console.log("Creating token with:", { id, role });
@@ -10,7 +11,7 @@ const createToken = (id, role) => {
 
 // Create new staff
 // Import the necessary modules
-import bcrypt from "bcrypt";
+
 
 // Create new staff
 export const staffSignup = async (req, res) => {
@@ -18,7 +19,7 @@ export const staffSignup = async (req, res) => {
     const { name, phone, role, username, password } = req.body;
 
     // Check if the staff member already exists
-    const existingStaff = await Staff.findOne({ username });
+    const existingStaff = await Staff.findOne({ username,role});
     if (existingStaff) {
       return res.status(400).json({ error: "Staff member already exists" });
     }
@@ -88,7 +89,7 @@ export const deleteStaff = async (req, res) => {
 // Get all staff
 export const getAllStaff = async (req, res) => {
   try {
-    const staff = await Staff.find();
+    const staff = await Staff.find().select('-password');
     if (!staff) {
       return res.status(400).json({ error: "error in fetching staff details" });
     }
@@ -102,18 +103,19 @@ export const getAllStaff = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password,role } = req.body;
 
     // Find the user by username
-    const user = await Staff.findOne({ username });
+    const user = await Staff.findOne({ username ,role});
 
     // Check if the user exists
     if (!user) {
       return res.status(400).json({ error: "User not found" });
     }
 
+    const isMatch = await bcrypt.compare(password, user.password);
     // Check if the password matches
-    if (password !== user.password) {
+    if (!isMatch) {
       return res.status(400).json({ error: "Invalid password" });
     }
 
@@ -135,9 +137,10 @@ export const getStaffById = async (req, res) => {
     if (!staff) {
       return res.status(400).json({ message: "Error in fetching staff" });
     }
+    
     return res
-      .status(200)
-      .json({ message: "staff fetched successfully", staff });
+    .status(200)
+      .json({ message: "staff fetched successfully",staff});
   } catch (error) {
     console.log(error.message);
     return res

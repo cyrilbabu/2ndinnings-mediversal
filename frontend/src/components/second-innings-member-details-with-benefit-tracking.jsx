@@ -119,7 +119,7 @@ export default function ViewMemberDetails({ role }) {
     );
   }
 
-  // console.log(patient.planDuration);
+  // console.log("ye le meri detail", patient);
 
   const assessorAssignments = assignments.filter(
     (assignment) => assignment.patient._id === id

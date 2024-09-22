@@ -148,6 +148,8 @@ export default function ViewMemberDetails({ role }) {
 
   const patientPlan = plans.filter((plan) => plan.plan === patient.plan)[0];
 
+  console.log("ye le", patient._id);
+
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <div className="flex justify-between items-center mb-6">
@@ -161,7 +163,12 @@ export default function ViewMemberDetails({ role }) {
           </button>
           Member Details
         </h1>
-        <button className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
+        <button
+          onClick={() => {
+            navigate(`/admin-dashboard/edit-patient/${patient._id}`);
+          }}
+          className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300"
+        >
           <Edit className="w-4 h-4 mr-2" />
           Edit Details
         </button>
@@ -174,9 +181,7 @@ export default function ViewMemberDetails({ role }) {
           </div>
           <div>
             <h2 className="text-2xl font-bold">{patient.fullName}</h2>
-            <p className="text-green-200">
-              Member ID: {patient?.memberId}  
-            </p>
+            <p className="text-green-200">Member ID: {patient?.memberId}</p>
             <p className="text-green-200">{patient.plan} Plan</p>
           </div>
         </div>
@@ -244,7 +249,11 @@ export default function ViewMemberDetails({ role }) {
                 <h3 className="text-xl font-semibold text-green-800 mb-4">
                   Emergency Contact
                 </h3>
-                <InfoItem icon={User} label="Name" value={patient?.emergencyName} />
+                <InfoItem
+                  icon={User}
+                  label="Name"
+                  value={patient?.emergencyName}
+                />
                 <InfoItem
                   icon={Phone}
                   label="Phone"
@@ -771,22 +780,21 @@ export default function ViewMemberDetails({ role }) {
                 {patient.activities.map((activity, index) => (
                   <ActivityItem
                     key={index}
-                    
-                    date={new Date(activity.createdAt).toLocaleString("en-IN", {
-                      timeZone: "Asia/Kolkata",
-                      year: 'numeric',
-                      month: 'numeric',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true
-                    }).replace('am', 'AM').replace('pm', 'PM')}
-                    
+                    date={new Date(activity.createdAt)
+                      .toLocaleString("en-IN", {
+                        timeZone: "Asia/Kolkata",
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .replace("am", "AM")
+                      .replace("pm", "PM")}
                     activity={activity?.activities}
-                    
                   />
                 ))}
-               
               </div>
             </div>
           )}

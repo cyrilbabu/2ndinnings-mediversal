@@ -38,6 +38,7 @@ import SubmitReportView from "./components/care-manager-submit-report";
 import ViewGeriatricReport from "./components/view-geriatric-report";
 import ViewAllStaff from "./components/view-all-staff";
 import ViewCallReports from "./components/view-call-reports";
+import EditPatient from "./components/EditPatient";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -125,6 +126,14 @@ export default function App() {
             element={
               <AdminRoute>
                 <ShowAllPatient role="admin-dashboard" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="admin-dashboard/edit-patient/:id"
+            element={
+              <AdminRoute>
+                <EditPatient role="admin-dashboard" />
               </AdminRoute>
             }
           />

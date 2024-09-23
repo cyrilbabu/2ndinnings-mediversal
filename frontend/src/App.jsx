@@ -37,6 +37,8 @@ import IndianGeriatricAssessmentForm from "./components/indian-geriatric-assessm
 import SubmitReportView from "./components/care-manager-submit-report";
 import ViewGeriatricReport from "./components/view-geriatric-report";
 import ViewAllStaff from "./components/view-all-staff";
+import ViewCallReports from "./components/view-call-reports";
+import EditPatient from "./components/EditPatient";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -128,6 +130,14 @@ export default function App() {
             }
           />
           <Route
+            path="admin-dashboard/edit-patient/:id"
+            element={
+              <AdminRoute>
+                <EditPatient role="admin-dashboard" />
+              </AdminRoute>
+            }
+          />
+          <Route
             path="admin-dashboard/member-detail/:id"
             element={
               <AdminRoute>
@@ -172,7 +182,15 @@ export default function App() {
             path="frontdesk-dashboard/member-detail/:id"
             element={
               <FrontDeskRoute>
-                <ViewMemberDetails />
+                <ViewMemberDetails role="frontdesk-dashboard" />
+              </FrontDeskRoute>
+            }
+          />
+          <Route
+            path="frontdesk-dashboard/edit-patient/:id"
+            element={
+              <FrontDeskRoute>
+                <EditPatient role="frontdesk-dashboard" />
               </FrontDeskRoute>
             }
           />
@@ -239,6 +257,14 @@ export default function App() {
             element={
               <CareManagerRoute>
                 <SubmitReportView />
+              </CareManagerRoute>
+            }
+          />
+          <Route
+            path="care-manager-dashboard/view-call-report/:id"
+            element={
+              <CareManagerRoute>
+                <ViewCallReports />
               </CareManagerRoute>
             }
           />

@@ -89,9 +89,17 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport, navigate }) => (
         onClick={() =>
           navigate(`/care-manager-dashboard/call-report/${patient._id}`)
         }
-        className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+        className="flex-1 bg-green-700 text-white py-2 rounded-md hover:bg-green-800 transition duration-300"
       >
         Start Wellness Call
+      </button>
+      <button
+        onClick={() =>
+          navigate(`/care-manager-dashboard/view-call-report/${patient._id}`)
+        }
+        className="flex-1 bg-green-800 text-white py-2 rounded-md hover:bg-green-900 transition duration-300"
+      >
+        View Call Reports
       </button>
     </div>
   </div>
@@ -224,7 +232,7 @@ export default function RevisedCareManagerDashboard() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="w-full">
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white rounded-lg shadow-md p-4">
             <h2 className="text-xl font-semibold text-green-800 mb-4">
@@ -253,17 +261,6 @@ export default function RevisedCareManagerDashboard() {
                 onSubmitReport={handleSubmitReport}
               />
             ))}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="text-xl font-semibold text-green-800 mb-4">
-              Quick Actions
-            </h2>
-            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
-              View All Reports
-            </button>
           </div>
         </div>
       </div>

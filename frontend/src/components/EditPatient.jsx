@@ -106,51 +106,68 @@ export default function EditPatient() {
           className="bg-white rounded-lg shadow-md p-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <InputField
-            icon={User}
-            label="Full Name"
-            name="fullName"
-            register={register}
-            errors={errors}
-          />
-          <InputField
-            icon={User}
-            label="Date of Birth"
-            name="dob"
-            type="date"
-            register={register}
-            errors={errors}
-          />
-          <InputField
-            icon={Phone}
-            label="Phone Number"
-            name="phone"
-            type="tel"
-            register={register}
-            errors={errors}
-          />
-          <InputField
-            icon={Mail}
-            label="Email Address"
-            name="email"
-            type="email"
-            register={register}
-            errors={errors}
-          />
-          <InputField
-            icon={AlertTriangle}
-            label="Emergency Contact"
-            name="emergencyContact"
-            register={register}
-            errors={errors}
-          />
-          <InputField
-            icon={Home}
-            label="Address"
-            name="address"
-            register={register}
-            errors={errors}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InputField
+              icon={User}
+              label="Full Name"
+              name="fullName"
+              register={register}
+              errors={errors}
+            />
+            <InputField
+              icon={User}
+              label="Date of Birth"
+              name="dob"
+              type="date"
+              register={register}
+              errors={errors}
+            />
+            <InputField
+              icon={Phone}
+              label="Phone Number"
+              name="phone"
+              type="tel"
+              register={register}
+              errors={errors}
+            />
+            <InputField
+              icon={AlertTriangle}
+              label="Emergency Contact Name"
+              name="emergencyName"
+              register={register}
+              errors={errors}
+            />
+            <InputField
+              icon={Mail}
+              label="Email Address"
+              name="email"
+              type="email"
+              register={register}
+              errors={errors}
+            />
+
+            <InputField
+              icon={AlertTriangle}
+              label="Emergency Contact Email"
+              name="emergencyEmail"
+              register={register}
+              errors={errors}
+            />
+            <InputField
+              icon={Home}
+              label="Address"
+              name="address"
+              register={register}
+              errors={errors}
+            />
+            <InputField
+              icon={AlertTriangle}
+              label="Emergency Contact Number"
+              name="emergencyContact"
+              register={register}
+              errors={errors}
+            />
+          </div>
 
           {/* Gender Radio Button */}
           <div>

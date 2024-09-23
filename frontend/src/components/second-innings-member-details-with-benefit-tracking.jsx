@@ -132,6 +132,8 @@ export default function ViewMemberDetails({ role }) {
   // console.log("ye le meri detail", patient);
   console.log(patient.activities);
 
+  console.log("ye le role", role);
+
   // console.log(patient.planDuration);
 
   const Assignments = assignments.filter(
@@ -165,7 +167,7 @@ export default function ViewMemberDetails({ role }) {
         </h1>
         <button
           onClick={() => {
-            navigate(`/admin-dashboard/edit-patient/${patient._id}`);
+            navigate(`/${role}/edit-patient/${patient._id}`);
           }}
           className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300"
         >

@@ -97,12 +97,11 @@ export default function NewRegistration() {
 
   useEffect(() => {
     function createMemberID() {
-      if (patients.length==0) {
+      if (patients.length == 0) {
         const date = new Date();
         const year = date.getFullYear();
         setMemberId(() => `MHPL 2INN ${year} 0001`);
-      }
-      else{
+      } else {
         const latestPatient = patients?.reduce((latest, current) => {
           return new Date(current.createdAt) > new Date(latest.createdAt)
             ? current
@@ -115,10 +114,8 @@ export default function NewRegistration() {
         const date = new Date();
         const year = date.getFullYear();
         // const serial = "0001";
-        setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`)
-    
+        setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`);
       }
-
     }
 
     createMemberID();
@@ -150,7 +147,7 @@ export default function NewRegistration() {
             disabled={true}
             name="memberId"
             value={id}
-            className="cursor-not-allowed text-slate-400 py-1 px-2 rounded-lg"
+            className=" text-slate-400 py-1 px-2 rounded-lg"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
@@ -178,7 +175,7 @@ export default function NewRegistration() {
             />
             <InputField
               icon={AlertTriangle}
-              label="Emergency Name"
+              label="Emergency Contact Name"
               name="emergencyName"
               type="text"
               value={formData.emergencyName}
@@ -194,7 +191,7 @@ export default function NewRegistration() {
             />
             <InputField
               icon={AlertTriangle}
-              label="Emergency Email"
+              label="Emergency Contact Email"
               name="emergencyEmail"
               type="email"
               value={formData.emergencyEmail}
@@ -209,7 +206,7 @@ export default function NewRegistration() {
             />
             <InputField
               icon={AlertTriangle}
-              label="Emergency Contact"
+              label="Emergency Contact Number"
               name="emergencyContact"
               value={formData.emergencyContact}
               onChange={handleInputChange}
@@ -272,14 +269,16 @@ export default function NewRegistration() {
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => {
-                navigate("/frontdesk-dashboard/view-all-plans");
-              }}
-              className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
-            >
-              View Plans
-            </button>
+            <div className="my-auto">
+              <button
+                onClick={() => {
+                  navigate("/frontdesk-dashboard/view-all-plans");
+                }}
+                className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
+              >
+                View Plans
+              </button>
+            </div>
           </div>
 
           <div className="mt-6">

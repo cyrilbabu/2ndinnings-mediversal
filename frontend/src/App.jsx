@@ -182,7 +182,15 @@ export default function App() {
             path="frontdesk-dashboard/member-detail/:id"
             element={
               <FrontDeskRoute>
-                <ViewMemberDetails />
+                <ViewMemberDetails role="frontdesk-dashboard" />
+              </FrontDeskRoute>
+            }
+          />
+          <Route
+            path="frontdesk-dashboard/edit-patient/:id"
+            element={
+              <FrontDeskRoute>
+                <EditPatient role="frontdesk-dashboard" />
               </FrontDeskRoute>
             }
           />

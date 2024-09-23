@@ -225,3 +225,47 @@ export const updatePatientCallDetails = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+
+//edit registration 
+
+
+export const editPatientRegistration = async (req, res) => {
+  try {
+    const { patientId, fullName, email, phone, address, plan, planDuration, dob, emergencyContact, healthCondition, emergencyName, emergencyEmail, memberId, gender } = req.body;
+
+    
+    const existingPatient = await Patient.findById(patientId);
+    if (!existingPatient) {
+      return res.status(400).json({ message: "Patient not found" });
+    }
+
+    // Update the fields directly
+    existingPatient.fullName = fullName;
+    existingPatient.email = email;
+    existingPatient.phone = phone;
+    existingPatient.address = address;
+    existingPatient.plan = plan;
+    existingPatient.planDuration = planDuration;
+    existingPatient.dob = dob;
+    existingPatient.emergencyContact = emergencyContact;
+    existingPatient.healthCondition = healthCondition;
+    existingPatient.emergencyName = emergencyName;
+    existingPatient.emergencyEmail = emergencyEmail;
+    existingPatient.gender = gender;
+    existingPatient.memberId = memberId;
+
+    await existingPatient.save();
+
+    res.status(200).json({
+      message: "Patient information updated successfully",
+      patient: existingPatient,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+

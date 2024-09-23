@@ -28,6 +28,6 @@ router.get("/getPatientById/:id", getPatientById);
 router.put("/updateCallDetails", updatePatientCallDetails);
 router.post("/register", registerPatient);
 router.put("/updatePatient", updatePatientDetails);
-router.put("/patients", editPatientRegistration); 
+router.put("/editpatients", editPatientRegistration); 
 
 export default router;

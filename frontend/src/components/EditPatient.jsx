@@ -7,6 +7,8 @@ import { useEditPatient } from "../query/useEditPatient";
 import { usePatient } from "../query/usePatient";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { url } from "../services/url";
 
 const InputField = ({
   icon: Icon,
@@ -57,6 +59,8 @@ export default function EditPatient() {
     if (patient) {
       const formattedDate = new Date(patient.dob).toISOString().split("T")[0];
       setValue("fullName", patient.fullName || "");
+      setValue("memberId", patient.memberId || "");
+
       setValue("dob", formattedDate || "");
       setValue("phone", patient.phone || "");
       setValue("email", patient.email || "");
@@ -72,18 +76,21 @@ export default function EditPatient() {
   }, [patient, setValue]);
 
   const onSubmit = (data) => {
-    const updatedData = { id, data }; // Include the patient id in the data
+    const updatedData = { ...data, patientId: id }; // Include the patient id in the data
     console.log(updatedData);
 
-    // editPatient(updatedData, {
-    //   onSuccess: () => {
-    //     toast.success("Patient Updated Successfully");
-    //     navigate(`/admin-dashboard/member-detail/${id}`);
-    //   },
-    //   onError: () => {
-    //     toast.error("Error updating patient.");
-    //   },
-    // });
+    // Replace with the actual base URL
+
+    axios
+      .put(`${url}/api/patient/editpatients`, updatedData) // Change to PUT request
+      .then((response) => {
+        toast.success("Updated successfully");
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        toast.error("Error updating ");
+      });
   };
 
   if (!patient) {
@@ -107,6 +114,13 @@ export default function EditPatient() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InputField
+              icon={User}
+              label="Member Id"
+              name="memberId"
+              register={register}
+              errors={errors}
+            />
             <InputField
               icon={User}
               label="Full Name"

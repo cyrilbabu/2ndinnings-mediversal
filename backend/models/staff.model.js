@@ -20,6 +20,7 @@ const staffSchema = mongoose.Schema(
     },
     notificationToken: {
       type: String,
+      default : ""
     },
     role: {
       type: String,

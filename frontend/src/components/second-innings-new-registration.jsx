@@ -36,10 +36,10 @@ const InputField = ({
 );
 
 export default function NewRegistration() {
-  const [id, setMemberId] = useState("");
+  // const [id, setMemberId] = useState("");
   const { registerPatient, isLoading: registerLoading } = useRegisterPatient();
   const { isLoading: loading, allPatient: patients } = useAllPatient();
-  console.log(id);
+  // console.log(id);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -54,6 +54,7 @@ export default function NewRegistration() {
     emergencyEmail: "",
     emergencyName: "",
     gender: "",
+    memberId: "",
   });
 
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ export default function NewRegistration() {
     setIsLoading(true);
     navigate("/frontdesk-dashboard");
     registerPatient(
-      { ...formData, memberId: id },
+      { ...formData },
       {
         onSuccess: () => {
           setFormData({
@@ -88,6 +89,7 @@ export default function NewRegistration() {
             healthCondition: "",
             emergencyEmail: "",
             emergencyName: "",
+            memberId: "",
             gender,
           });
         },
@@ -95,34 +97,31 @@ export default function NewRegistration() {
     );
   };
 
-  useEffect(() => {
-    function createMemberID() {
-      if (patients.length==0) {
-        const date = new Date();
-        const year = date.getFullYear();
-        setMemberId(() => `MHPL 2INN ${year} 0001`);
-      }
-      else{
-        const latestPatient = patients?.reduce((latest, current) => {
-          return new Date(current.createdAt) > new Date(latest.createdAt)
-            ? current
-            : latest;
-        });
+  // useEffect(() => {
+  //   function createMemberID() {
+  //     if (patients.length == 0) {
+  //       const date = new Date();
+  //       const year = date.getFullYear();
+  //       setMemberId(() => `MHPL 2INN ${year} 0001`);
+  //     } else {
+  //       const latestPatient = patients?.reduce((latest, current) => {
+  //         return new Date(current.createdAt) > new Date(latest.createdAt)
+  //           ? current
+  //           : latest;
+  //       });
 
-        const serial = latestPatient?.memberId.split(" ")[3];
-        const no = parseInt(serial, 10) + 1;
-        const fourDigitString = no.toString().padStart(4, "0");
-        const date = new Date();
-        const year = date.getFullYear();
-        // const serial = "0001";
-        setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`)
-    
-      }
+  //       const serial = latestPatient?.memberId.split(" ")[3];
+  //       const no = parseInt(serial, 10) + 1;
+  //       const fourDigitString = no.toString().padStart(4, "0");
+  //       const date = new Date();
+  //       const year = date.getFullYear();
+  //       // const serial = "0001";
+  //       setMemberId(() => `MHPL 2INN ${year} ${fourDigitString}`);
+  //     }
+  //   }
 
-    }
-
-    createMemberID();
-  }, [patients]);
+  //   createMemberID();
+  // }, [patients]);
 
   if (loading) {
     return (
@@ -147,10 +146,11 @@ export default function NewRegistration() {
           <InputField
             icon={User}
             label="Member ID:"
-            disabled={true}
+            // disabled={true}
             name="memberId"
-            value={id}
-            className="cursor-not-allowed text-slate-400 py-1 px-2 rounded-lg"
+            value={formData.memberId}
+            onChange={handleInputChange}
+            className=" text-black py-1 px-2 rounded-lg"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
@@ -178,7 +178,7 @@ export default function NewRegistration() {
             />
             <InputField
               icon={AlertTriangle}
-              label="Emergency Name"
+              label="Emergency Contact Name"
               name="emergencyName"
               type="text"
               value={formData.emergencyName}
@@ -194,7 +194,7 @@ export default function NewRegistration() {
             />
             <InputField
               icon={AlertTriangle}
-              label="Emergency Email"
+              label="Emergency Contact Email"
               name="emergencyEmail"
               type="email"
               value={formData.emergencyEmail}
@@ -209,7 +209,7 @@ export default function NewRegistration() {
             />
             <InputField
               icon={AlertTriangle}
-              label="Emergency Contact"
+              label="Emergency Contact Number"
               name="emergencyContact"
               value={formData.emergencyContact}
               onChange={handleInputChange}
@@ -272,14 +272,16 @@ export default function NewRegistration() {
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => {
-                navigate("/frontdesk-dashboard/view-all-plans");
-              }}
-              className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
-            >
-              View Plans
-            </button>
+            <div className="my-auto">
+              <button
+                onClick={() => {
+                  navigate("/frontdesk-dashboard/view-all-plans");
+                }}
+                className="md:mt-10 mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-300"
+              >
+                View Plans
+              </button>
+            </div>
           </div>
 
           <div className="mt-6">

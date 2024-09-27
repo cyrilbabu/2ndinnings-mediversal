@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   assignCareManager,
+  editPatientRegistration,
   getAllPatient,
   getPatientById,
   registerPatient,
@@ -27,5 +28,6 @@ router.get("/getPatientById/:id", getPatientById);
 router.put("/updateCallDetails", updatePatientCallDetails);
 router.post("/register", registerPatient);
 router.put("/updatePatient", updatePatientDetails);
+router.put("/editpatients", editPatientRegistration);
 
 export default router;

@@ -18,7 +18,6 @@ export async function getAllStaff() {
     });
 }
 
-
 export async function getStaffById(id) {
   let newUrl = `${url}/api/staff/getStaffById/${id}`;
 
@@ -34,4 +33,25 @@ export async function getStaffById(id) {
       console.error("error in fetching staff:", error);
       throw error;
     });
+}
+
+export async function editStaff(data) {
+  const apiUrl = `${url}/api/staff/updateStaff`;
+
+  try {
+    const response = await axios.post(apiUrl, data);
+
+    if (response.status === 200) {
+      return response.data.updatedStaff; // Assuming response.data contains the array of admin details
+    } else {
+      console.error(
+        "Failed to fetch employee information:",
+        response.data.error
+      );
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching employee information:", error);
+    throw error;
+  }
 }

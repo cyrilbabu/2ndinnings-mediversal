@@ -12,14 +12,13 @@ const createToken = (id, role) => {
 // Create new staff
 // Import the necessary modules
 
-
 // Create new staff
 export const staffSignup = async (req, res) => {
   try {
     const { name, phone, role, username, password } = req.body;
 
     // Check if the staff member already exists
-    const existingStaff = await Staff.findOne({ username });
+    const existingStaff = await Staff.findOne({ username, role });
     if (existingStaff) {
       return res.status(400).json({ error: "Staff member already exists" });
     }
@@ -52,20 +51,30 @@ export const staffSignup = async (req, res) => {
 // Update staff
 export const updateStaff = async (req, res) => {
   try {
-    const { name, phone, role, username, password } = req.body;
-    const updateData = { name, phone, role, username };
+    const { id, name, phone, role, username, password, notificationToken } =
+      req.body;
+
+    // Create an update object with the fields that are being updated
+    const updateData = { name, phone, role, username, notificationToken };
+
+    // Hash password if it's being updated
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
     }
-    const staff = await Staff.findOneAndUpdate({ username }, updateData, {
+
+    // Use findByIdAndUpdate to find the staff member and update it
+    const staff = await Staff.findByIdAndUpdate(id, updateData, {
       new: true,
+      runValidators: true, // Optional: run validation on the update
     });
+
     if (!staff) {
       return res.status(404).json({ message: "Staff member not found" });
     }
+
     return res.status(200).json(staff);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message); // Use console.error for error logging
     return res
       .status(500)
       .json({ message: "Error updating staff member", error });
@@ -89,7 +98,7 @@ export const deleteStaff = async (req, res) => {
 // Get all staff
 export const getAllStaff = async (req, res) => {
   try {
-    const staff = await Staff.find().select('-password');
+    const staff = await Staff.find().select("-password");
     if (!staff) {
       return res.status(400).json({ error: "error in fetching staff details" });
     }
@@ -103,10 +112,10 @@ export const getAllStaff = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, role } = req.body;
 
     // Find the user by username
-    const user = await Staff.findOne({ username });
+    const user = await Staff.findOne({ username, role });
 
     // Check if the user exists
     if (!user) {
@@ -137,10 +146,10 @@ export const getStaffById = async (req, res) => {
     if (!staff) {
       return res.status(400).json({ message: "Error in fetching staff" });
     }
-    
+
     return res
-    .status(200)
-      .json({ message: "staff fetched successfully",staff});
+      .status(200)
+      .json({ message: "staff fetched successfully", staff });
   } catch (error) {
     console.log(error.message);
     return res

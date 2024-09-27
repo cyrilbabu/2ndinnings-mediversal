@@ -1,6 +1,7 @@
 import { url } from "./url";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { editStaff } from "./staff";
 
 export async function login(data) {
   let newUrl = `${url}/api/staff/login`;
@@ -18,9 +19,9 @@ export async function login(data) {
     });
 }
 
-function logout() {
+function logout(staff) {
   localStorage.clear();
+  editStaff({ username: staff, notificationToken: "" });
 }
 
 export default logout;
-

@@ -4,6 +4,7 @@ import staffRoutes from "./routes/staffRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import cors from "cors";
 import verifyRouter from "./routes/privetRoutes.js";
+
 import dotenv from "dotenv";
 
 dotenv.config();

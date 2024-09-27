@@ -3,7 +3,7 @@ import { useAllStaff } from "../query/useAllStaff";
 import { useAssignCareManager } from "../query/useAssignCareManager";
 
 /* eslint-disable react/prop-types */
-const DropDownStaff = ({ role, patientId }) => {
+const DropDownStaff = ({ role, patientId, patientName }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const { isLoading: loadingStaff, allStaff } = useAllStaff();
   const { assignCareManager, isLoading: assigningManager } =
@@ -13,9 +13,22 @@ const DropDownStaff = ({ role, patientId }) => {
     const staffId = event.target.value;
     setSelectedOption(staffId);
 
+    const selectedStaff = allStaff.find((staff) => staff._id === staffId);
+    const notificationTokken = selectedStaff.notificationToken;
+
     if (staffId) {
-      console.log({ staffId, patientId });
-      assignCareManager({ staffId, patientId });
+      assignCareManager(
+        { staffId, patientId, patientName },
+        {
+          onSuccess: () => {
+            sendNotification({
+              title: "2nd innings mediversal",
+              body: `New Patient is Assigned To You`,
+              token: notificationTokken,
+            });
+          },
+        }
+      );
     }
   };
 

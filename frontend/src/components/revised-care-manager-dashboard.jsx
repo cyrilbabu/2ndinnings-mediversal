@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   User,
   Heart,
@@ -16,6 +16,7 @@ import { useUser } from "../query/useUser";
 import { useAllPatient } from "../query/useAllPatient";
 import { useNavigate } from "react-router-dom";
 import logout from "../services/auth";
+import { requestPermission } from "../services/firebase";
 
 function calculateAge(dob) {
   const today = new Date();
@@ -92,6 +93,14 @@ const PatientCard = ({ patient, onViewDetails, onSubmitReport, navigate }) => (
         className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
       >
         Start Wellness Call
+      </button>
+      <button
+        onClick={() => {
+          navigate(`/care-manager-dashboard/member-detail/${patient._id}`);
+        }}
+        className="flex-1 bg-yellow-500 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
+      >
+        View Call Reports
       </button>
     </div>
   </div>
@@ -188,6 +197,18 @@ export default function RevisedCareManagerDashboard() {
 
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
+  useEffect(() => {
+    const handleRequestPermission = async () => {
+      const result = await requestPermission(userData._id);
+      console.log(result);
+      if (result === "not_granted") {
+        navigate("/no-permission");
+      }
+    };
+
+    handleRequestPermission();
+  }, [userData._id, navigate]);
+
   const { isLoading: loadingPatients, allPatient } = useAllPatient();
 
   if (loadingPatients) {
@@ -198,7 +219,7 @@ export default function RevisedCareManagerDashboard() {
       </div>
     );
   }
-  console.log("patient hai", allPatient);
+
   const filteredPatients = allPatient.filter(
     (patient) => patient.careManager === userData._id
   );
@@ -216,7 +237,7 @@ export default function RevisedCareManagerDashboard() {
           <span>
             <LogOut
               onClick={() => {
-                logout();
+                logout(userData._id);
                 navigate("/");
               }}
             />
@@ -224,9 +245,9 @@ export default function RevisedCareManagerDashboard() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6">
-          <div className="bg-white rounded-lg shadow-md p-4">
+      <div className="w-full">
+        <div className="w-full">
+          <div className="bg-white rounded-lg shadow-md p-4 mb-4">
             <h2 className="text-xl font-semibold text-green-800 mb-4">
               High Priority Notifications
             </h2>
@@ -256,7 +277,7 @@ export default function RevisedCareManagerDashboard() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        {/* <div className="space-y-6">
           <div className="bg-white rounded-lg shadow-md p-4">
             <h2 className="text-xl font-semibold text-green-800 mb-4">
               Quick Actions
@@ -265,7 +286,7 @@ export default function RevisedCareManagerDashboard() {
               View All Reports
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {showReportForm && selectedPatient && (

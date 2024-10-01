@@ -9,7 +9,6 @@ export const sendNotification = async (req, res) => {
   try {
     const { title, body, token } = req.body;
 
-
     // Validate the token
     if (!token) {
       return res
@@ -33,6 +32,6 @@ export const sendNotification = async (req, res) => {
     console.error("Notification error", error);
     return res
       .status(500)
-      .json({ error: "Error in sendNotification controller" });
+      .json({ error: "Error in sendNotification controller", error });
   }
 };

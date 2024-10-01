@@ -4,6 +4,7 @@ import express from "express";
 import connectDB from "./db/db.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import verifyRouter from "./routes/privetRoutes.js";
+
 import staffRoutes from "./routes/staffRoutes.js";
 
 dotenv.config();

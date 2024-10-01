@@ -6,6 +6,7 @@ import AssignModal from "./AssignModal";
 import SelectDropDown from "./SelectDropDown";
 import StaffName from "./StaffDetails";
 import StaffDetails from "./StaffDetails";
+import { sendNotification } from "../services/firebase";
 
 export default function AdminShowAllPatient({ role }) {
   const [name, setName] = useState("");
@@ -32,21 +33,24 @@ export default function AdminShowAllPatient({ role }) {
   const handleSubmit = (e, data) => {
     e.preventDefault();
 
-    addAssignement({
-      staff: selectedOption,
-      role: selectedOption?.role,
-      patient: selectedPatient,
-      date: data.date,
-      time: data.time,
-    });
-
-    console.log({
-      staff: selectedOption,
-      patient: selectedPatient,
-      role: selectedOption?.role,
-      date: data.date,
-      time: data.time,
-    });
+    addAssignement(
+      {
+        staff: selectedOption,
+        role: selectedOption?.role,
+        patient: selectedPatient,
+        date: data.date,
+        time: data.time,
+      },
+      {
+        onSuccess: () => {
+          sendNotification({
+            title: "2nd innings mediversal",
+            body: `New Assignement on ${data.date} at ${data.time} for patient ${selectedPatient.fullName}`,
+            token: selectedOption.notificationToken,
+          });
+        },
+      }
+    );
 
     handleCloseModal();
   };
@@ -129,7 +133,11 @@ export default function AdminShowAllPatient({ role }) {
                     ) : patient.careManager ? (
                       <StaffDetails id={patient.careManager} />
                     ) : (
-                      <DropDownStaff role={role} patientId={patient._id} />
+                      <DropDownStaff
+                        role={role}
+                        patientId={patient._id}
+                        patientName={patient.fullName}
+                      />
                     )}
                   </td>
                   <td className="px-5 py-3 w-1/7 border-b-2 border-gray-200 text-left text-xs text-gray-600">

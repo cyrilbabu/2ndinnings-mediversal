@@ -13,8 +13,8 @@ import {
   getAssignmentById,
 } from "../controllers/assignment.controller.js";
 
-
 import { upload } from "../middleware/multer.js";
+import { sendNotification } from "../firebase.js";
 const router = express.Router();
 
 router.post("/login", login);
@@ -24,6 +24,7 @@ router.get("/getAllStaff", getAllStaff);
 router.get("/getStaffById/:id", getStaffById);
 router.get("/getAssignment", getAssignment);
 router.post("/uploadAssignment", uploadAssignment);
+router.post("/sendNotification", sendNotification);
 
 router.post("/updateAssessment", upload.single("photos", 10), updateAssessment);
 

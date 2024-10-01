@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -11,7 +11,6 @@ import AssessorRoute from "./routes/AssesorRoute";
 import CareManagerRoute from "./routes/CareManagerRoute";
 import HomeCareStaffRoute from "./routes/HomeCareStaffRoute";
 import FrontDeskRoute from "./routes/MultiRoleRoutes";
-
 import LoginPrivateRoute from "./routes/LoginPrivateRoute";
 
 // Import components
@@ -28,15 +27,15 @@ import ViewAllPlans from "./components/view-all-plans";
 import VitalsRecordingScreen from "./components/home-care-vitals-recording-with-photos";
 import StaffRegistration from "./components/staff-registration";
 import HomeCareVitalDetails from "./components/home-care-vitail-detail";
-
 import NotAuthorised from "./UI/NotAuthorised";
 import PageNotFound from "./UI/PageNotFound";
-
 import ViewMemberDetails from "./components/second-innings-member-details-with-benefit-tracking";
 import IndianGeriatricAssessmentForm from "./components/indian-geriatric-assessment-form";
 import SubmitReportView from "./components/care-manager-submit-report";
 import ViewGeriatricReport from "./components/view-geriatric-report";
 import ViewAllStaff from "./components/view-all-staff";
+import SomeThingWentWrong from "./UI/SomeThingWentWrong";
+import NoPermission from "./UI/NoPermission";
 import ViewCallReports from "./components/view-call-reports";
 import EditPatient from "./components/EditPatient";
 
@@ -54,7 +53,9 @@ export default function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <Routes>
+          <Route path="/not_Working" element={<SomeThingWentWrong />} />
           <Route path="/not-authorised" element={<NotAuthorised />} />
+          <Route path="/no-permission" element={<NoPermission />} />
           <Route path="*" element={<PageNotFound />} />
           <Route
             path="/login"

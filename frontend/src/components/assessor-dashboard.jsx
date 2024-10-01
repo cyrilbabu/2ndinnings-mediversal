@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Calendar,
   CheckCircle,
@@ -15,6 +15,7 @@ import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import logout from "../services/auth";
 
 import { useNavigate } from "react-router-dom";
+import { requestPermission } from "../services/firebase";
 
 const VisitCard = ({ visit, onActionClick, navigate, activeTab }) => (
   <div className="bg-white rounded-lg shadow-md p-4 mb-4">
@@ -77,6 +78,18 @@ export default function AssessorDashboard() {
   const navigate = useNavigate();
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
+
+  useEffect(() => {
+    const handleRequestPermission = async () => {
+      const result = await requestPermission(userData._id);
+      console.log(result);
+      if (result === "not_granted") {
+        navigate("/no-permission");
+      }
+    };
+
+    handleRequestPermission(); // call the async function
+  }, [userData._id, navigate]);
 
   const handleActionClick = (visit) => {
     // Here you would navigate to the appropriate assessment form or view

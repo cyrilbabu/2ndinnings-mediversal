@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Calendar,
   CheckCircle,
@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useGetAllAssignment } from "../query/useGetAllAssignment";
 import logout from "../services/auth";
+import { requestPermission } from "../services/firebase";
 
 const VisitCard = ({
   name,
@@ -78,6 +79,18 @@ export default function HomeCareStaffDashboard() {
   const { isLoading: loadingAssignments, assignments } = useGetAllAssignment();
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
 
+  useEffect(() => {
+    const handleRequestPermission = async () => {
+      const result = await requestPermission(userData._id);
+      console.log(result);
+      if (result === "not_granted") {
+        navigate("/no-permission");
+      }
+    };
+
+    handleRequestPermission(); // call the async function
+  }, [userData._id, navigate]);
+
   if (loadingAssignments) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-50">
@@ -114,7 +127,7 @@ export default function HomeCareStaffDashboard() {
           <LogOut
             className="w-5 h-5 cursor-pointer"
             onClick={() => {
-              logout();
+              logout(userData._id);
               navigate("/");
             }}
           />
@@ -127,6 +140,7 @@ export default function HomeCareStaffDashboard() {
         </h2>
         {notCompletedhomeCareAssignments.map((visit) => (
           <VisitCard
+            key={visit._id}
             id={visit._id}
             name={visit.patient.fullName}
             address={visit.patient.address}
@@ -146,6 +160,7 @@ export default function HomeCareStaffDashboard() {
 
         {completedhomeCareAssignments.map((visit) => (
           <VisitCard
+            key={visit._id}
             id={visit._id}
             name={visit.patient.fullName}
             address={visit.patient.address}

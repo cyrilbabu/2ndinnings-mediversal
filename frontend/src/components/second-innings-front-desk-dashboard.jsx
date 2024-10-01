@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../UI/back-button";
 import { useAllPatient } from "../query/useAllPatient";
 import logout from "../services/auth";
+import { requestPermission } from "../services/firebase";
 
 const DashboardCard = ({
   title,
@@ -37,6 +38,18 @@ export default function FrontDeskDashboard() {
 
   const { isLoading, allPatient: patients } = useAllPatient();
   const userData = JSON.parse(localStorage.getItem("userData")) || null;
+
+  useEffect(() => {
+    const handleRequestPermission = async () => {
+      const result = await requestPermission(userData._id);
+      console.log(result);
+      if (result === "not_granted") {
+        navigate("/no-permission");
+      }
+    };
+
+    handleRequestPermission(); // call the async function
+  }, [userData._id, navigate]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -131,7 +144,7 @@ export default function FrontDeskDashboard() {
             <LogOut
               className="w-5 h-5 cursor-pointer"
               onClick={() => {
-                logout();
+                logout(userData._id);
                 navigate("/");
               }}
             />

@@ -12,7 +12,7 @@ export function useEditPatient() {
       toast.success("Availed");
     },
     onError: () => {
-      toast.error(null);
+      toast.error("Some error");
     },
   });
 

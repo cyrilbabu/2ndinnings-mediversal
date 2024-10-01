@@ -26,7 +26,6 @@ export const sendNotification = async (req, res) => {
 
     // Send the notification
     const response = await admin.messaging().send(message);
-    console.log("Notification Sent", response);
     return res.status(200).json({ success: true, response });
   } catch (error) {
     console.error("Notification error", error);

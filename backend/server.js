@@ -18,5 +18,5 @@ app.use("/api/patient", patientRoutes);
 app.use("/api/private", verifyRouter);
 
 app.listen(6200 || process.env.PORT, () => {
-  console.log(`Server started on http://localhost:${6000 || process.env.PORT}`);
+  console.log(`Server started on http://localhost:${6200 || process.env.PORT}`);
 });

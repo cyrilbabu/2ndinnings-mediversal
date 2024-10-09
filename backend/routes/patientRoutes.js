@@ -30,4 +30,5 @@ router.post("/register", registerPatient);
 router.put("/updatePatient", updatePatientDetails);
 router.put("/editpatients", editPatientRegistration);
 
+
 export default router;

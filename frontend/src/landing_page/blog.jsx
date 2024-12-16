@@ -109,7 +109,7 @@ export default function BlogPage() {
         </nav>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-20">
+      {/* <main className="max-w-6xl mx-auto px-4 py-20">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-teal-800 mb-4">
             Insights for Your Golden Years
@@ -141,9 +141,9 @@ export default function BlogPage() {
               </svg>
             </button>
           </div>
-        </div>
+        </div> */}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPosts.map((post, index) => (
             <div
               key={post.title}
@@ -225,15 +225,22 @@ export default function BlogPage() {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
-        {filteredPosts.length === 0 && (
+        <main className="flex-grow flex flex-col mt-40 justify-center items-center">
+        <h1 className="text-5xl font-bold mb-4">Coming Soon</h1>
+        <p className="text-lg text-green-700">
+          We're working hard to bring you something amazing. Stay tuned!
+        </p>
+      </main>
+
+        {/* {filteredPosts.length === 0 && (
           <div className="text-center text-teal-600 mt-8">
             No articles found matching your search. Try a different keyword.
           </div>
-        )}
+        )} */}
 
-        <div className="mt-16 text-center bg-white p-8 rounded-lg shadow-lg">
+        {/* <div className="mt-16 text-center bg-white p-8 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-teal-800 mb-4">
             Stay Informed with 2nd Innings
           </h2>
@@ -250,9 +257,56 @@ export default function BlogPage() {
             <button className="ml-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-r-md">
               Subscribe
             </button>
-          </div>
-        </div>
-      </main>
+          </div> */}
+        {/* </div> */}
+      {/* </main> */}
     </div>
   );
 }
+
+// import React from "react";
+// import { Link } from "react-router-dom";
+
+// export default function BlogPage() {
+//   return (
+//     <div className="flex flex-col min-h-screen bg-green-50 text-green-900">
+//       {/* Header */}
+//       <header className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
+//         <Link
+//           to="/"
+//           className="text-2xl font-bold text-teal-700 hover:text-teal-800 transition-colors"
+//         >
+//           2nd Innings
+//         </Link>
+//         <nav className="hidden md:flex space-x-8">
+//           <Link
+//             to="/plans"
+//             className="text-teal-600 hover:text-teal-700 transition-colors"
+//           >
+//             Plans
+//           </Link>
+//           <Link
+//             to="/services"
+//             className="text-teal-600 hover:text-teal-700 transition-colors"
+//           >
+//             Our Services
+//           </Link>
+//           <Link
+//             to="/blog"
+//             className="text-teal-600 hover:text-teal-700 transition-colors"
+//           >
+//             Blog
+//           </Link>
+//         </nav>
+//       </header>
+
+//       {/* Coming Soon Content */}
+      // <main className="flex-grow flex flex-col justify-center items-center">
+      //   <h1 className="text-5xl font-bold mb-4">Coming Soon</h1>
+      //   <p className="text-lg text-green-700">
+      //     We're working hard to bring you something amazing. Stay tuned!
+      //   </p>
+      // </main>
+//     </div>
+//   );
+// }

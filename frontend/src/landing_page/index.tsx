@@ -37,6 +37,12 @@ export default function Index() {
           >
             Blog
           </Link>
+           <Link
+            to="/login"
+            className="text-teal-600 hover:text-teal-700 transition-colors"
+          >
+            Login
+          </Link>
         </nav>
       </header>
 

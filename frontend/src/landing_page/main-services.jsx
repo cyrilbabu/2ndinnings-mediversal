@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-// import Link from "next/link";
-// import Image from "next/image";
+
 import {
   ChevronRight,
   Heart,
@@ -13,7 +12,7 @@ import {
   Home,
   Phone,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
 
 const services = [
   {

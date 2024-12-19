@@ -77,10 +77,11 @@ export default function Index() {
   </a>
 </button>
 
-              <button className="bg-white flex px-4 py-2 rounded text-teal-600 font-semibold transition-all duration-300 hover:bg-teal-50 border border-teal-200 shadow-md">
+              <Link
+            to="/services" className="bg-white flex px-4 py-2 rounded text-teal-600 font-semibold transition-all duration-300 hover:bg-teal-50 border border-teal-200 shadow-md">
                 <Search className="w-5 h-5 mr-2" />
                 Explore Services
-              </button>
+              </Link>
             </div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
